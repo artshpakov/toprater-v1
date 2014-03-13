@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.0.3'
 
+gem 'pg'
 gem 'pry-rails'
 gem 'slim'
 gem 'russian'
