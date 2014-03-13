@@ -1,0 +1,4 @@
+en:
+  index:
+    headline: Index page
+    find_me: Find me in %{path}
