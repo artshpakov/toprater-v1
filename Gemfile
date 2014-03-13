@@ -7,6 +7,8 @@ gem 'pry-rails'
 gem 'slim'
 gem 'russian'
 
+gem 'ancestry'
+
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'sass-rails', '~> 4.0.0'
