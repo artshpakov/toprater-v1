@@ -1,5 +1,5 @@
 .DS_Store
-Gemfile.lock
+Gemfile.local
 public/assets/*
 public/system/*
 .sass-cache/
@@ -10,3 +10,5 @@ tmp
 *.rbc
 .bundle
 .rvmrc*
+*.swp
+*.swo

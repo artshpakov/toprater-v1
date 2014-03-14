@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140313132406) do
+ActiveRecord::Schema.define(version: 20140314105834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 20140313132406) do
   create_table "alternatives", force: true do |t|
     t.string "name", null: false
   end
+
+  create_table "alternatives_criteria", id: false, force: true do |t|
+    t.integer "alternative_id"
+    t.integer "criterion_id"
+    t.integer "rating"
+  end
+
+  add_index "alternatives_criteria", ["alternative_id"], name: "index_alternatives_criteria_on_alternative_id", using: :btree
+  add_index "alternatives_criteria", ["criterion_id", "alternative_id"], name: "index_alternatives_criteria_on_criterion_id_and_alternative_id", unique: true, using: :btree
 
   create_table "criteria", force: true do |t|
     t.string  "name",                    null: false
