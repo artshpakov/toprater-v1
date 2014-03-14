@@ -1,5 +1,5 @@
 @rating.controller "rating.CriteriaCtrl", ["$scope", ($scope) ->
 
-  $scope.make_section_active = (criterion) ->
-    $scope.active_section = criterion
+  $scope.toggle_section = (criterion) ->
+    $scope.active_section = if $scope.active_section and $scope.active_section is criterion then null else criterion
 ]
