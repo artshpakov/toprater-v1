@@ -3,7 +3,8 @@ class AlternativesController < ApplicationController
   respond_to :json
 
   def rate
-    respond_with Array.wrap Alternative.all.sample
+    @alternatives = Voltdb::CriterionsRating.alternatives(Alternative.ids, params[:criterion_ids].split(","))
+    respond_with @alternatives
   end
 
 end
