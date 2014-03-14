@@ -8,6 +8,8 @@ gem 'slim'
 gem 'russian'
 
 gem 'ancestry'
+gem 'gon'
+gem 'rabl'
 
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.0.0'
@@ -16,6 +18,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'foundation-rails'
 gem 'font-awesome-rails'
 gem 'quiet_assets'
+
+gem 'angularjs-rails', '~> 1.2.0'
+gem 'ng-rails-csrf'
 
 group :development do
   gem 'thin'

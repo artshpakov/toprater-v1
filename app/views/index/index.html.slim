@@ -1,2 +1,7 @@
-h1 =t "index.headline"
-p ==t "index.find_me", path: content_tag(:b, "app/views/index/index.html.slim")
+.row
+  / Корзина критериев
+
+.row
+  .large-4.columns ng-controller="rating.CriteriaCtrl"
+    = render partial: "partials/accordeon"
+  .large-8.columns

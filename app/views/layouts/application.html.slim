@@ -14,15 +14,16 @@ html
     link rel="apple-touch-icon" href="favicon.png"
 
     = stylesheet_link_tag :application, media: "all"
+    = include_gon namespace: 'rating_data'
     = javascript_include_tag :application
     = csrf_meta_tags
 
-  body lang="ru"
-    #wrapper
+  body lang="ru" ng-app="rating"
+    #wrapper ng-controller="rating.MainCtrl"
       .row
         - if flash[:notice]
           .alert.alert-success = flash[:notice] 
         - if flash[:alert]
           .alert.alert-danger = flash[:alert]
 
-        == yield
+      == yield
