@@ -1,14 +1,19 @@
-.tag
-  font-size: 0.8em
+@mixin toggleable
   background-color: #bbb
+  color: #000
+  &.active
+    background-color: rgb(75, 192, 75)
+    color: #fff
+
+
+.tag
+  @include toggleable
+  font-size: 0.8em
   padding: 0 6px
   line-height: 22px
   margin: 0 7px 5px 0
   display: block
   float: left
-  &.active
-    background-color: rgb(75, 192, 75)
-    color: #fff
 
 .root-criterion
   display: block

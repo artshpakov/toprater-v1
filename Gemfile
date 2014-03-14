@@ -19,6 +19,7 @@ gem 'foundation-rails'
 gem 'font-awesome-rails'
 gem 'quiet_assets'
 
+gem 'underscore-rails'
 gem 'angularjs-rails', '~> 1.2.0'
 gem 'ng-rails-csrf'
 

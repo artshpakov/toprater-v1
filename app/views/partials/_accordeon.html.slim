@@ -2,4 +2,4 @@
   .root-criterion
     a href="javascript:;" ng-click="make_section_active(root_criterion)" {{ root_criterion.name }}
   .criteria-drawer ng-show="active_section == root_criterion"
-    span.tag ng-repeat="criterion in root_criterion.children" {{ criterion.name }}
+    a.tag href="javascript:;" ng-class="{ active: is_active(criterion) }" ng-repeat="criterion in root_criterion.children" ng-click="toggle_active(criterion)" {{ criterion.name }}
