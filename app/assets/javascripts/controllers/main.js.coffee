@@ -1,4 +1,4 @@
-@rating.controller "rating.MainCtrl", ["$scope", "CriteriaCollection", ($scope, CriteriaCollection) ->
+@rating.controller "rating.MainCtrl", ["$scope", "CriteriaCollection", "AlternativesCollection", ($scope, CriteriaCollection, AlternativesCollection) ->
 
   $scope.criteria = CriteriaCollection.all()
   $scope.active_criteria = []
@@ -11,5 +11,8 @@
       $scope.active_criteria = _.reject $scope.active_criteria, (c) -> c is criterion
     else
       $scope.active_criteria.push criterion
+
+  $scope.$watch 'active_criteria.length', ->
+    AlternativesCollection.rate $scope.active_criteria
 
 ]
