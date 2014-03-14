@@ -31,9 +31,9 @@ namespace :voltdb do
     Alternative.all.each do |entry|
       fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
       values = criterion_ids.map do |criterion_id|
-        AlternativesCriterion.where(alternative_id: entry.id, criterion_id: criterion_id).first.rating rescue 'NULL'
+        AlternativesCriterion.find_by(alternative_id: entry.id, criterion_id: criterion_id).rating rescue 'NULL'
       end.join ','
-      Voltdb::CriterionsRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values })"
+      Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values })"
     end
 
     puts "\nDone"

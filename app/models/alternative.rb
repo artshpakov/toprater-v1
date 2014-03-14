@@ -2,7 +2,7 @@ class Alternative < ActiveRecord::Base
 
   validates :name, presence: true
 
-  has_many :alternatives_criterions
-  has_many :criterions, through: :alternatives_criterions
+  has_many :alternatives_criteria
+  has_many :criteria, through: :alternatives_criteria
 
 end
