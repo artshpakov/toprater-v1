@@ -1,5 +1,4 @@
-module Voltdb
-  def self.table_name_prefix
-    'voltdb_'
-  end
+class Voltdb < Settingslogic
+  source "#{Rails.root}/config/voltdb.yml"
+  namespace Rails.env
 end

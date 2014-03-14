@@ -4,7 +4,10 @@ public/assets/*
 public/system/*
 .sass-cache/
 config/database.yml
+config/voltdb.yml
 db/*.sqlite3
+db/voltdb/compiled_schema.jar
+db/voltdb/schema.sql
 log
 tmp
 *.rbc
@@ -12,3 +15,6 @@ tmp
 .rvmrc*
 *.swp
 *.swo
+
+catalog-report.html
+statement-plans/
