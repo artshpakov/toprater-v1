@@ -29,5 +29,10 @@ gem 'ng-rails-csrf'
 group :development do
   gem 'thin'
   gem 'capistrano', '~> 2.15.0'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'rack-mini-profiler'
+  gem 'quiet_assets'
+  gem 'letter_opener'
 end
 gem 'rspec-rails', group: %i(development test)
