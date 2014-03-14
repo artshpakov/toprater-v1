@@ -19,9 +19,24 @@ namespace :voltdb do
       f.write(sql)
     end
 
-    puts ""
-    puts "Done. Now do something like this:\n$ #{File.join(Voltdb.bin_path, "voltdb")} compile #{voltdb_schema_path} -o #{voltdb_jar_path}\n$ #{File.join(Voltdb.bin_path, "voltdb")} create #{voltdb_jar_path}"
+    puts "\nDone. Now do something like this:\n$ #{File.join(Voltdb.bin_path, "voltdb")} compile #{voltdb_schema_path} -o #{voltdb_jar_path}\n$ #{File.join(Voltdb.bin_path, "voltdb")} create #{voltdb_jar_path}"
 
+  end
+
+
+  desc "Populate voltdb schema with data"
+  task populate: :environment do
+    criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
+
+    Alternative.all.each do |entry|
+      fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
+      values = criterion_ids.map do |criterion_id|
+        AlternativesCriterion.where(alternative_id: entry.id, criterion_id: criterion_id).first.rating rescue 'NULL'
+      end.join ','
+      Voltdb::CriterionsRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values })"
+    end
+
+    puts "\nDone"
   end
 
 end
