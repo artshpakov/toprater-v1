@@ -5,3 +5,5 @@
   .large-4.columns ng-controller="rating.CriteriaCtrl"
     = render partial: "partials/accordeon"
   .large-8.columns
+    ol#cards
+      li.card ng-repeat="alternative in alternatives" {{ alternative.name }}
