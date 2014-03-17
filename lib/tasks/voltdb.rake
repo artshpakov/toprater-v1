@@ -37,7 +37,7 @@ namespace :voltdb do
         values[ac.criterion_id] = ac.rating
       end
 
-      Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values.values.join(',') })"
+      Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ alternative.id }, #{ values.values.join(',') })"
     end
 
     puts "\nDone"
