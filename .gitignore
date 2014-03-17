@@ -19,3 +19,4 @@ tmp
 catalog-report.html
 statement-plans/
 voltdbroot/
+voltdb_crash*.txt

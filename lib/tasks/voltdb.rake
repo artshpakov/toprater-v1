@@ -1,30 +1,33 @@
 
 namespace :voltdb do
 
-  desc "Generate and load voltdb schema"
-  task schema_load: :environment do
-    
+  desc "Generate and load VoltDB schema"
+  task schema_load: :environment do    
     criteria_columns = Criterion.all.map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
 
     sql = "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\n CONSTRAINT criteria_ratings_alternative_index PRIMARY KEY ( alternative_id )\n);"
 
-    voltdb_schema_path = "#{Rails.root}/db/voltdb/schema.sql"
-    voltdb_jar_path = "#{Rails.root}/db/voltdb/compiled_schema.jar"
-
-    if File.exists?(voltdb_schema_path)
-      puts "Will rewrite #{voltdb_schema_path}"
-    end
-
-    File.open(voltdb_schema_path, "w") do |f|
-      f.write(sql)
-    end
-
-    puts "\nDone. Now do something like this:\n$ #{File.join(Voltdb.bin_path, "voltdb")} compile #{voltdb_schema_path} -o #{voltdb_jar_path}\n$ #{File.join(Voltdb.bin_path, "voltdb")} create #{voltdb_jar_path}"
-
+    puts "Will rewrite #{schema_path}" if File.exists?(schema_path)
+    File.open(schema_path, "w") { |f| f.write(sql) }
+    puts "  Generated schema"
   end
 
 
-  desc "Populate voltdb schema with data"
+  desc "Compile VoltDB schema"
+  task :compile do
+    %x( voltdb compile #{ schema_path } -o #{ jar_path } )
+    puts "  Schema compiled"
+  end
+
+
+  desc "Create VoltDB session"
+  task :create do
+    %x( voltdb create -B #{ jar_path } )
+    puts "  VoltDB session created"
+  end
+
+
+  desc "Populate VoltDB schema with data"
   task populate: :environment do
     criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
     fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
@@ -40,7 +43,24 @@ namespace :voltdb do
       Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ alternative.id }, #{ values.values.join(',') })"
     end
 
-    puts "\nDone"
+    puts "  Populated schema"
+  end
+
+
+  desc "Prepare VoltDB schema & data"
+  task :setup do
+    Rake::Task['voltdb:schema_load'].invoke && Rake::Task['voltdb:compile'].invoke && Rake::Task['voltdb:create'].invoke && Rake::Task['voltdb:populate'].invoke
+  end
+
+
+  private
+
+  def schema_path
+    "#{Rails.root}/db/voltdb/schema.sql"
+  end
+
+  def jar_path
+    "#{Rails.root}/db/voltdb/compiled_schema.jar"
   end
 
 end
