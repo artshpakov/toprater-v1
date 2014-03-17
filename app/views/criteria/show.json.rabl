@@ -1,5 +1,5 @@
 object @criterion
 attributes :id, :name, :short_name
-child children: :children do
-  extends "criteria/show"
+child descendants: :children do
+  attributes :id, :name, :short_name, :parent_id, :depth
 end
