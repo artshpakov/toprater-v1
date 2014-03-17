@@ -6,4 +6,4 @@
     = render partial: "partials/accordeon"
   .large-8.columns
     ol#cards
-      li.card ng-repeat="alternative in alternatives" {{ alternative.name }}
+      li.card ng-repeat="alternative in alternatives" ng-bind-html="alternative.name"

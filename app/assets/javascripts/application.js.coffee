@@ -4,6 +4,7 @@
 
 #= require angular
 #= require angular-resource
+#= require angular-sanitize
 #= require ng-rails-csrf
 
 #= require_self
@@ -12,5 +13,5 @@
 
 # $ -> $(document).foundation()
 
-@rating = angular.module 'rating', ['ngResource', 'ng-rails-csrf']
+@rating = angular.module 'rating', ['ngResource', 'ng-rails-csrf', 'ngSanitize']
 @rating.value 'data', window.rating_data

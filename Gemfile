@@ -12,6 +12,9 @@ gem 'ancestry'
 gem 'gon'
 gem 'rabl'
 
+gem 'inherited_resources'
+gem 'draper'
+
 gem 'sequel'
 gem 'sqlite3'
 
