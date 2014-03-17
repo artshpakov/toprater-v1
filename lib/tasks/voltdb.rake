@@ -27,13 +27,17 @@ namespace :voltdb do
   desc "Populate voltdb schema with data"
   task populate: :environment do
     criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
+    fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
+    default_values = Hash[criterion_ids.collect { |id| [ id, 'NULL' ] }]
 
-    Alternative.all.each do |entry|
-      fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
-      values = criterion_ids.map do |criterion_id|
-        AlternativesCriterion.find_by(alternative_id: entry.id, criterion_id: criterion_id).rating rescue 'NULL'
-      end.join ','
-      Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values })"
+    Alternative.find_each do |alternative|
+      values = default_values
+
+      alternative.alternatives_criteria.each do |ac|
+        values[ac.criterion_id] = ac.rating
+      end
+
+      Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings(alternative_id, #{ fields }) VALUES (#{ entry.id }, #{ values.values.join(',') })"
     end
 
     puts "\nDone"
