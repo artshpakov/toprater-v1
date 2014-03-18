@@ -1,0 +1,1 @@
+%x( rake import:criteria )

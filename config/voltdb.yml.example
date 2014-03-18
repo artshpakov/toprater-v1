@@ -1,0 +1,14 @@
+defaults: &defaults
+  bin_path:
+  host: localhost
+  port: 3021
+  output_dir: ~/.voltdb_server
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

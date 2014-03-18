@@ -9,6 +9,9 @@ AlternativesPower::Application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  # Raise an error on page load if there are pending migrations
+  config.active_record.migration_error = :page_load
+
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
