@@ -22,7 +22,21 @@ namespace :voltdb do
   desc "Create VoltDB session"
   task create: :environment do
     if File.exists?(Voltdb.pid_file)
-      abort "   VoltDB already running with PID #{File.read(Voltdb.pid_file)}"
+      pid = File.read(Voltdb.pid_file).to_i
+      
+      process_exists = begin
+        Process.getpgid( pid )
+        true
+      rescue Errno::ESRCH
+        false
+      end
+
+      if process_exists
+        abort "  VoltDB already running with PID #{pid}"
+      else
+        puts "  Found stale pid file. Removing"
+        File.delete(Voltdb.pid_file)
+      end
     end
 
     %x( #{Voltdb.voltdb_executable_path} create -v -B #{ jar_path } )
