@@ -1,9 +1,8 @@
 defaults: &defaults
-  bin_path: /usr/bin/
+  bin_path:
   host: localhost
-  api_port: 8080
-  log_file: <%= "#{Rails.root}/log/voltdb.log" %>
-  pid_file: <%= "#{Rails.root}/tmp/pids/voltdb.pid" %>
+  port: 3021
+  output_dir: ~/.voltdb_server
 
 development:
   <<: *defaults
