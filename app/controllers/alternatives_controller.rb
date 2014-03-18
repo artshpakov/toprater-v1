@@ -7,6 +7,18 @@ class AlternativesController < ApplicationController
 
   helper_method :alternative, :alternatives
 
+  def show
+    respond_to do |format|
+      format.html do
+        render "index/index"
+      end
+      format.json do
+        respond_with Alternative.find_by! id: params[:id]
+      end
+    end
+  end
+
+
   def rate
     @alternatives = Voltdb::CriteriaRating.alternatives(params[:criterion_ids].split(","))
     respond_with alternatives
