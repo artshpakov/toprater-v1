@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140317090311) do
+ActiveRecord::Schema.define(version: 20140318135455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,12 +41,29 @@ ActiveRecord::Schema.define(version: 20140317090311) do
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
 
+  create_table "review_sentences", force: true do |t|
+    t.integer  "alternative_id"
+    t.integer  "criterion_id"
+    t.integer  "review_id"
+    t.json     "sentences"
+    t.float    "score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "review_sentences", ["alternative_id"], name: "index_review_sentences_on_alternative_id", using: :btree
+  add_index "review_sentences", ["criterion_id"], name: "index_review_sentences_on_criterion_id", using: :btree
+  add_index "review_sentences", ["review_id"], name: "index_review_sentences_on_review_id", using: :btree
+
   create_table "reviews", force: true do |t|
     t.integer "alternative_id"
     t.text    "body"
     t.date    "date"
+    t.string  "type"
+    t.integer "agency_id"
   end
 
   add_index "reviews", ["alternative_id"], name: "index_reviews_on_alternative_id", using: :btree
+  add_index "reviews", ["type", "agency_id"], name: "index_reviews_on_type_and_agency_id", using: :btree
 
 end

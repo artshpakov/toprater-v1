@@ -19,8 +19,23 @@ namespace :import do
         hotels[hotel_attributes[:ta_id]] = hotel.id
       end
     end
-
+    
     puts "Processed #{hotels.keys.size} hotels"
+
+    DB[:reviews].where(owner_response: nil).each do |review_attributes|
+      hotel_id = hotels[review_attributes[:hotel_id]]
+      if hotel_id
+        review = Review::Tripadvisor.find_or_initialize_by(alternative_id: hotel_id, agency_id: review_attributes[:ta_id])
+        if review.new_record?
+          review_attributes[:date] = begin
+            Time.parse(review_attributes[:date])
+          rescue
+            nil
+          end
+          review.update_attributes(review_attributes.slice(:body, :date))
+        end
+      end
+    end
 
     DB.disconnect
 
@@ -31,10 +46,9 @@ namespace :import do
     pavel_criterion = Criterion.find_or_create_by(name: "Павел", short_name: "pavel")
 
     DB[:criteria].each do |criterion_attributes|
-      # binding.pry
-      criterion = Criterion.find_or_create_by(name: criterion_attributes[:title])
+      criterion = Criterion.find_or_create_by(short_name: criterion_attributes[:title], name: criterion_attributes[:title])
       if criterion.id
-        criterion.update_attribute :parent, pavel_criterion
+        criterion.update_attributes({parent: pavel_criterion, name: criterion_attributes[:title]})
         criteria[criterion_attributes[:id]] = criterion.id
       end
     end
@@ -43,12 +57,20 @@ namespace :import do
 
     DB[:reviews].each do |ratings_attributes|
       criteria.each_key do |crit_id|
-        unless ratings_attributes[:"criteria_#{crit_id}"] == 0
+        if !hotels[ratings_attributes[:hotel_id]].nil? and !criteria[crit_id].nil? and ratings_attributes[:"criteria_#{crit_id}"] > 0
           alt_crit = AlternativesCriterion.find_or_initialize_by(alternative_id: hotels[ratings_attributes[:hotel_id]], criterion_id: criteria[crit_id])
-          alt_crit.update_attributes({rating: ratings_attributes[:"criteria_#{crit_id}"]})
+          if alt_crit.new_record?
+            alt_crit.update_attributes({rating: ratings_attributes[:"criteria_#{crit_id}"], reviews_count: ratings_attributes[:"count_#{crit_id}"]})
+          end
         end
       end
+    end
 
+    DB[:details].each do |details_attributes|
+      criterion_id = criteria[details_attributes[:criteria]]
+      review_id = Review::Tripadvisor.where(agency_id: details_attributes[:review_id]).pluck(:id).first
+      sentence = ReviewSentence.find_or_initialize_by(alternative_id: hotels[details_attributes[:hotel_id]], criterion_id: criterion_id, review_id: review_id)
+      sentence.update_attributes({sentences: [details_attributes[:sent1], details_attributes[:sent2], details_attributes[:sent3]], score: details_attributes[:score], review_id: review_id})
     end
 
     DB.disconnect
