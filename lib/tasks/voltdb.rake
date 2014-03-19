@@ -2,7 +2,7 @@ namespace :voltdb do
 
   desc "Generate and load VoltDB schema"
   task schema_load: :environment do    
-    criteria_columns = Criterion.all.map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
+    criteria_columns = Criterion.where.not(ancestry: nil).map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
 
     sql = "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\n CONSTRAINT criteria_ratings_alternative_index PRIMARY KEY ( alternative_id )\n);"
 
@@ -14,6 +14,8 @@ namespace :voltdb do
 
   desc "Compile VoltDB schema"
   task compile: :environment do
+    check_process { |pid| abort "  VoltDB already running with PID #{pid}" }
+    File.delete jar_path if File.exists? jar_path
     %x( #{Voltdb.voltdb_executable_path} compile #{ schema_path } -o #{ jar_path } )
     puts "  Schema compiled"
   end
@@ -23,8 +25,8 @@ namespace :voltdb do
   task create: :environment do
     check_process { |pid| abort "  VoltDB already running with PID #{pid}" }
 
-    %x( #{Voltdb.voltdb_executable_path} create -v -B #{ jar_path } )
-    sleep 3
+    %x( #{Voltdb.voltdb_executable_path} create -B #{ jar_path } )
+    sleep 10
 
     if File.exists?(Voltdb.pid_file)
       puts "  VoltDB session created with PID #{File.read(Voltdb.pid_file)}"
@@ -36,7 +38,8 @@ namespace :voltdb do
 
   desc "Kill VoltDB session"
   task kill: :environment do
-    check_process { |pid| %x(kill #{ pid }) }
+    check_process { |pid| %x(kill #{ pid } && rm #{Voltdb.pid_file}) }
+    sleep 3
     puts "  VoltDB process killed"
   end
 
@@ -51,6 +54,7 @@ namespace :voltdb do
 
   desc "Populate VoltDB schema with data"
   task populate: :environment do
+    abort "  Voltdb doesn't running" if !check_process
     criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
     fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
     default_values = Hash[criterion_ids.collect { |id| [ id, 'NULL' ] }]
@@ -92,11 +96,14 @@ namespace :voltdb do
       pid = File.read(Voltdb.pid_file).to_i
       begin
         Process.getpgid(pid)
-        block.call pid
+        return block.call pid if block_given?
+        return pid
       rescue Errno::ESRCH
+        puts "  Voltdb: found stale pid file"
         File.delete(Voltdb.pid_file)
       end  
     end
+    nil
   end
 
 end
