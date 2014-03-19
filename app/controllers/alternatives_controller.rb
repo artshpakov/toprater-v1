@@ -5,7 +5,7 @@ class AlternativesController < ApplicationController
   respond_to :json
   custom_actions collection: [:rate]
 
-  helper_method :alternative, :alternatives
+  helper_method :alternative, :alternatives, :reviews
 
   def show
     respond_to do |format|

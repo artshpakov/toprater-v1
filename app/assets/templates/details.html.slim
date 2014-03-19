@@ -6,7 +6,10 @@ div ng-repeat="criterion in active_criteria" ng-show="alternative.reviews[criter
   hr
   .tag.active = "{{ criterion.name }}"
   .clearfix
-  p.review ng-repeat="review in alternative.reviews[criterion.id]"
-    ' {{ review[0] }}.
-    b'= "{{ review[1] }}."
-    | {{ review[1] }}.
+  .review ng-repeat="review in alternative.reviews[criterion.id]"
+    .progress ng-class="{ alert: review.score < 20, secondary: review.score < 60, success: review.score >= 60 }"
+      span.meter style="width: {{ review.score }}%"
+    ' {{ review.sentences[0] }}.
+    b'= "{{ review.sentences[1] }}."
+    | {{ review.sentences[2] }}.
+    | {{ review.score }}
