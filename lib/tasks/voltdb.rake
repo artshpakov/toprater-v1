@@ -21,26 +21,11 @@ namespace :voltdb do
 
   desc "Create VoltDB session"
   task create: :environment do
-    if File.exists?(Voltdb.pid_file)
-      pid = File.read(Voltdb.pid_file).to_i
-      
-      process_exists = begin
-        Process.getpgid( pid )
-        true
-      rescue Errno::ESRCH
-        false
-      end
-
-      if process_exists
-        abort "  VoltDB already running with PID #{pid}"
-      else
-        puts "  Found stale pid file. Removing"
-        File.delete(Voltdb.pid_file)
-      end
-    end
+    check_process { |pid| abort "  VoltDB already running with PID #{pid}" }
 
     %x( #{Voltdb.voltdb_executable_path} create -v -B #{ jar_path } )
-    sleep 5
+    sleep 3
+
     if File.exists?(Voltdb.pid_file)
       puts "  VoltDB session created with PID #{File.read(Voltdb.pid_file)}"
     else
@@ -49,9 +34,23 @@ namespace :voltdb do
   end
 
 
+  desc "Kill VoltDB session"
+  task kill: :environment do
+    check_process { |pid| %x(kill #{ pid }) }
+    puts "  VoltDB process killed"
+  end
+
+
+  desc "Restart VoltDB"
+  task restart: :environment do
+    Rake::Task['voltdb:kill'].invoke
+    sleep 3
+    Rake::Task['voltdb:create'].invoke
+  end
+
+
   desc "Populate VoltDB schema with data"
   task populate: :environment do
-    puts "Importing data to VoltDB"
     criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
     fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
     default_values = Hash[criterion_ids.collect { |id| [ id, 'NULL' ] }]
@@ -85,6 +84,19 @@ namespace :voltdb do
 
   def jar_path
     "#{Rails.root}/db/voltdb/compiled_schema.jar"
+  end
+
+
+  def check_process &block
+    if File.exists?(Voltdb.pid_file)
+      pid = File.read(Voltdb.pid_file).to_i
+      begin
+        Process.getpgid(pid)
+        block.call pid
+      rescue Errno::ESRCH
+        File.delete(Voltdb.pid_file)
+      end  
+    end
   end
 
 end
