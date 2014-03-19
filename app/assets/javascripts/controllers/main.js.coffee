@@ -1,4 +1,4 @@
-@rating.controller "rating.MainCtrl", ["$scope", "CriteriaCollection", "AlternativesCollection", ($scope, CriteriaCollection, AlternativesCollection) ->
+@rating.controller "rating.MainCtrl", ["$scope", "CriteriaCollection", "Alternative", ($scope, CriteriaCollection, Alternative) ->
 
   $scope.criteria = CriteriaCollection.all()
   $scope.active_criteria = []
@@ -13,7 +13,7 @@
       $scope.active_criteria.push criterion
 
   $scope.$watch 'active_criteria.length', ->
-    if promise = AlternativesCollection.rate($scope.active_criteria)
+    if promise = Alternative.rate($scope.active_criteria)
       promise.then (response) ->
         $scope.alternatives = response.data
 

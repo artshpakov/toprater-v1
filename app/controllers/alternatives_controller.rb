@@ -13,15 +13,16 @@ class AlternativesController < ApplicationController
         render "index/index"
       end
       format.json do
-        respond_with Alternative.find_by! id: params[:id]
+        @alternative = Alternative.find_by! id: params[:id]
+        @criterion_ids = params[:criterion_ids].split(',')
       end
     end
   end
 
 
   def rate
-    @alternatives = Voltdb::CriteriaRating.alternatives(params[:criterion_ids].split(","))
-    respond_with alternatives
+    @criterion_ids = params[:criterion_ids].split(",")
+    @alternatives = Voltdb::CriteriaRating.alternatives @criterion_ids
   end
 
 protected

@@ -8,4 +8,5 @@
 .large-8.columns
   ol#cards
     li.card ng-repeat="alternative in alternatives"
-      a href="/alternatives/{{ alternative.id }}" {{ alternative.name }}
+      a' href="/alternatives/{{ alternative.id }}" {{ alternative.name }}
+      | ({{ alternative.relevant_reviews_count }} reviews)

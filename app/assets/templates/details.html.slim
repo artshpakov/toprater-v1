@@ -1,2 +1,12 @@
 a href="/" &larr; Назад
 h3 = "{{ alternative.name }}"
+
+p Reviews ({{ alternative.relevant_reviews_count }})
+div ng-repeat="criterion in active_criteria" ng-show="alternative.reviews[criterion.id].length"
+  hr
+  .tag.active = "{{ criterion.name }}"
+  .clearfix
+  p.review ng-repeat="review in alternative.reviews[criterion.id]"
+    ' {{ review[0] }}.
+    b'= "{{ review[1] }}."
+    | {{ review[1] }}.
