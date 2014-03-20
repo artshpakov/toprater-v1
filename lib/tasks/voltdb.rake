@@ -2,7 +2,7 @@ namespace :voltdb do
 
   desc "Generate and load VoltDB schema"
   task schema_load: :environment do    
-    criteria_columns = Criterion.where.not(ancestry: nil).map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
+    criteria_columns = Criterion.where.not(ancestry: nil).order('id ASC').map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
 
     sql = "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\n CONSTRAINT criteria_ratings_alternative_index PRIMARY KEY ( alternative_id )\n);"
 
@@ -55,13 +55,13 @@ namespace :voltdb do
   desc "Populate VoltDB schema with data"
   task populate: :environment do
     abort "  Voltdb doesn't running" if !check_process
-    criterion_ids = Criterion.where.not(ancestry: nil).pluck :id
+    criterion_ids = Criterion.where.not(ancestry: nil).order('id ASC').map(&:id)
     fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
     default_values = Hash[criterion_ids.collect { |id| [ id, 'NULL' ] }]
 
     Alternative.find_each do |alternative|
       print "."
-      values = default_values
+      values = default_values.dup
 
       alternative.alternatives_criteria.each do |ac|
         values[ac.criterion_id] = ac.rating
