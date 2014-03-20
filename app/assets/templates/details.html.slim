@@ -7,9 +7,8 @@ div ng-repeat="criterion in active_criteria" ng-show="alternative.reviews[criter
   .tag.active = "{{ criterion.name }}"
   .clearfix
   .review ng-repeat="review in alternative.reviews[criterion.id]"
-    .progress ng-class="{ alert: review.score < 20, secondary: review.score < 60, success: review.score >= 60 }"
-      span.meter style="width: {{ review.score }}%"
+    .stars
+      .fa ng-repeat="star in [1,2,3,4,5]" ng-class="star <= review.rating ? 'fa-star' : 'fa-star-o'"
     span' ng-if="review.sentences[0]" {{ review.sentences[0] }}.
     b' ng-if="review.sentences[1]" {{ review.sentences[1] }}.
     span ng-if="review.sentences[2]" {{ review.sentences[2] }}.
-    h4 = "{{ review.score }}%"
