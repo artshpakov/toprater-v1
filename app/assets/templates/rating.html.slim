@@ -1,9 +1,9 @@
 .large-4.columns ng-controller="rating.CriteriaCtrl"
-  #criteria-wrapper ng-repeat="root_criterion in criteria"
+  #criteria-wrapper ng-repeat="root_criterion in criteria.all"
     .root-criterion
       a href="javascript:;" ng-click="toggle_section(root_criterion)" {{ root_criterion.name }}
     .criteria-drawer ng-show="active_section == root_criterion"
-      a.tag href="javascript:;" ng-class="{ active: is_active(criterion) }" ng-repeat="criterion in root_criterion.children" ng-click="toggle_active(criterion)" {{ criterion.name }}
+      a.tag href="javascript:;" ng-class="{ active: criterion.is_active() }" ng-repeat="criterion in root_criterion.children" ng-click="criterion.toggle_active()" {{ criterion.name }}
 
 .large-8.columns
   ol#cards
