@@ -1,0 +1,17 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: altpower
+  pool: 5
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: altpower_development
+  pool: 5
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: altpower_test
+  pool: 5
