@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.3'
 
 gem 'pg'
-gem 'volter', path: '../volter'
+gem 'volter', github: 'Solver-Club/volter'
 gem 'pry-rails'
 gem 'slim'
 gem 'russian'
@@ -32,9 +32,13 @@ gem 'underscore-rails'
 gem 'angularjs-rails', '~> 1.2.0'
 gem 'ng-rails-csrf'
 
+gem 'unicorn'
+
 group :development do
   gem 'thin'
   gem 'capistrano', '~> 2.15.0'
+  gem 'capistrano-unicorn', require: false
+  gem 'rvm-capistrano', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'rack-mini-profiler'
