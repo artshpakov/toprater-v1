@@ -13,8 +13,8 @@
       $scope.active_criteria.push criterion
 
   $scope.$watch 'active_criteria.length', ->
-    if promise = Alternative.rate($scope.active_criteria)
-      promise.then (response) ->
+    if $scope.active_criteria.length
+      Alternative.rate($scope.active_criteria).then (response) ->
         $scope.alternatives = response.data
 
 ]

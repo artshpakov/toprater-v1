@@ -4,10 +4,6 @@ class Voltdb::CriteriaRating < Volter::Model
 
   def self.alternatives(criterion_ids, alternative_ids=nil, *args)
     criterion_columns = criterion_ids.map{|cr| "cr_#{cr}"}
-    puts "SELECT alternative_id, CAST((#{criterion_columns.map{|cr| "COALESCE(#{cr}, 0)" }.join('+')}) AS FLOAT)/#{criterion_columns.size} AS score
-       FROM criteria_ratings 
-       #{ "WHERE alternative_id IN ( #{alternative_ids.join(',')} )" if !alternative_ids.nil? }
-       ORDER BY score DESC LIMIT 20"
 
     result = execute_sql(
       "SELECT alternative_id, CAST((#{criterion_columns.map{|cr| "COALESCE(#{cr}, 0)" }.join('+')}) AS FLOAT)/#{criterion_columns.size} AS score
@@ -18,8 +14,6 @@ class Voltdb::CriteriaRating < Volter::Model
     ).raw["results"].first["data"][0..19]
 
     alternatives_scores = result.map{|data| {data[0] => data[1]} }.reduce Hash.new, :merge
-    p alternatives_scores
-
     sorted_alternatives = []
     Alternative.where(id: alternatives_scores.keys).each do |alternative|
       alternative.avg_score = alternatives_scores[alternative.id]
