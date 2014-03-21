@@ -25,7 +25,7 @@ namespace :voltdb do
   task create: :environment do
     check_process { |pid| abort "  VoltDB already running with PID #{pid}" }
 
-    %x( #{Voltdb.voltdb_executable_path} create -B #{ jar_path } )
+    %x( #{Voltdb.voltdb_executable_path} create -B #{ jar_path } -H #{Voltdb.host}:#{Voltdb.port} --http #{Voltdb.http_port} )
     sleep 10
 
     if File.exists?(Voltdb.pid_file)

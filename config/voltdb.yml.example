@@ -3,6 +3,7 @@ defaults: &defaults
   host: localhost
   port: 3021
   output_dir: ~/.voltdb_server
+  http_port: 8080
 
 development:
   <<: *defaults
