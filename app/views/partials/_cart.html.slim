@@ -1,2 +1,2 @@
 #cart
-  a.tag.active ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_active()" href="javascript:;" {{ criterion.name }}
+  a.tag ng-repeat="criterion in criteria.picked" ng-click="criterion.toggle_state('active', 'inactive')" ng-class="{ active: criterion.is_active(), inactive: criterion.is_inactive() }" href="javascript:;" {{ criterion.name }}

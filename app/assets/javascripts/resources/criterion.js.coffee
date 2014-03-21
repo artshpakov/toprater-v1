@@ -5,20 +5,29 @@
     criteria_cache = _.map data.criteria, (root) ->
       _.tap root, (root) ->
         root.children = _.map root.children, (child) ->
-          new Criterion child
+          new Criterion _.extend { state: null }, child
 
+    picked_criteria_cache = []
     active_criteria_cache = []
 
 
     Criterion.all     = criteria_cache
+    Criterion.picked  = picked_criteria_cache
     Criterion.active  = active_criteria_cache
 
-    Criterion::is_active      = -> @active
-    Criterion::toggle_active  = ->
-      if @active
-        active_criteria_cache.splice active_criteria_cache.indexOf(@), 1
+    Criterion::is_active    = -> @state is 'active'
+    Criterion::is_inactive  = -> @state is 'inactive'
+
+    Criterion::set_state    = (state) ->
+      if state?
+        picked_criteria_cache.push @ unless @ in picked_criteria_cache
+        active_criteria_cache.push @ if state is 'active'
       else
-        active_criteria_cache.push @
-      @active = !@active
+        picked_criteria_cache.splice picked_criteria_cache.indexOf(@), 1
+      active_criteria_cache.splice(active_criteria_cache.indexOf(@), 1) if state isnt 'active'
+      @state = state
+
+    Criterion::toggle_state = (from, to=null) ->
+      @state = if @state is to then @set_state(from) else @set_state(to)
 
 ]
