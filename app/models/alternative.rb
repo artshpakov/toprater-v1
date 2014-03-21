@@ -5,6 +5,8 @@ class Alternative < ActiveRecord::Base
   has_many :reviews
   has_many :review_sentences
 
+  has_many :property_values, class_name: 'Property::Value'
+
   validates :name, presence: true
 
   attr_accessor :avg_score

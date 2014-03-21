@@ -3,7 +3,6 @@ class AlternativesController < ApplicationController
   inherit_resources
 
   respond_to :json
-  custom_actions collection: [:rate]
 
   helper_method :alternative, :alternatives
 
@@ -19,10 +18,22 @@ class AlternativesController < ApplicationController
     end
   end
 
-
-  def rate
+  def index
     @criterion_ids = params[:criterion_ids].split(",")
-    @alternatives = Voltdb::CriteriaRating.alternatives @criterion_ids
+
+    filtered_alternatives = Alternative
+    alternatives_ids = nil
+    if params[:properties] and params[:properties].any?
+      fields = Property::Field.where(name: params[:properties].keys).map{|field| {field.name => field.id}}.reduce Hash.new, :merge
+
+      filtered_alternatives = filtered_alternatives.joins(:property_values)
+      params[:properties].each do |property, value|
+        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: fields[property], value: value})
+      end
+      alternatives_ids = filtered_alternatives.limit(500).pluck(:id)
+    end
+
+    @alternatives = Voltdb::CriteriaRating.alternatives @criterion_ids, alternatives_ids
   end
 
 protected

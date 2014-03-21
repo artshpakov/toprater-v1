@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140318135455) do
+ActiveRecord::Schema.define(version: 20140321123417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,35 @@ ActiveRecord::Schema.define(version: 20140318135455) do
   end
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
+
+  create_table "property_fields", force: true do |t|
+    t.integer  "group_id"
+    t.string   "field_type",             null: false
+    t.string   "name",                   null: false
+    t.string   "title",                  null: false
+    t.integer  "status",     default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "property_fields", ["group_id"], name: "index_property_fields_on_group_id", using: :btree
+
+  create_table "property_groups", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "property_values", force: true do |t|
+    t.integer  "alternative_id"
+    t.integer  "field_id"
+    t.text     "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "property_values", ["alternative_id"], name: "index_property_values_on_alternative_id", using: :btree
+  add_index "property_values", ["field_id"], name: "index_property_values_on_field_id", using: :btree
 
   create_table "review_sentences", force: true do |t|
     t.integer  "alternative_id"
