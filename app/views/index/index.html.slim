@@ -1,4 +1,8 @@
 .row
+  header
+    a.btn href="javascript:;" ng-click="properties_shown = !properties_shown" = fa_icon :bars, text: 'Фильтры'
+    = render partial: "partials/properties"
+
   = render partial: "partials/cart"
 
 .row role="main-content"

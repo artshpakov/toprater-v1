@@ -14,7 +14,7 @@
 
   $scope.$watch 'active_criteria.length', ->
     if $scope.active_criteria.length
-      Alternative.rate($scope.active_criteria).then (alternatives) ->
+      Alternative.rate(criteria: $scope.active_criteria).then (alternatives) ->
         $scope.alternatives = alternatives
 
 ]
