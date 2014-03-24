@@ -1,6 +1,7 @@
 class AlternativesController < ApplicationController
 
   inherit_resources
+  custom_actions collection: [:count]
 
   respond_to :json
 
@@ -19,8 +20,7 @@ class AlternativesController < ApplicationController
   end
 
   def index
-    @criterion_ids = params[:criterion_ids].split(",")
-
+    #TODO: filters will be moved to VoltDB soon
     filtered_alternatives = Alternative
     alternatives_ids = nil
     if params[:properties] and params[:properties].any?
@@ -28,10 +28,39 @@ class AlternativesController < ApplicationController
       params[:properties].each do |property, value|
         filtered_alternatives = filtered_alternatives.where(property_values: {field_id: property.to_i, value: value})
       end
-      alternatives_ids = filtered_alternatives.limit(500).pluck(:id)
+      alternatives_ids = filtered_alternatives.limit(200).pluck(:id)
     end
 
-    @alternatives = Voltdb::CriteriaRating.alternatives @criterion_ids, alternatives_ids
+
+    if alternatives_ids and !alternatives_ids.any?
+      @alternatives = []
+      return
+    end
+
+    @alternatives = Voltdb::CriteriaRating.select
+
+    if alternatives_ids and alternatives_ids.any?
+      @alternatives = @alternatives.where(alternative_id: alternatives_ids)
+    end
+
+    if params[:criterion_ids].present?
+      @criterion_ids = params[:criterion_ids].split(",")
+      @alternatives = @alternatives.order(@criterion_ids)
+    end
+
+    @alternatives = @alternatives.load
+  end
+
+  def count
+    filtered_alternatives = Alternative
+    if params[:properties] and params[:properties].any?
+      filtered_alternatives = filtered_alternatives.joins(:property_values)
+      params[:properties].each do |property, value|
+        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: property.to_i, value: value})
+      end
+    end
+
+    respond_with filtered_alternatives.count
   end
 
 protected
