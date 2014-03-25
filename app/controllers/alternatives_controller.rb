@@ -20,47 +20,30 @@ class AlternativesController < ApplicationController
   end
 
   def index
-    #TODO: filters will be moved to VoltDB soon
-    filtered_alternatives = Alternative
-    alternatives_ids = nil
-    if params[:property_ids] and params[:property_ids].any?
-      filtered_alternatives = filtered_alternatives.joins(:property_values)
-      params[:property_ids].each do |id, value|
-        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: id, value: value})
-      end
-      alternatives_ids = filtered_alternatives.limit(200).pluck(:id)
-    end
-
-
-    if alternatives_ids and !alternatives_ids.any?
-      @alternatives = []
-      return
-    end
-
     @alternatives = Voltdb::CriteriaRating.select
-
-    if alternatives_ids and alternatives_ids.any?
-      @alternatives = @alternatives.where(alternative_id: alternatives_ids)
+    if params[:properties] and params[:properties].any?
+      params[:properties].each do |property, value|
+        @alternatives = @alternatives.where(properties: {property => value})
+      end
     end
 
     if params[:criterion_ids].present?
       @criterion_ids = params[:criterion_ids].split(",")
-      @alternatives = @alternatives.order(@criterion_ids)
+      @alternatives = @alternatives.score_by(@criterion_ids)
     end
 
     @alternatives = @alternatives.load
   end
 
   def count
-    filtered_alternatives = Alternative
-    if params[:property_ids] and params[:property_ids].any?
-      filtered_alternatives = filtered_alternatives.joins(:property_values)
-      params[:property_ids].each do |property, value|
-        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: property.to_i, value: value})
+    @alternatives = Voltdb::CriteriaRating.select
+    if params[:properties] and params[:properties].any?
+      params[:properties].each do |property, value|
+        @alternatives = @alternatives.where(properties: {property => value})
       end
     end
 
-    respond_with count: filtered_alternatives.count
+    respond_with @alternatives.count.load
   end
 
 protected

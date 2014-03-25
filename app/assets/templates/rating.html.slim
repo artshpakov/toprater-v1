@@ -10,4 +10,4 @@
     li.card ng-repeat="alternative in alternatives.all"
       a' href="/alternatives/{{ alternative.id }}" {{ alternative.name }}
       | ({{ alternative.relevant_reviews_count }} reviews)
-      |  score {{ alternative.avg_score }}%
+      |  score {{ alternative.score }}%

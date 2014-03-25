@@ -12,8 +12,8 @@ class Voltdb::CriteriaRating < Volter::Model
     end
 
     def where(opts)
-      @alternative_id = opts[:alternative_id].to_a if opts[:alternative_id]
-      @criterion_id = opts[:criterion_id].to_a if opts[:criterion_id]
+      @conditions ||= {}
+      @conditions.merge!(opts)
       self
     end
 
@@ -22,72 +22,86 @@ class Voltdb::CriteriaRating < Volter::Model
       self
     end
 
-    def order(criterion_ids)
-      criterion_columns = criterion_ids.map{|cr| "cr_#{cr}"}
-
-      result = execute_sql(
-        "SELECT alternative_id, CAST((#{criterion_columns.map{|cr| "COALESCE(#{cr}, 0)" }.join('+')}) AS FLOAT)/#{criterion_columns.size} AS score
-         FROM criteria_ratings 
-         #{ "WHERE alternative_id IN ( #{@alternative_id.join(',')} )" if defined?(@alternative_id) and !@alternative_id.nil? }
-         ORDER BY score DESC LIMIT #{ defined?(@limit) ? @limit : 20 }"
-
-      ).raw["results"].first["data"][0..19]
-
-      @scores = result.map{|data| {data[0] => data[1]} }.reduce(Hash.new, :merge)
-      @alternative_id = @scores.keys unless defined? @alternative_id
+    def score_by(opts)
+      @score_by = opts || []
       self
     end
 
-    def first
-      if defined? @alternative_id
-        if defined? @scores
-          alternative = Alternative.where(id: @scores.keys.first).first
-          if alternative
-            alternative.avg_score = @scores.values.first
-            return alternative
-          else
-            return nil
-          end
-        else
-          return Alternative.where(id: @alternative_id.first).first
+    def load
+      @sql = {selects: [], froms: [], joins: [], wheres: [], orders: [], limit: "", count: ""}
+      @columns = []
+
+      if @conditions and @conditions[:properties]
+        properties = @conditions[:properties].symbolize_keys
+        prop_columns = properties.keys.map{|prop| "ap.prop_#{prop}"}
+        @sql[:selects] << "ap.alternative_id"
+        @columns << :alternative_id
+        @sql[:selects] += prop_columns
+        @columns += properties.keys.map{|prop| :"prop_#{prop}"}
+
+        @sql[:froms] << "alternatives_properties ap"
+        @sql[:wheres] << properties.map{|prop, val| "ap.prop_#{prop}=#{val}"}.join(" AND ")
+
+        if @count
+          @sql[:selects] = ["COUNT(#{@count})"]
+          @columns = [:count]
         end
       end
-      Alternative.first
+
+      if @limit
+        @sql[:limit] = @limit.to_s
+      end
+
+      if @score_by and @score_by.any?
+        criterion_columns = @score_by.map{|cr| "cr.cr_#{cr}"}
+        if @sql[:selects].empty?
+          @sql[:selects] << "cr.alternative_id"
+          @columns = [:alternative_id]
+        end
+        @sql[:selects] << "CAST((#{criterion_columns.map{|cr| "COALESCE(#{cr}, 0)" }.join('+')}) AS FLOAT)/#{criterion_columns.size} AS score"
+        @columns << :score
+
+        if @sql[:froms].empty?
+          @sql[:froms] << "criteria_ratings cr"
+        else
+          @sql[:joins] << "LEFT JOIN criteria_ratings cr ON cr.alternative_id = ap.alternative_id"
+        end
+        @sql[:orders] << "score DESC"
+      end
+
+      if @sql[:selects].empty? or @sql[:froms].empty?
+        alternatives = Alternative.all
+        alternatives = alternatives.limit(@sql[:limit]) unless @sql[:limit].empty?
+        alternatives = alternatives.count unless @sql[:count].empty?
+        return alternatives
+      end
+
+      sql = "SELECT #{ @sql[:selects].join(', ')} FROM #{@sql[:froms].join(',')} #{@sql[:joins].join(',')} #{ "WHERE #{@sql[:wheres].join(',')}" if @sql[:wheres].present?} #{"ORDER BY #{@sql[:orders].join(',')}" if @sql[:orders].present?} #{"LIMIT #{@sql[:limit]}" if @sql[:limit].present?}"
+
+      result = execute_sql(sql).raw["results"].first["data"]
+
+      if @columns.include? :alternative_id
+        i = @columns.index :alternative_id
+        alternative_ids = result.map{|row| row[i]}
+        alternatives = Alternative.where(id: alternative_ids)
+
+        sorted_alternatives = []
+        alternatives.each do |a|
+          sorted_alternatives[a.id] = a
+        end
+
+        output = result.map{|row| OpenStruct.new(Hash[@columns.zip(row)].merge(object: sorted_alternatives[row[i]]))}
+      else
+        output = result.map{|row| OpenStruct.new(Hash[@columns.zip(row)])}
+      end
+ 
     end
 
     def count
-      return @alternative_id.length if defined? @alternative_id
-      Alternative.count
+      @count = "*"
+      self
     end
-
-    def load
-      alternatives = []
-
-      if defined? @alternative_id
-        alternatives = Alternative.where(id: @alternative_id)
-      end
-
-      if defined? @scores
-        sorted_alternatives = []
-        alternatives.each do |alternative|
-          alternative.avg_score = @scores[alternative.id]
-          sorted_alternatives[alternative.id] = alternative
-        end
-        return @scores.keys.map{|i| sorted_alternatives[i]}
-      end
-      alternatives
-    end
-
-    def ids
-      @alternative_id if defined? @alternative_id
-    end
-
 
   end
 
 end
-
-
-
-    #@alternative_ids = opts[:alternative_ids] || []
-    #@scores = opts[:scores] || {}

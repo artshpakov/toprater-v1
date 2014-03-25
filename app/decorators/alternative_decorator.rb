@@ -5,12 +5,6 @@ class AlternativeDecorator < ApplicationDecorator
     h.link_to(object.name, "http://lmgtfy.com/?q=#{object.name.gsub(' ', '+')}", target: '_blank').html_safe
   end
 
-  def avg_score
-    if object.avg_score
-      (object.avg_score*100/5).round
-    end
-  end
-
   def processed_reviews criterion_ids
     reviews = object.review_sentences.where(criterion_id: criterion_ids)
     Hash[Array.wrap(criterion_ids).map do |cid|
