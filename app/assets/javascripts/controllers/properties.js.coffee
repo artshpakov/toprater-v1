@@ -1,14 +1,20 @@
-@rating.controller "rating.PropertiesCtrl", ["$scope", "data", "Alternative", ($scope, data, Alternative) ->
+@rating.controller "rating.PropertiesCtrl", ["$scope", "Property", "Alternative", ($scope, Property, Alternative) ->
 
-  $scope.properties = data.properties
-  $scope.filters = []
+  $scope.properties = Property.all
+  $scope.active_properties = Property.active
+
+  $scope.toggle_properties = ->
+    $scope.properties_shown = !$scope.properties_shown
 
   $scope.apply = ->
-    Alternative.rate(filters: $scope.filters).then (alternatives) ->
-      if alternatives.length
-        $scope.$parent.alternatives = alternatives
-      else
-        $scope.nothing_found = 'Nothing found'
+    Alternative.rate().then (alternatives) ->
+      $scope.toggle_properties()
 
+  $scope.update_filters = -> $scope.dirty = true
+  $scope.$watch 'dirty', (dirty) ->
+    if dirty
+      _.defer -> Alternative.count().then (count) ->
+        $scope.filtered_alternatives_count = count.data
+        $scope.dirty = false
 
 ]
