@@ -1,22 +1,26 @@
 @rating.factory 'Alternative', ["$resource", "$http", "Criterion", "Property", ($resource, $http, Criterion, Property) ->
-  criteria_to_s = (criteria) -> _.pluck(criteria, 'id').join(',')
-  filters_to_s  = (filters) -> _.tap {}, (hash) ->
-    for id, value of filters
-      hash["properties[#{ id }]"] = 1 if value
+  criteria_to_params = (criteria) ->
+    _.pluck(criteria, 'id').join(',')
+  filters_to_params  = (filters) ->
+    _.tap {}, (hash) -> for id, value of filters
+      hash["property_ids[#{ id }]"] = 1 if value
 
-  _.tap $resource('/alternatives/:id.json', { id: '@id' }, { update: { method: 'PUT' } }), (Alternative) ->
+
+  _.tap $resource('/alternatives/:id.json', { id: '@id' }, 
+    update: { method: 'PUT' }
+    count_filtered: { url: '/alternatives/count.json' }
+  ), (Alternative) ->
 
     all: []
 
     Alternative.rate = ->
-      params = _.extend filters_to_s(Property.active), { criterion_ids: criteria_to_s(Criterion.active) }
+      params = _.extend filters_to_params(Property.active), { criterion_ids: criteria_to_params(Criterion.active) }
       @query(params).$promise.then (alternatives) => @all = alternatives
 
-    Alternative.count = (filters) ->
-      params = ("#{k}=#{v}" for k,v of filters_to_s(Property.active)).join("&")
-      $http.get("/alternatives/count.json?#{ params }")
+    Alternative.count = ->
+      @count_filtered(filters_to_params(Property.active)).$promise
 
     Alternative.pick = (id, criteria) ->
-      @get(id: id, criterion_ids: criteria_to_s(criteria)).$promise
+      @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise
 
 ]

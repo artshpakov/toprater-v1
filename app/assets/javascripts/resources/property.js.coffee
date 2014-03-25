@@ -3,6 +3,6 @@
   items = data.properties
 
   all: items
-  active: []
+  active: {}
 
 ]

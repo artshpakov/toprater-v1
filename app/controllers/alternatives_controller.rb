@@ -23,10 +23,10 @@ class AlternativesController < ApplicationController
     #TODO: filters will be moved to VoltDB soon
     filtered_alternatives = Alternative
     alternatives_ids = nil
-    if params[:properties] and params[:properties].any?
+    if params[:property_ids] and params[:property_ids].any?
       filtered_alternatives = filtered_alternatives.joins(:property_values)
-      params[:properties].each do |property, value|
-        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: property.to_i, value: value})
+      params[:property_ids].each do |id, value|
+        filtered_alternatives = filtered_alternatives.where(property_values: {field_id: id, value: value})
       end
       alternatives_ids = filtered_alternatives.limit(200).pluck(:id)
     end
@@ -53,14 +53,14 @@ class AlternativesController < ApplicationController
 
   def count
     filtered_alternatives = Alternative
-    if params[:properties] and params[:properties].any?
+    if params[:property_ids] and params[:property_ids].any?
       filtered_alternatives = filtered_alternatives.joins(:property_values)
-      params[:properties].each do |property, value|
+      params[:property_ids].each do |property, value|
         filtered_alternatives = filtered_alternatives.where(property_values: {field_id: property.to_i, value: value})
       end
     end
 
-    respond_with filtered_alternatives.count
+    respond_with count: filtered_alternatives.count
   end
 
 protected

@@ -13,8 +13,8 @@
   $scope.update_filters = -> $scope.dirty = true
   $scope.$watch 'dirty', (dirty) ->
     if dirty
-      _.defer -> Alternative.count().then (count) ->
-        $scope.filtered_alternatives_count = count.data
+      _.defer -> Alternative.count().then (response) ->
+        $scope.filtered_alternatives_count = response.count
         $scope.dirty = false
 
 ]
