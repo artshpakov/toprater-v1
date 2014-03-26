@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.3'
+gem 'rails', '~> 4.0'
 
 gem 'pg'
 gem 'volter', github: 'Solver-Club/volter'
@@ -21,8 +21,8 @@ gem 'sqlite3'
 gem 'settingslogic'
 
 gem 'jquery-rails'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'sass-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.0'
+gem 'sass-rails', '~> 4.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'foundation-rails'
 gem 'font-awesome-rails'
@@ -38,7 +38,7 @@ gem 'unicorn'
 
 group :development do
   gem 'thin'
-  gem 'capistrano', '~> 2.15.0'
+  gem 'capistrano'
   gem 'capistrano-unicorn', require: false
   gem 'rvm-capistrano', require: false
   gem 'better_errors'

@@ -5,7 +5,7 @@ require 'rvm/capistrano'
 # require 'thinking_sphinx/capistrano'
 require 'capistrano-unicorn'
 
-set :stages, %w(production staging jenkins)
+set :stages, %w(production staging jenkins development)
 set :default_stage, "staging"
 require 'capistrano/ext/multistage'
 
