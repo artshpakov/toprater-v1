@@ -9,5 +9,6 @@
   ol#cards
     li.card ng-repeat="alternative in alternatives.all"
       a' href="/alternatives/{{ alternative.id }}" {{ alternative.name }}
-      | ({{ alternative.relevant_reviews_count }} reviews)
-      |  score {{ alternative.score }}%
+      span ng-show='alternative.score != null'
+        | ({{ alternative.relevant_reviews_count }} reviews)
+        |  score {{ alternative.score }}%
