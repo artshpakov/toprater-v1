@@ -18,8 +18,9 @@
 
     Alternative.rate = ->
       params = _.extend filters_to_params(Property.active), { criterion_ids: criteria_to_params(Criterion.active) }
-      @query(params).$promise.then (alternatives) =>
-        @all = _.map(alternatives, (alternative) -> new Alternative alternative)
+      unless _.isEmpty(Property.active) && _.isEmpty(Criterion.active)
+        @query(params).$promise.then (alternatives) =>
+          @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
     Alternative.count = ->
       @count_filtered(filters_to_params(Property.active)).$promise
