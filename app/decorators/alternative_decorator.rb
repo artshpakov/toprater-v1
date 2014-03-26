@@ -1,6 +1,10 @@
 class AlternativeDecorator < ApplicationDecorator
   delegate_all
 
+  def score
+    (object.score*100/5).round if object.score
+  end
+
   def link_to_lmgtfy
     h.link_to(object.name, "http://lmgtfy.com/?q=#{object.name.gsub(' ', '+')}", target: '_blank').html_safe
   end

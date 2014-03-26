@@ -3,10 +3,10 @@
     _.pluck(criteria, 'id').join(',')
   filters_to_params  = (filters) ->
     _.tap {}, (hash) -> for id, value of filters
-      hash["property_ids[#{ id }]"] = 1 if value
+      hash["prop[#{ id }]"] = 1 if value
 
 
-  _.tap $resource('/alternatives/:id.json', { id: '@id' }, 
+  _.tap $resource('/alternatives/:id.json', { id: '@id' },
     update: { method: 'PUT' }
     count_filtered: { url: '/alternatives/count.json' }
   ), (Alternative) ->
@@ -15,7 +15,8 @@
 
     Alternative.rate = ->
       params = _.extend filters_to_params(Property.active), { criterion_ids: criteria_to_params(Criterion.active) }
-      @query(params).$promise.then (alternatives) => @all = alternatives
+      @query(params).$promise.then (alternatives) =>
+        @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
     Alternative.count = ->
       @count_filtered(filters_to_params(Property.active)).$promise

@@ -13,7 +13,15 @@ class Voltdb::CriteriaRating < Volter::Model
 
     def where(opts)
       @conditions ||= {}
-      @conditions.merge!(opts)
+      if opts.is_a? Hash
+        opts.each do |key, val|
+          if @conditions[key].present?
+            @conditions[key].merge! val
+          else
+            @conditions[key] = val
+          end
+        end
+      end
       self
     end
 
@@ -71,8 +79,8 @@ class Voltdb::CriteriaRating < Volter::Model
 
       if @sql[:selects].empty? or @sql[:froms].empty?
         alternatives = Alternative.all
-        alternatives = alternatives.limit(@sql[:limit]) unless @sql[:limit].empty?
-        alternatives = alternatives.count unless @sql[:count].empty?
+        alternatives = alternatives.limit(@limit) if @limit and @limit.present?
+        alternatives = alternatives.count if @count and @count.present?
         return alternatives
       end
 
@@ -80,20 +88,26 @@ class Voltdb::CriteriaRating < Volter::Model
 
       result = execute_sql(sql).raw["results"].first["data"]
 
+      if @columns.include? :count
+        return result[0][0]
+      end
+
       if @columns.include? :alternative_id
-        i = @columns.index :alternative_id
-        alternative_ids = result.map{|row| row[i]}
+        alternative_id_index = @columns.index :alternative_id
+        alternative_ids = result.map{|row| row[alternative_id_index]}
+        scores = result.map{|row| {row[alternative_id_index] => row[@columns.index(:score)]}}.reduce Hash.new, :merge if @columns.include? :score
         alternatives = Alternative.where(id: alternative_ids)
 
         sorted_alternatives = []
         alternatives.each do |a|
-          sorted_alternatives[a.id] = a
+          a.score = scores[a.id] if @columns.include? :score
+          sorted_alternatives[alternative_ids.index(a.id)] = a
         end
 
-        output = result.map{|row| OpenStruct.new(Hash[@columns.zip(row)].merge(object: sorted_alternatives[row[i]]))}
-      else
-        output = result.map{|row| OpenStruct.new(Hash[@columns.zip(row)])}
+        return sorted_alternatives
       end
+
+      nil
  
     end
 

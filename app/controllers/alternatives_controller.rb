@@ -21,8 +21,8 @@ class AlternativesController < ApplicationController
 
   def index
     @alternatives = Voltdb::CriteriaRating.select
-    if params[:properties] and params[:properties].any?
-      params[:properties].each do |property, value|
+    if params[:prop] and params[:prop].any?
+      params[:prop].each do |property, value|
         @alternatives = @alternatives.where(properties: {property => value})
       end
     end
@@ -32,18 +32,18 @@ class AlternativesController < ApplicationController
       @alternatives = @alternatives.score_by(@criterion_ids)
     end
 
-    @alternatives = @alternatives.load
+    @alternatives = @alternatives.limit(20).load
   end
 
   def count
     @alternatives = Voltdb::CriteriaRating.select
-    if params[:properties] and params[:properties].any?
-      params[:properties].each do |property, value|
+    if params[:prop] and params[:prop].any?
+      params[:prop].each do |property, value|
         @alternatives = @alternatives.where(properties: {property => value})
       end
     end
 
-    respond_with @alternatives.count.load
+    render json: {count: @alternatives.count.load.to_i }
   end
 
 protected

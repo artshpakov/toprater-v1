@@ -9,6 +9,6 @@ class Alternative < ActiveRecord::Base
 
   validates :name, presence: true
 
-  attr_accessor :avg_score
+  attr_accessor :score, :properties
 
 end
