@@ -1,13 +1,17 @@
-.card ng-repeat="alternative in alternatives.all"
-  .headline
-    a.title href="/alternatives/{{ alternative.id }}"
-      h2.index
-        small #
-        | {{ $index+1 }}
-      | {{ alternative.name }}
-  a.img href="/alternatives/{{ alternative.id }}"
-    .score ng-if="alternative.score != null"
-      small' подходит на
-      | {{ alternative.score }}%
-  .tags-area
-    .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" {{ criterion.name }}
+div ng-repeat="alternative in alternatives.all"
+  .card
+    .headline
+      a.title href="javascript:;" ng-click="pick(alternative)"
+        h2.index
+          small #
+          | {{ $index+1 }}
+        | {{ alternative.name }}
+    a.img href="javascript:;" ng-click="pick(alternative)"
+      .score ng-if="alternative.score != null"
+        small' подходит на
+        | {{ alternative.score }}%
+    .tags-area
+      .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" {{ criterion.name }}
+
+  .details-placeholder ng-if="($index+1)%3==0" ng-show="belongs_here($index)"
+    h1 : a href="/alternatives/{{ alternative.id }}" {{ current_alternative.name }}
