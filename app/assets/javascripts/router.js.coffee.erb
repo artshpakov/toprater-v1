@@ -2,9 +2,10 @@
 
   $routeProvider.when '/',
     templateUrl: '<%= asset_path("rating.html.slim") %>'
+    controller: 'rating.RatingCtrl'
 
   $routeProvider.when '/alternatives/:id',
-    templateUrl: '<%= asset_path("details.html.slim") %>',
+    templateUrl: '<%= asset_path("details.html.slim") %>'
     controller: 'rating.DetailsCtrl'
 
   $routeProvider.otherwise redirectTo: '/'

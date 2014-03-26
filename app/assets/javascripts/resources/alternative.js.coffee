@@ -13,6 +13,9 @@
 
     all: []
 
+    Alternative::index = ->
+      Alternative.all.indexOf @
+
     Alternative.rate = ->
       params = _.extend filters_to_params(Property.active), { criterion_ids: criteria_to_params(Criterion.active) }
       @query(params).$promise.then (alternatives) =>

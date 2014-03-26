@@ -12,10 +12,4 @@
     $scope.properties_shown = !$scope.properties_shown
     $scope.criteria_shown = false if $scope.properties_shown
 
-  $scope.pick = (alternative) ->
-    $scope.current_alternative = alternative
-
-  $scope.belongs_here = (index) ->
-    0 <= index - Alternative.all.indexOf($scope.current_alternative) < 3
-
 ]
