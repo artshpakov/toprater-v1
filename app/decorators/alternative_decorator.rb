@@ -1,14 +1,12 @@
 class AlternativeDecorator < ApplicationDecorator
   delegate_all
 
-  def link_to_lmgtfy
-    h.link_to(object.name, "http://lmgtfy.com/?q=#{object.name.gsub(' ', '+')}", target: '_blank').html_safe
+  def score
+    (object.score*100/5).round if object.score
   end
 
-  def avg_score
-    if object.avg_score
-      (object.avg_score*100/5).round
-    end
+  def link_to_lmgtfy
+    h.link_to(object.name, "http://lmgtfy.com/?q=#{object.name.gsub(' ', '+')}", target: '_blank').html_safe
   end
 
   def processed_reviews criterion_ids

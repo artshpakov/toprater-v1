@@ -2,10 +2,14 @@ AlternativesPower::Application.routes.draw do
 
   root 'index#index'
 
-  resources :alternatives, only: :show do
-    collection { get :rate }
+  resources :alternatives, only: [:index, :show] do
+    collection do
+      get :count
+    end
   end
 
-  resources :criteria, only: %i(index show)
+  resources :properties, only: [:index]
+
+  resources :criteria, only: [:index, :show]
 
 end

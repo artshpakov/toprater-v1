@@ -1,5 +1,6 @@
-@rating.controller "rating.MainCtrl", ["$scope", "Criterion", ($scope, Criterion) ->
+@rating.controller "rating.MainCtrl", ["$scope", "Criterion", "Alternative", ($scope, Criterion, Alternative) ->
 
-  $scope.criteria = Criterion
+  $scope.alternatives = Alternative
+  $scope.criteria     = Criterion
 
 ]

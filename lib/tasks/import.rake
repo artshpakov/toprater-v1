@@ -79,5 +79,34 @@ namespace :import do
 
   end
 
+  desc "Import alternatives properties from sqlite DB file"
+  task booking: :environment do
+
+    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/booking-maldives.db")
+    counter = 0
+    DB[:hotels].each do |booking_hotel|
+      hotel = Alternative.where(name: booking_hotel[:name]).first
+      if hotel
+        counter += 1
+        JSON.parse(booking_hotel[:facilities]).each do |fac_group, fac_properties|
+          group = Property::Group.find_or_create_by(name: fac_group)
+
+          fac_properties.each do |fac_property|
+            field = group.fields.find_or_initialize_by(name: fac_property.downcase.gsub(/[\-\s]+/, "_").gsub(/[^A-Za-z_]/, ""))
+            field.title = fac_property
+            field.field_type = 'boolean'
+            if field.save!
+              value = field.values.find_or_initialize_by(alternative_id: hotel.id)
+              value.value = '1'
+              value.save!
+            end
+          end
+        end
+      end
+    end
+    p "Processed #{counter} hotels"
+    
+  end
+
 
 end

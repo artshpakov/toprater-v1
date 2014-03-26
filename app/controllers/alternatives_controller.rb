@@ -1,9 +1,9 @@
 class AlternativesController < ApplicationController
 
   inherit_resources
+  custom_actions collection: [:count]
 
   respond_to :json
-  custom_actions collection: [:rate]
 
   helper_method :alternative, :alternatives
 
@@ -19,10 +19,31 @@ class AlternativesController < ApplicationController
     end
   end
 
+  def index
+    @alternatives = Voltdb::CriteriaRating.select
+    if params[:prop] and params[:prop].any?
+      params[:prop].each do |property, value|
+        @alternatives = @alternatives.where(properties: {property => value})
+      end
+    end
 
-  def rate
-    @criterion_ids = params[:criterion_ids].split(",")
-    @alternatives = Voltdb::CriteriaRating.alternatives @criterion_ids
+    if params[:criterion_ids].present?
+      @criterion_ids = params[:criterion_ids].split(",")
+      @alternatives = @alternatives.score_by(@criterion_ids)
+    end
+
+    @alternatives = @alternatives.limit(20).load
+  end
+
+  def count
+    @alternatives = Voltdb::CriteriaRating.select
+    if params[:prop] and params[:prop].any?
+      params[:prop].each do |property, value|
+        @alternatives = @alternatives.where(properties: {property => value})
+      end
+    end
+
+    render json: {count: @alternatives.count.load.to_i }
   end
 
 protected
