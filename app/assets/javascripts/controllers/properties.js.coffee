@@ -3,9 +3,6 @@
   $scope.properties = Property.all
   $scope.active_properties = Property.active
 
-  $scope.toggle_properties = ->
-    $scope.properties_shown = !$scope.properties_shown
-
   $scope.apply = ->
     Alternative.rate().then (alternatives) ->
       $scope.toggle_properties()

@@ -1,14 +1,13 @@
-.large-4.columns ng-controller="rating.CriteriaCtrl"
-  #criteria-wrapper ng-repeat="root_criterion in criteria.all"
-    .root-criterion
-      a href="javascript:;" ng-click="toggle_section(root_criterion)" {{ root_criterion.name }}
-    .criteria-drawer ng-show="active_section == root_criterion"
-      a.tag href="javascript:;" ng-class="{ active: criterion.is_active(), inactive: criterion.is_inactive() }" ng-repeat="criterion in root_criterion.children" ng-click="criterion.toggle_state('active')" {{ criterion.name }}
-
-.large-8.columns
-  ol#cards
-    li.card ng-repeat="alternative in alternatives.all"
-      a' href="/alternatives/{{ alternative.id }}" {{ alternative.name }}
-      span ng-show='alternative.score != null'
-        | ({{ alternative.relevant_reviews_count }} reviews)
-        |  score {{ alternative.score }}%
+.card ng-repeat="alternative in alternatives.all"
+  .headline
+    a.title href="/alternatives/{{ alternative.id }}"
+      h2.index
+        small #
+        | {{ $index+1 }}
+      | {{ alternative.name }}
+  a.img href="/alternatives/{{ alternative.id }}"
+    .score ng-if="alternative.score != null"
+      small' подходит на
+      | {{ alternative.score }}%
+  .tags-area
+    .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" {{ criterion.name }}

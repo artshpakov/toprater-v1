@@ -32,7 +32,7 @@ class AlternativesController < ApplicationController
       @alternatives = @alternatives.score_by(@criterion_ids)
     end
 
-    @alternatives = @alternatives.limit(20).load
+    @alternatives = @alternatives.limit(21).load
   end
 
   def count

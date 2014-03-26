@@ -1,6 +1,4 @@
 div ng-controller="rating.PropertiesCtrl"
-  a.btn href="javascript:;" ng-click="toggle_properties()" = fa_icon :bars, text: 'Фильтры'
-
   #properties ng-show="properties_shown"
     form ng-submit="apply()"
       fieldset ng-repeat="property in properties"
