@@ -17,9 +17,13 @@ namespace :import do
       hotel = Alternative.find_or_create_by(name: hotel_attributes[:name])
       if hotel.id
         hotels[hotel_attributes[:ta_id]] = hotel.id
+        if hotel_attributes[:photo].present?
+          medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: hotel.id, url: hotel_attributes[:photo], medium_type: 'image')
+          medium.update_attributes(cover: true)
+        end
       end
     end
-    
+
     puts "Processed #{hotels.keys.size} hotels"
 
     DB[:reviews].where(owner_response: nil).each do |review_attributes|
@@ -87,6 +91,10 @@ namespace :import do
     DB[:hotels].each do |booking_hotel|
       hotel = Alternative.where(name: booking_hotel[:name]).first
       if hotel
+        if booking_hotel[:photo].present?
+          medium = Medium::Booking.find_or_create_by(alternative_id: hotel.id, url: booking_hotel[:photo], medium_type: 'image')
+        end
+
         counter += 1
         JSON.parse(booking_hotel[:facilities]).each do |fac_group, fac_properties|
           group = Property::Group.find_or_create_by(name: fac_group)
