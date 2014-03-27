@@ -14,7 +14,7 @@ div ng-repeat="alternative in alternatives.all"
     .tags-area
       .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" {{ criterion.name }}
 
-  .details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="topp{{ $index }}" style="background: url({{ current_alternative.cover_url }}); background-size: cover;"
+  .details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}" style="background: url({{ current_alternative.cover_url }}); background-size: cover;"
     .headline
       h2.index
         small #

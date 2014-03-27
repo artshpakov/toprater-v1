@@ -3,6 +3,12 @@
   $scope.pick = (alternative) ->
     $scope.current_alternative = alternative
 
+  $scope.$watch 'current_alternative', (alternative) ->
+    if alternative?
+      _.defer ->
+        element = document.getElementById "middle#{ $scope.row alternative.index() }"
+        window.scrollTo 0, element.offsetTop - 70
+
   $scope.belongs_here = (index) ->
     $scope.current_alternative and 0 <= index - $scope.current_alternative.index() < 3
   $scope.last_in_row = (index) ->
@@ -16,5 +22,7 @@
     $scope.current_alternative = Alternative.all[$scope.current_alternative.index()-1]
   $scope.next         = ->
     $scope.current_alternative = Alternative.all[$scope.current_alternative.index()+1]
+
+  $scope.row = (index) -> Math.floor index/3
 
 ]
