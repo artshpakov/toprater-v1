@@ -4,7 +4,9 @@
     $scope.current_alternative = alternative
 
   $scope.belongs_here = (index) ->
-    0 <= index - Alternative.all.indexOf($scope.current_alternative) < 3
+    $scope.current_alternative and 0 <= index - $scope.current_alternative.index() < 3
+  $scope.last_in_row = (index) ->
+    (index+1)%3 == 0 or index == Alternative.all.length-1
 
   $scope.has_previous = ->
     $scope.current_alternative? and $scope.current_alternative.index() > 0

@@ -1,12 +1,15 @@
+@import '_settings'
+
+
 @mixin toggleable
-  background-color: #bbb
+  background-color: $toggleable-default-color
   color: #000
   cursor: pointer
   &.active
-    background-color: rgb(75, 192, 75)
+    background-color: $toggleable-active-color
     color: #fff
   &.inactive
-    background-color: #a1c2db
+    background-color: $toggleable-inactive-color
 
 
 #criteria
