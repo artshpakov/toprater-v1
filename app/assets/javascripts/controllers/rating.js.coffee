@@ -1,13 +1,21 @@
 @rating.controller "rating.RatingCtrl", ["$scope", "Alternative", ($scope, Alternative) ->
 
+  $scope.current_alternative = Alternative.current_alternative
+
   $scope.pick = (alternative) ->
-    $scope.current_alternative = alternative
+    $scope.current_alternative = Alternative.current_alternative = alternative
+
+  $scope.scroll_to = (alternative) ->
+    _.defer ->
+      element = document.getElementById "middle#{ $scope.row alternative.index() }"
+      window.scrollTo 0, element.offsetTop - 70
 
   $scope.$watch 'current_alternative', (alternative) ->
-    if alternative?
-      _.defer ->
-        element = document.getElementById "middle#{ $scope.row alternative.index() }"
-        window.scrollTo 0, element.offsetTop - 70
+    $scope.scroll_to alternative if alternative?
+
+  console.log $scope.current_alternative
+  $scope.scroll_to $scope.current_alternative if $scope.current_alternative?
+
 
   $scope.belongs_here = (index) ->
     $scope.current_alternative and 0 <= index - $scope.current_alternative.index() < 3
@@ -19,9 +27,9 @@
   $scope.has_next     = ->
     $scope.current_alternative? and $scope.current_alternative.index() < Alternative.all.length-1 
   $scope.previous     = ->
-    $scope.current_alternative = Alternative.all[$scope.current_alternative.index()-1]
+    $scope.pick Alternative.all[$scope.current_alternative.index()-1]
   $scope.next         = ->
-    $scope.current_alternative = Alternative.all[$scope.current_alternative.index()+1]
+    $scope.pick Alternative.all[$scope.current_alternative.index()+1]
 
   $scope.row = (index) -> Math.floor index/3
 
