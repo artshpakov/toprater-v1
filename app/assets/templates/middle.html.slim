@@ -1,0 +1,10 @@
+.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}" style="background: url({{ current_alternative.cover_url }}); background-size: cover;"
+  .headline
+    h2.index
+      small #
+      | {{ current_alternative.index() + 1 }}
+    h2 : a.title href="/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
+    .clearfix
+    .nav
+      a href="javascript:;" style="float: right" ng-click="next()" ng-if="has_next()" next &rarr;
+      a href="javascript:;" ng-click="previous()" ng-if="has_previous()" &larr; previous
