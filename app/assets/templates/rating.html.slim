@@ -7,7 +7,7 @@ div ng-repeat="alternative in alternatives.all"
           | {{ $index+1 }}
         | {{ alternative.name }}
     a.image href="javascript:;" ng-click="pick(alternative)"
-      img src="{{ alternative.cover_url }}"
+      img ng-src="{{ alternative.cover_url }}"
       .score ng-if="alternative.score != null"
         small' подходит на
         | {{ alternative.score }}%
