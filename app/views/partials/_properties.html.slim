@@ -1,12 +1,10 @@
 div ng-controller="rating.PropertiesCtrl"
-  a.btn href="javascript:;" ng-click="toggle_properties()" = fa_icon :bars, text: 'Фильтры'
-
   #properties ng-show="properties_shown"
     form ng-submit="apply()"
-      fieldset ng-repeat="property in properties"
+      fieldset ng-repeat="property in properties.all"
         legend = "{{ property.name }}"
         label ng-repeat="field in property.fields"
-          input type="checkbox" ng-model="active_properties[field.id]" ng-click="update_filters()"
+          input type="checkbox" ng-model="properties.active[field.id]" ng-click="update_filters()"
           | {{ field.title }}
       #filters-result ng-show="filtered_alternatives_count"
         ' Найдено {{ filtered_alternatives_count }} результатов.

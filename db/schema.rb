@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140321123417) do
+ActiveRecord::Schema.define(version: 20140327084825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,20 @@ ActiveRecord::Schema.define(version: 20140321123417) do
   end
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
+
+  create_table "media", force: true do |t|
+    t.integer  "alternative_id"
+    t.string   "type"
+    t.string   "agency_id"
+    t.string   "url"
+    t.string   "medium_type"
+    t.boolean  "cover"
+    t.integer  "status",         default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "media", ["alternative_id"], name: "index_media_on_alternative_id", using: :btree
 
   create_table "property_fields", force: true do |t|
     t.integer  "group_id"

@@ -1,5 +1,8 @@
 .row
   header
+    a.btn href="javascript:;" ng-click="toggle_criteria()" = fa_icon :heart, text: 'Критерии'
+    a.btn href="javascript:;" ng-click="toggle_properties()" = fa_icon :bars, text: 'Фильтры'
+    = render partial: "partials/criteria"
     = render partial: "partials/properties"
 
   = render partial: "partials/cart"
