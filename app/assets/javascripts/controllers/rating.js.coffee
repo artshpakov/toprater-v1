@@ -1,21 +1,16 @@
 @rating.controller "rating.RatingCtrl", ["$scope", "Alternative", ($scope, Alternative) ->
 
   $scope.current_alternative = Alternative.current_alternative
+  $scope.$watch 'current_alternative', (alternative) ->
+    scroll_to alternative if alternative?
+
+  scroll_to = (alternative) -> _.defer ->
+    element = angular.element("#middle#{ $scope.row alternative.index() }")[0]
+    angular.element("body").animate { scrollTop: element.offsetTop - 70 }, 'fast'
+
 
   $scope.pick = (alternative) ->
     $scope.current_alternative = Alternative.current_alternative = alternative
-
-  $scope.scroll_to = (alternative) ->
-    _.defer ->
-      element = document.getElementById "middle#{ $scope.row alternative.index() }"
-      window.scrollTo 0, element.offsetTop - 70
-
-  $scope.$watch 'current_alternative', (alternative) ->
-    $scope.scroll_to alternative if alternative?
-
-  console.log $scope.current_alternative
-  $scope.scroll_to $scope.current_alternative if $scope.current_alternative?
-
 
   $scope.belongs_here = (index) ->
     $scope.current_alternative and 0 <= index - $scope.current_alternative.index() < 3
