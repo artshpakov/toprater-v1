@@ -18,3 +18,4 @@ $ -> $(document).foundation()
 
 @rating = angular.module 'rating', ['ngResource', 'ngRoute', 'ng-rails-csrf', 'ngSanitize']
 @rating.value 'data', window.rating_data
+@rating.value 'locale', window.I18n.locale

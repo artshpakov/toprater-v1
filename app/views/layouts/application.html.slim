@@ -10,8 +10,13 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     meta name="title" content="#{ yield(:title).presence || Rails.application.class.parent_name }"
 
-    link rel="shortcut icon" href="favicon.ico"
-    link rel="apple-touch-icon" href="favicon.png"
+    link rel="shortcut icon" href="/favicon.ico"
+    link rel="apple-touch-icon" href="/favicon.png"
+
+    javascript:
+      window.I18n = {}
+      I18n.default_locale = "#{I18n.default_locale}"
+      I18n.locale = "#{locale}"
 
     = stylesheet_link_tag :application, media: "all"
     = include_gon namespace: 'rating_data'

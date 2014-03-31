@@ -1,14 +1,12 @@
 @rating.config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
 
-  $routeProvider.when '/',
+  $routeProvider.when '/:locale',
     templateUrl: '<%= asset_path("rating.html.slim") %>'
     controller: 'rating.RatingCtrl'
 
-  $routeProvider.when '/alternatives/:id',
+  $routeProvider.when '/:locale/alternatives/:id',
     templateUrl: '<%= asset_path("details.html.slim") %>'
     controller: 'rating.DetailsCtrl'
-
-  $routeProvider.otherwise redirectTo: '/'
 
   $locationProvider.html5Mode(true)
 ]
