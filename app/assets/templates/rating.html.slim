@@ -5,7 +5,7 @@ div ng-repeat="alternative in alternatives.all"
         h2.index
           small #
           | {{ $index+1 }}
-        | {{ alternative.name }}
+        | {{ alternative.name | truncate:40 }}
     a.image href="javascript:;" ng-click="pick(alternative)"
       img ng-src="{{ alternative.cover_url }}"
       .score ng-if="alternative.score != null"
