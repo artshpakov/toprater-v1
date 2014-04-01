@@ -7,6 +7,5 @@ div ng-controller="rating.PropertiesCtrl"
           input type="checkbox" ng-model="properties.active[field.id]" ng-click="update_filters()"
           | {{ field.title }}
       #filters-result ng-show="filtered_alternatives_count"
-        ' Найдено {{ filtered_alternatives_count }} результатов.
-        a href="javascript:;" ng-click="apply()" Показать
-
+        ' {{ 'properties.results.found' | i18n:{ count: filtered_alternatives_count } }}.
+        a href="javascript:;" ng-click="apply()" {{ 'properties.results.show' | i18n }}

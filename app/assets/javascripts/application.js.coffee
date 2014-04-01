@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require foundation
 #= require underscore
+#= require i18n
 
 #= require angular
 #= require angular-resource
@@ -18,4 +19,4 @@ $ -> $(document).foundation()
 
 @rating = angular.module 'rating', ['ngResource', 'ngRoute', 'ng-rails-csrf', 'ngSanitize']
 @rating.value 'data', window.rating_data
-@rating.value 'locale', window.I18n.locale
+@rating.value 'locale', window.i18njs.locale

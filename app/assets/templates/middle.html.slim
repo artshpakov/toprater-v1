@@ -6,5 +6,5 @@
     h2 : a.title href="/{{ locale }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
     .clearfix
     .nav
-      a href="javascript:;" style="float: right" ng-click="next()" ng-if="has_next()" next &rarr;
-      a href="javascript:;" ng-click="previous()" ng-if="has_previous()" &larr; previous
+      a href="javascript:;" style="float: right" ng-click="next()" ng-if="has_next()" == "#{ I18n.t('nav.next') } &rarr;"
+      a href="javascript:;" ng-click="previous()" ng-if="has_previous()" == "&larr; #{ I18n.t('nav.previous') }"

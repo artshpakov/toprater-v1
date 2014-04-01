@@ -14,9 +14,10 @@ html
     link rel="apple-touch-icon" href="/favicon.png"
 
     javascript:
-      window.I18n = {}
-      I18n.default_locale = "#{I18n.default_locale}"
-      I18n.locale = "#{locale}"
+      window.i18njs = {
+        locale: "#{locale}",
+        default_locale: "#{I18n.default_locale}"
+      };
 
     = stylesheet_link_tag :application, media: "all"
     = include_gon namespace: 'rating_data'

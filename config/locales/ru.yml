@@ -1,4 +1,16 @@
 ru:
-  index:
-    headline: "Главная страница"
-    find_me: Шаблон находится в директории %{path}
+  main:
+    criteria: "Критерии"
+    properties: "Фильтры"
+
+  nav:
+    previous: "назад"
+    next: "далее"
+
+  properties:
+    results:
+      found:
+        one: "Найден %{count} результат"
+        few: "Найдены %{count} результата"
+        other: "Найдено %{count} результатов"
+      show: "Показать"

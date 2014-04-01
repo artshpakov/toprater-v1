@@ -1,4 +1,15 @@
 en:
-  index:
-    headline: Index page
-    find_me: Find me in %{path}
+  main:
+    criteria: "Criteria"
+    properties: "Properties"
+
+  nav:
+    previous: "previous"
+    next: "next"
+
+  properties:
+    results:
+      found:
+        one: "%{count} alternative found"
+        other: "%{count} alternatives found"
+      show: "Show me"

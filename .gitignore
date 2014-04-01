@@ -8,6 +8,7 @@ config/voltdb.yml
 db/*.sqlite3
 db/voltdb/compiled_schema.jar
 db/voltdb/schema.sql
+app/assets/javascripts/translations.js
 log
 tmp
 *.rbc
