@@ -1,1 +1,5 @@
 == AlternativesPower
+
+Put SQlite databases in rails /tmp
+
+$ rake import:hotels import:booking voltdb:setup
