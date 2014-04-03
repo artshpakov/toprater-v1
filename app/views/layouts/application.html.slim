@@ -24,7 +24,7 @@ html
     = javascript_include_tag :application
     = csrf_meta_tags
 
-  body lang="ru" ng-app="rating"
+  body lang="#{locale}" ng-app="rating"
     #wrapper ng-controller="rating.MainCtrl"
       .row
         - if flash[:notice]

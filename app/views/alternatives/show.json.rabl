@@ -1,5 +1,5 @@
 object alternative
-attributes :id, :name, :reviews_count, :score, :cover_url
+attributes :id, :name, :reviews_count, :score, :cover_url, :top
 node :reviews do
   alternative.processed_reviews @criterion_ids
 end

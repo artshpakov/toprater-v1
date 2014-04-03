@@ -1,5 +1,5 @@
 collection alternatives
-attributes :id, :name, :score, :reviews_count, :cover_url
+attributes :id, :name, :score, :reviews_count, :cover_url, :top
 # node :reviews do |alternative|
 #   alternative.processed_reviews @criterion_ids
 # end

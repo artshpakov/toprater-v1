@@ -12,4 +12,12 @@ class Alternative < ActiveRecord::Base
 
   attr_accessor :score, :properties
 
+  def cover_thumb
+    Voltdb::Kv.get "alt:#{id}:cover"
+  end
+
+  def top
+    JSON.parse(Voltdb::Kv.get("top50:alt_rating:#{id}") || "{}")
+  end
+
 end

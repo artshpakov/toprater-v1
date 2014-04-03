@@ -2,15 +2,18 @@ namespace :voltdb do
 
   desc "Generate and load VoltDB schema"
   task schema_load: :environment do    
+
+    sql = "CREATE TABLE kv ( key VARCHAR(250) NOT NULL, value VARCHAR(1048576) NOT NULL, PRIMARY KEY (key));\nPARTITION TABLE kv ON COLUMN key;\n"
+
     criteria_columns = Criterion.where.not(ancestry: nil).order('id ASC').map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
 
-    sql = "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\n CONSTRAINT criteria_ratings_alternative_index PRIMARY KEY ( alternative_id )\n);\n"
+    sql += "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\nPRIMARY KEY ( alternative_id )\n);\nPARTITION TABLE criteria_ratings ON COLUMN alternative_id;\n"
 
     properties_columns = Property::Field.order('id ASC').map do |field|
       " prop_#{field.id} #{field.voltdb_type}"
     end.join(",")
 
-    sql += "CREATE TABLE alternatives_properties ( alternative_id INTEGER NOT NULL,\n#{properties_columns},\n CONSTRAINT alternatives_properties_alternative_index PRIMARY KEY ( alternative_id )\n);"
+    sql += "CREATE TABLE alternatives_properties ( alternative_id INTEGER NOT NULL,\n#{properties_columns},\nPRIMARY KEY ( alternative_id )\n);\nPARTITION TABLE alternatives_properties ON COLUMN alternative_id;\n"
 
     puts "Will rewrite #{schema_path}" if File.exists?(schema_path)
     File.open(schema_path, "w") { |f| f.write(sql) }
@@ -60,7 +63,7 @@ namespace :voltdb do
 
   desc "Populate VoltDB schema with data"
   task populate: :environment do
-    abort "  Voltdb doesn't running" if !check_process
+    # abort "  Voltdb doesn't running" if !check_process
 
     criterion_ids = Criterion.where.not(ancestry: nil).order('id ASC').map(&:id)
     criterion_fields = criterion_ids.map { |criterion_id| "cr_#{ criterion_id }" }.join ','
@@ -87,9 +90,32 @@ namespace :voltdb do
       end      
 
       Voltdb::CriteriaRating.execute_sql "INSERT INTO alternatives_properties (alternative_id, #{ properties_fields }) VALUES (#{ alternative.id }, #{ properties_values.values.join(',') })"
+
+      alternative.media.covers.first.tap do |cover|
+        Voltdb::Kv.set "alt:#{alternative.id}:cover", cover.url(:thumb) if cover
+      end
+    end
+
+    puts "\n  Build alterantives rating"
+
+    Voltdb::Kv.del "top50:alt_by_crit:*"
+    criteria = Criterion.where.not(ancestry: nil).pluck(:id)
+    criteria.each do |criterion_id|
+      alternatives_ids = Voltdb::CriteriaRating.select.score_by(criterion_id).limit(10).ids.load
+      alternatives_ids.each_with_index do |alternative_id, place|
+        Voltdb::Kv.get("top50:alt_rating:#{alternative_id}").tap do |current_ratings|
+          current_ratings ||= "{}"
+          current_ratings = JSON.parse(current_ratings)
+          current_ratings.merge!({criterion_id => place+1})
+          current_ratings = Hash[current_ratings.sort_by{|k,v| v}]
+          Voltdb::Kv.set "top50:alt_rating:#{alternative_id}", current_ratings.to_json
+        end
+      end
+    print "."
     end
 
     puts "\n  Populated schema"
+
   end
 
 
@@ -99,7 +125,7 @@ namespace :voltdb do
   end
 
 
-  private
+private
 
   def schema_path
     "#{Rails.root}/db/voltdb/schema.sql"

@@ -1,12 +1,12 @@
 class Voltdb::CriteriaRating < Volter::Model
 
-  # self.table_name = "criteria_ratings"
+  self.table_name = "criteria_ratings"
 
   class << self
 
     def select
       instance_variables.each do |var|
-        remove_instance_variable var
+        remove_instance_variable var unless [:@table_name].include? var
       end
       self
     end
@@ -32,6 +32,12 @@ class Voltdb::CriteriaRating < Volter::Model
 
     def score_by(opts)
       @score_by = opts || []
+      @score_by = [@score_by] unless @score_by.is_a? Array
+      self
+    end
+
+    def ids
+      @ids_only = true
       self
     end
 
@@ -70,9 +76,9 @@ class Voltdb::CriteriaRating < Volter::Model
         @columns << :score
 
         if @sql[:froms].empty?
-          @sql[:froms] << "criteria_ratings cr"
+          @sql[:froms] << "#{@table_name} cr"
         else
-          @sql[:joins] << "LEFT JOIN criteria_ratings cr ON cr.alternative_id = ap.alternative_id"
+          @sql[:joins] << "LEFT JOIN #{@table_name} cr ON cr.alternative_id = ap.alternative_id"
         end
         @sql[:orders] << "score DESC"
       end
@@ -95,6 +101,9 @@ class Voltdb::CriteriaRating < Volter::Model
       if @columns.include? :alternative_id
         alternative_id_index = @columns.index :alternative_id
         alternative_ids = result.map{|row| row[alternative_id_index]}
+
+        return alternative_ids if @ids_only
+
         scores = result.map{|row| {row[alternative_id_index] => row[@columns.index(:score)]}}.reduce Hash.new, :merge if @columns.include? :score
         alternatives = Alternative.where(id: alternative_ids)
 
