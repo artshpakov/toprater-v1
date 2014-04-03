@@ -4,6 +4,11 @@
   $scope.$watch 'current_alternative', (alternative) ->
     scroll_to alternative if alternative?
 
+
+  $scope.$watch 'criteria.active.length', (criteria_count) ->
+    Alternative.rate()
+
+
   scroll_to = (alternative) -> _.defer ->
     element = angular.element("#middle#{ $scope.row alternative.index() }")[0]
     angular.element("body").animate { scrollTop: element.offsetTop - 70 }, 'fast'

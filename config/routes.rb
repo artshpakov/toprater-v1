@@ -13,4 +13,8 @@ AlternativesPower::Application.routes.draw do
 
   root 'index#index'
 
+  namespace :search do
+    get :fetch
+  end
+
 end

@@ -1,8 +1,18 @@
 .row
   header
-    a.btn href="javascript:;" ng-click="toggle_criteria()" = fa_icon :heart, text: t("main.criteria")
+    ul#realms
+      li : a href="javascript:alert('coming soon');" Отели
+
+    div#search ng-controller="rating.SearchCtrl"
+      input type="search" placeholder="Что Вас интересует?" ng-model="query" ng-blur="reset_search()"
+      div role="search-results"
+        ul ng-show="tips.length"
+          li ng-repeat="tip in tips" class="result {{ tip.type }}"
+            a href="javascript:;" ng-click="pick_tip(tip)"
+              div = "{{ tip.name }}"
+              div style="line-height: 12px; color: #bbb; font-size: 12px" Отели
+
     a.btn href="javascript:;" ng-click="toggle_properties()" = fa_icon :bars, text: t("main.properties")
-    = render partial: "partials/criteria"
     = render partial: "partials/properties"
 
   = render partial: "partials/cart"
