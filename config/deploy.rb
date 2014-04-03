@@ -6,7 +6,7 @@ require 'rvm/capistrano'
 require 'capistrano-unicorn'
 
 set :stages, %w(production staging jenkins development)
-set :default_stage, "staging"
+set :default_stage, "development"
 require 'capistrano/ext/multistage'
 
 set :application, "AlternativesPower"
@@ -44,6 +44,9 @@ after "deploy:finalize_update", "deploy:make_symlinks:"
 after 'deploy:restart', 'unicorn:reload'    # app IS NOT preloaded
 after 'deploy:restart', 'unicorn:restart'   # app preloaded
 after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero downtime deployments)
+
+
+#TODO: deploy voltdb config and run nodes in cluster mode
 
 namespace :deploy do
   after 'update_code', :roles => :app do

@@ -1,5 +1,6 @@
-PATH
-  remote: ../volter
+GIT
+  remote: git://github.com/Solver-Club/volter.git
+  revision: 76746b445e7287724839b62b1090baf1ac826d06
   specs:
     volter (0.0.2)
       activesupport
