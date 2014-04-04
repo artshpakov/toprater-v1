@@ -1,4 +1,4 @@
-a href="/" &larr; Назад
+a href="/{{ locale }}" &larr; Назад
 h3 = "{{ alternative.name }}"
 
 p Reviews ({{ alternative.relevant_reviews_count }})
@@ -14,4 +14,4 @@ div ng-repeat="criterion in criteria.active" ng-show="alternative.reviews[criter
     span ng-if="review.sentences[2]" {{ review.sentences[2] }}.
 
 hr
-a href="/" &larr; Назад
+a href="/{{ locale }}" &larr; Назад
