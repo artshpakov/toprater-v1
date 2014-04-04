@@ -12,7 +12,7 @@ class Alternative < ActiveRecord::Base
 
   attr_accessor :score, :properties
 
-  def cover_thumb
+  def cover_url
     Voltdb::Kv.get "alt:#{id}:cover"
   end
 

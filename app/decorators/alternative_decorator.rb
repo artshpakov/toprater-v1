@@ -1,11 +1,11 @@
 class AlternativeDecorator < ApplicationDecorator
   delegate_all
 
-  def cover_url
-    if object.media.covers.any?
-      object.media.covers.first.url
-    end
-  end
+  #def cover_url
+    #if object.media.covers.any?
+      #object.media.covers.first.url
+    #end
+  #end
 
   def score
     (object.score*100/5).round if object.score
