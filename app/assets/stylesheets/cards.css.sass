@@ -22,7 +22,6 @@
   width: 32%
   margin-right: 20px
   border: 1px solid #bbb
-  height: 420px
   border: 1px solid #ddd
   margin-bottom: 12px
   box-shadow: 0 4px 10px #bbb
@@ -63,6 +62,12 @@
 
   .tags-area
     padding: 12px 16px
+    height: 150px
+    overflow: auto
+    > div
+      overflow: hidden
+      &.active
+        margin-bottom: 10px
 
 
 

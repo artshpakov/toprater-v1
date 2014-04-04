@@ -12,6 +12,13 @@ div ng-repeat="alternative in alternatives.all"
         small' подходит на
         | {{ alternative.score }}%
     .tags-area
-      .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" {{ criterion.name }}
+      .active
+        .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" ng-if="alternative.grade(criterion)"
+          b' = "\#{{ alternative.grade(criterion) }}"
+          | {{ criterion.name }}
+      .inactive
+        .tag ng-repeat="criterion in alternative.top_criteria() | filter:{state: null} | orderBy:grade | limitTo:8" ng-click="criterion.set_state('active')"
+          b' = "\#{{ alternative.grade(criterion) }}"
+          | {{ criterion.name }}
 
   ng-include src="'#{ asset_path 'middle.html.slim' }'"

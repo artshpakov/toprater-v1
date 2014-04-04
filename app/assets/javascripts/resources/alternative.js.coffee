@@ -27,4 +27,11 @@
     Alternative.pick = (id, criteria) ->
       @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise
 
+    Alternative::top_criteria = ->
+      _.map @top, (tip) ->
+        _.find Criterion.leafs, (criterion) -> criterion.id is tip.id
+
+    Alternative::grade = (criterion) ->
+      _.find(@top, (tip) -> tip.id is criterion.id)?.grade
+
 ]
