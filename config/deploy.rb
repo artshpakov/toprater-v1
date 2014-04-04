@@ -45,6 +45,8 @@ after 'deploy:restart', 'unicorn:reload'    # app IS NOT preloaded
 after 'deploy:restart', 'unicorn:restart'   # app preloaded
 after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero downtime deployments)
 
+after 'deploy:assets:precompile', 'deploy:assets:export_i18n'
+
 
 #TODO: deploy voltdb config and run nodes in cluster mode
 
@@ -77,6 +79,13 @@ namespace :deploy do
   #task :build_missing_paperclip_styles, :roles => :app do
     #run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake paperclip:refresh:missing_styles"
   #end
+
+  namespace :assets do
+    desc "Export translations into a JS file"
+    task :export_i18n, :roles => :app do
+      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake i18n:js:export"
+    end
+  end
 end
 
 namespace :admin do
