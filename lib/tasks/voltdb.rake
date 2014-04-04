@@ -101,12 +101,18 @@ namespace :voltdb do
     Voltdb::Kv.del "top50:alt_by_crit:*"
     criteria = Criterion.where.not(ancestry: nil).pluck(:id)
     criteria.each do |criterion_id|
-      alternatives_ids = Voltdb::CriteriaRating.select.score_by(criterion_id).limit(10).ids.load
-      alternatives_ids.each_with_index do |alternative_id, place|
+      grade = 0
+      last_score = nil
+      scored_alternatives = Voltdb::CriteriaRating.select.score_by(criterion_id).limit(20).ids.load
+      scored_alternatives.each do |alternative_id, score|
+        if last_score.nil? or last_score > score
+          grade += 1
+          last_score = score
+        end
         Voltdb::Kv.get("top50:alt_rating:#{alternative_id}").tap do |current_ratings|
           current_ratings ||= "{}"
           current_ratings = JSON.parse(current_ratings)
-          current_ratings.merge!({criterion_id => place+1})
+          current_ratings.merge!({criterion_id => grade})
           current_ratings = Hash[current_ratings.sort_by{|k,v| v}]
           Voltdb::Kv.set "top50:alt_rating:#{alternative_id}", current_ratings.to_json
         end

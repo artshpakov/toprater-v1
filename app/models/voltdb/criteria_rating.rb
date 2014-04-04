@@ -102,9 +102,13 @@ class Voltdb::CriteriaRating < Volter::Model
         alternative_id_index = @columns.index :alternative_id
         alternative_ids = result.map{|row| row[alternative_id_index]}
 
-        return alternative_ids if @ids_only
-
         scores = result.map{|row| {row[alternative_id_index] => row[@columns.index(:score)]}}.reduce Hash.new, :merge if @columns.include? :score
+
+        if @ids_only
+          return scores if @columns.include? :score
+          return alternative_ids 
+        end
+
         alternatives = Alternative.where(id: alternative_ids)
 
         sorted_alternatives = []
