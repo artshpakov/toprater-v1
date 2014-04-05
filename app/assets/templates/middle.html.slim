@@ -1,4 +1,5 @@
-.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}" style="background: url({{ current_alternative.cover_url }}); background-size: cover;"
+.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
+  img ng-src="{{ current_alternative.cover_url }}" style="width: 100%"
   .headline
     h2.index
       small #
