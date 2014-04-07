@@ -50,5 +50,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'rack-mini-profiler'
   gem 'letter_opener'
+  gem 'every'
 end
 gem 'rspec-rails', group: %i(development test)
