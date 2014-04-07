@@ -5,7 +5,9 @@
     scroll_to alternative if alternative?
 
 
-  $scope.$watch 'criteria.active.length', (criteria_count) ->
+  $scope.$watch 'criteria.active.length', ->
+    Alternative.rate()
+  $scope.$watch 'properties.picked.length', ->
     Alternative.rate()
 
 

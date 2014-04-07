@@ -6,7 +6,4 @@
 
   $scope.locale       = locale
 
-  $scope.toggle_properties = ->
-    $scope.properties_shown = !$scope.properties_shown
-
 ]

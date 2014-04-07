@@ -31,6 +31,9 @@
     Criterion::toggle_state = (from, to=null) ->
       @state = if @state is to then @set_state(from) else @set_state(to)
 
+    Criterion::pick = -> @set_state 'active'
+    Criterion::drop = -> @set_state()
+
     Criterion.reset = ->
       _.each _.clone(@picked), (criterion) -> criterion.set_state(null)
 

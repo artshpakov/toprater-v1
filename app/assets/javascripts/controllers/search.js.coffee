@@ -1,4 +1,4 @@
-@rating.controller "rating.SearchCtrl", ["$scope", "Criterion", "Search", ($scope, Criterion, Search) ->
+@rating.controller "rating.SearchCtrl", ["$scope", "Criterion", "Property", "Search", ($scope, Criterion, Property, Search) ->
 
   $scope.$watch 'query', (query) ->
     if query
@@ -10,7 +10,12 @@
     _.defer -> $scope.tips = []
 
   $scope.pick_tip = (tip) ->
-    _.find(Criterion.leafs, (criterion) -> criterion.id is tip.id).set_state 'active'
+    entry = switch tip.type
+      when 'criterion'
+        _.find(Criterion.leafs, (criterion) -> criterion.id is tip.id)
+      when 'property'
+        _.find(Property.all, (property) -> property.id is tip.id)
+    entry.pick()
     $scope.query = null
 
 ]

@@ -2,8 +2,8 @@
   criteria_to_params = (criteria) ->
     _.pluck(criteria, 'id').join(',')
   filters_to_params  = (filters) ->
-    _.tap {}, (hash) -> for id, value of filters
-      hash["prop[#{ id }]"] = 1 if value
+    _.tap {}, (hash) -> for filter in filters
+      hash["prop[#{ filter.id }]"] = 1
 
 
   _.tap $resource('/alternatives/:id.json', { id: '@id' },
@@ -17,7 +17,7 @@
       Alternative.all.indexOf @
 
     Alternative.rate = ->
-      params = _.extend filters_to_params(Property.active), { criterion_ids: criteria_to_params(Criterion.active) }
+      params = _.extend filters_to_params(Property.picked), { criterion_ids: criteria_to_params(Criterion.active) }
       @query(params).$promise.then (alternatives) =>
         @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
