@@ -19,6 +19,8 @@ gem 'draper'
 gem 'sequel'
 gem 'sqlite3'
 
+gem 'chewy'
+
 gem 'paperclip'
 gem 'settingslogic'
 
