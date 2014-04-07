@@ -1,4 +1,4 @@
-@rating.factory 'Alternative', ["$resource", "$http", "Criterion", "Property", ($resource, $http, Criterion, Property) ->
+@rating.factory 'Alternative', ["$resource", "$http", "Criterion", "Search", ($resource, $http, Criterion, Search) ->
   criteria_to_params = (criteria) ->
     _.pluck(criteria, 'id').join(',')
   filters_to_params  = (filters) ->
@@ -17,12 +17,9 @@
       Alternative.all.indexOf @
 
     Alternative.rate = ->
-      params = _.extend filters_to_params(Property.picked), { criterion_ids: criteria_to_params(Criterion.active) }
+      params = _.extend filters_to_params(Search.properties()), { criterion_ids: criteria_to_params(Search.criteria()) }
       @query(params).$promise.then (alternatives) =>
         @all = _.map(alternatives, (alternative) -> new Alternative alternative)
-
-    Alternative.count = ->
-      @count_filtered(filters_to_params(Property.active)).$promise
 
     Alternative.pick = (id, criteria) ->
       @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise

@@ -5,10 +5,13 @@
     scroll_to alternative if alternative?
 
 
-  $scope.$watch 'criteria.active.length', ->
+  # $scope.$watch 'criteria.active.length', ->
+  #   Alternative.rate()
+  # $scope.$watch 'properties.picked.length', ->
+  #   Alternative.rate()
+  $scope.$watch 'search.items.length', ->
     Alternative.rate()
-  $scope.$watch 'properties.picked.length', ->
-    Alternative.rate()
+
 
 
   scroll_to = (alternative) -> _.defer ->

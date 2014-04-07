@@ -1,6 +1,8 @@
-@rating.factory 'Property', ["$resource", "data", ($resource, data) ->
+@rating.factory 'Property', ["$resource", "data", "Search", ($resource, data, Search) ->
 
   _.tap $resource('/properties/:id', { id: '@id' }), (Property) ->
+
+    Property::type = 'property'
 
     cache   = _.map data.properties, (params) -> new Property params
     picked  = []
@@ -11,9 +13,9 @@
     Property::is_picked = -> @ in picked
 
     Property::pick = ->
-      picked.push @ unless @is_picked()
+      Search.items.push @ unless @is_picked()
     Property::drop = ->
-      picked.splice picked.indexOf(@), 1
+      Search.items.splice picked.indexOf(@), 1
     Property::toggle = ->
       if @is_picked() then @drop() else pick()
 
