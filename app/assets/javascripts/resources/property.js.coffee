@@ -6,6 +6,8 @@
 
     cache = _.map data.properties, (params) -> new Property params
 
+    Property::toggle = -> @active = !@active
+
     Property.all = cache
 
 ]

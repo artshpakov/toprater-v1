@@ -12,6 +12,8 @@
 
   Criterion.all = cache
 
+  Criterion::toggle = -> @active = !@active
+
   Criterion
 
 ]

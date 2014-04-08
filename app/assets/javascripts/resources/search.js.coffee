@@ -13,7 +13,9 @@
   Search.is_picked = (item) ->
     item in cache
   Search.pick = (item) ->
-    cache.push item unless @is_picked item
+    unless @is_picked item
+      item.active = true
+      cache.push item
   Search.drop = (item) ->
     cache.splice cache.indexOf(item), 1
 

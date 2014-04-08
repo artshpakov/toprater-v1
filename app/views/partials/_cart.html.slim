@@ -1,5 +1,5 @@
 #cart
   a role="clear-cart" href="javascript:;" ng-click="search.reset()" : i.fa.fa-times-circle-o
-  .tag.active ng-repeat="item in search.items" class="{{ item.type }}"
+  .tag ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
     ' {{ item.name }}
     a.close href="javascript:;" ng-click="search.drop(item)" &times;
