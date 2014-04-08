@@ -6,18 +6,20 @@ div ng-repeat="alternative in alternatives.all"
           small #
           | {{ $index+1 }}
         | {{ alternative.name | truncate:40 }}
+
     a.image href="javascript:;" ng-click="pick(alternative)"
       img ng-src="{{ alternative.cover_url }}"
       .score ng-if="alternative.score != null"
         small' подходит на
         | {{ alternative.score }}%
+
     .tags-area
       .active
-        .active.tag ng-repeat="criterion in criteria.active" ng-click="criterion.toggle_state('active')" ng-if="alternative.grade(criterion)"
+        .active.criterion.tag ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
           b' = "\#{{ alternative.grade(criterion) }}"
           | {{ criterion.name }}
       .inactive
-        .tag ng-repeat="criterion in alternative.top_criteria() | filter:{state: null} | orderBy:grade | limitTo:8" ng-click="criterion.set_state('active')"
+        .tag ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:8" ng-click="search.pick(criterion)"
           b' = "\#{{ alternative.grade(criterion) }}"
           | {{ criterion.name }}
 

@@ -1,15 +1,25 @@
-@rating.factory 'Search', ["$http", ($http) ->
+@rating.factory 'Search', ["$resource", ($resource) ->
 
   cache = []
 
-  items: cache
+  Search = $resource '/search.json', {},
+    fetch: { url: '/search/fetch.json', isArray: true }
 
-  fetch: (query, callback) ->
-    $http.get("/search/fetch.json?query=#{ query }").success callback
+  Search.items = cache
 
-  criteria:   -> _.filter cache, (item) -> item.type is 'criterion'
-  properties: -> _.filter cache, (item) -> item.type is 'property'
+  Search.criteria =   -> _.filter cache, (item) -> item.type is 'criterion'
+  Search.properties = -> _.filter cache, (item) -> item.type is 'property'
 
-  reset: -> @items = []
+  Search.is_picked = (item) ->
+    item in cache
+  Search.pick = (item) ->
+    cache.push item unless @is_picked item
+  Search.drop = (item) ->
+    cache.splice cache.indexOf(item), 1
+
+
+  Search.reset = -> @items = []
+
+  Search
 
 ]

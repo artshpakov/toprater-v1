@@ -1,14 +1,5 @@
 #cart
   a role="clear-cart" href="javascript:;" ng-click="search.reset()" : i.fa.fa-times-circle-o
-
   .tag.active ng-repeat="item in search.items" class="{{ item.type }}"
     ' {{ item.name }}
-    a.close href="javascript:;" ng-click="item.drop()" &times;
-
-  / .criterion.tag ng-repeat="criterion in criteria.picked" ng-click="criterion.toggle_state('active', 'inactive')" ng-class="{ active: criterion.is_active(), inactive: criterion.is_inactive() }"
-  /   ' {{ criterion.name }}
-  /   a.close href="javascript:;" ng-click="criterion.set_state()" &times;
-
-  / .property.tag ng-repeat="property in properties.picked" ng-class="{ active: property.is_picked() }"
-  /   ' {{ property.name }}
-  /   a.close href="javascript:;" ng-click="property.drop()" &times;
+    a.close href="javascript:;" ng-click="search.drop(item)" &times;

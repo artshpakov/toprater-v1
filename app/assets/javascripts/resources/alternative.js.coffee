@@ -1,34 +1,34 @@
-@rating.factory 'Alternative', ["$resource", "$http", "Criterion", "Search", ($resource, $http, Criterion, Search) ->
-  criteria_to_params = (criteria) ->
-    _.pluck(criteria, 'id').join(',')
-  filters_to_params  = (filters) ->
-    _.tap {}, (hash) -> for filter in filters
+@rating.factory 'Alternative', ["$resource", "Criterion", "Search", ($resource, Criterion, Search) ->
+
+  criteria_to_params = ->
+    _.pluck(Search.criteria(), 'id').join(',')
+  filters_to_params  = ->
+    _.tap {}, (hash) -> for filter in Search.properties()
       hash["prop[#{ filter.id }]"] = 1
 
 
-  _.tap $resource('/alternatives/:id.json', { id: '@id' },
-    update: { method: 'PUT' }
-    count_filtered: { url: '/alternatives/count.json' }
-  ), (Alternative) ->
+  Alternative = $resource '/alternatives/:id.json', { id: '@id' }, update: { method: 'PUT' }
 
-    all: []
+  Alternative.all = []
 
-    Alternative::index = ->
-      Alternative.all.indexOf @
+  Alternative::index = ->
+    Alternative.all.indexOf @
 
-    Alternative.rate = ->
-      params = _.extend filters_to_params(Search.properties()), { criterion_ids: criteria_to_params(Search.criteria()) }
-      @query(params).$promise.then (alternatives) =>
-        @all = _.map(alternatives, (alternative) -> new Alternative alternative)
+  Alternative.rate = ->
+    params = _.extend filters_to_params(), { criterion_ids: criteria_to_params() }
+    @query(params).$promise.then (alternatives) =>
+      @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
-    Alternative.pick = (id, criteria) ->
-      @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise
+  Alternative.pick = (id, criteria) ->
+    @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise
 
-    Alternative::top_criteria = ->
-      _.map @top, (tip) ->
-        _.find Criterion.leafs, (criterion) -> criterion.id is tip.id
+  Alternative::top_criteria = ->
+    _.map @top, (tip) ->
+      _.find Criterion.all, (criterion) -> criterion.id is tip.id
 
-    Alternative::grade = (criterion) ->
-      _.find(@top, (tip) -> tip.id is criterion.id)?.grade
+  Alternative::grade = (criterion) ->
+    _.find(@top, (tip) -> tip.id is criterion.id)?.grade
+
+  Alternative
 
 ]
