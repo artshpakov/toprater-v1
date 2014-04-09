@@ -2,7 +2,7 @@ class SearchController < ApplicationController
 
   respond_to :json
 
-  def fetch
+  def index
     @results = CompleteIndex.query(regexp: {name: "#{params[:q].downcase}.*"}).load
   end
 
