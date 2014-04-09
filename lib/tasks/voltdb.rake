@@ -5,7 +5,7 @@ namespace :voltdb do
 
     sql = "CREATE TABLE kv ( key VARCHAR(250) NOT NULL, value VARCHAR(1048576) NOT NULL, PRIMARY KEY (key));\nPARTITION TABLE kv ON COLUMN key;\n"
 
-    criteria_columns = Criterion.where.not(ancestry: nil).order('id ASC').map{|criterion| " cr_#{criterion.id} TINYINT" }.join(",")
+    criteria_columns = Criterion.where.not(ancestry: nil).order('id ASC').map{|criterion| " cr_#{criterion.id} FLOAT" }.join(",")
 
     sql += "CREATE TABLE criteria_ratings ( alternative_id INTEGER NOT NULL,\n#{criteria_columns},\nPRIMARY KEY ( alternative_id )\n);\nPARTITION TABLE criteria_ratings ON COLUMN alternative_id;\n"
 
@@ -78,7 +78,7 @@ namespace :voltdb do
       criteria_values = criteria_default_values.dup
 
       alternative.alternatives_criteria.each do |ac|
-        criteria_values[ac.criterion_id] = ac.rating
+        criteria_values[ac.criterion_id] = (ac.rating+1)*2.5
       end
 
       Voltdb::CriteriaRating.execute_sql "INSERT INTO criteria_ratings (alternative_id, #{ criterion_fields }) VALUES (#{ alternative.id }, #{ criteria_values.values.join(',') })"

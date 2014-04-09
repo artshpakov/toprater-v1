@@ -1,15 +1,8 @@
 namespace :import do
 
-  desc "Import criteria from a JSON file"
-  task criteria: :environment do
-    JSON.parse(File.read("#{ Rails.root }/db/criteria.dump.json")).map do |attributes|
-      Criterion.create attributes
-    end
-  end
-
   desc "Import hotels from sqlite DB file"
   task hotels: :environment do
-    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/tripadvisor-maldives.db")
+    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/tripadvisor-data.db")
 
     hotels = {}
 
@@ -43,7 +36,7 @@ namespace :import do
 
     DB.disconnect
 
-    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/maldives_processed.db")
+    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/processed-data.db")
 
     criteria = {}
 
@@ -86,7 +79,7 @@ namespace :import do
   desc "Import alternatives properties from sqlite DB file"
   task booking: :environment do
 
-    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/booking-maldives.db")
+    DB = Sequel.connect("sqlite://#{Rails.root}/tmp/booking-data.db")
     counter = 0
     DB[:hotels].each do |booking_hotel|
       hotel = Alternative.where(name: booking_hotel[:name]).first
