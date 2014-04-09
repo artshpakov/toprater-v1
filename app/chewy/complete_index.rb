@@ -8,9 +8,10 @@ class CompleteIndex < Chewy::Index
       #}
     #}
   #}
-
+  
   define_type Alternative.includes(:alternatives_criteria, :property_values) do
     field :name # , index: 'analyzed', analyzer: 'title'
+    field :realm_id
     #field :criteria, type: 'object', value: ->{ alternatives_criteria.to_a } do
       #field :name, value: ->(ac) { ac.criterion.name }
       #field :rating, type: 'integer', value: ->(ac) { ac.rating }
