@@ -7,8 +7,9 @@
 
   Search.items = cache
 
-  Search.criteria =   -> _.filter cache, (item) -> item.type is 'criterion'
-  Search.properties = -> _.filter cache, (item) -> item.type is 'property'
+  Search.active     = -> _.where cache, active: true
+  Search.criteria   = -> _.where cache, active: true, type: 'criterion'
+  Search.properties = -> _.where cache, active: true, type: 'property'
 
   Search.is_picked = (item) ->
     item in cache

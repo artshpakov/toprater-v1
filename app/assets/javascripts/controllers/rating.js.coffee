@@ -1,7 +1,7 @@
 @rating.controller "rating.RatingCtrl", ["$scope", "Alternative", "Search", ($scope, Alternative, Search) ->
 
-  $scope.$watch 'search.items.length', ->
-    Alternative.rate()
+  $scope.$watch 'search.items.length',    -> Alternative.rate()
+  $scope.$watch 'search.active().length', -> Alternative.rate()
 
 
   $scope.current_alternative = Alternative.current_alternative
