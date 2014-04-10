@@ -53,14 +53,6 @@ namespace :voltdb do
   end
 
 
-  desc "Restart VoltDB"
-  task restart: :environment do
-    Rake::Task['voltdb:kill'].invoke
-    sleep 3
-    Rake::Task['voltdb:create'].invoke
-  end
-
-
   desc "Populate VoltDB schema with data"
   task populate: :environment do
     # abort "  Voltdb doesn't running" if !check_process
@@ -121,13 +113,20 @@ namespace :voltdb do
     end
 
     puts "\n  Populated schema"
-
   end
 
 
   desc "Prepare VoltDB schema & data"
   task setup: :environment do
     Rake::Task['voltdb:schema_load'].invoke && Rake::Task['voltdb:compile'].invoke && Rake::Task['voltdb:create'].invoke && Rake::Task['voltdb:populate'].invoke
+  end
+
+
+  desc "Restart VoltDB"
+  task reload: :environment do
+    Rake::Task['voltdb:kill'].invoke
+    sleep 3
+    Rake::Task['voltdb:setup'].invoke
   end
 
 

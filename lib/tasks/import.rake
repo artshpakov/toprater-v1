@@ -93,9 +93,8 @@ namespace :import do
           group = Property::Group.find_or_create_by(name: fac_group)
 
           fac_properties.each do |fac_property|
-            field = group.fields.find_or_initialize_by(name: fac_property.downcase.gsub(/[\-\s]+/, "_").gsub(/[^A-Za-z_]/, ""))
-            field.title = fac_property
-            field.field_type = 'boolean'
+            short_name = fac_property.downcase.gsub(/[\-\s]+/, "_").gsub(/[^A-Za-z_]/, "")
+            field = group.fields.find_by(short_name: short_name) || group.fields.new(name: fac_property, short_name: short_name, field_type: 'boolean')
             if field.save!
               value = field.values.find_or_initialize_by(alternative_id: hotel.id)
               value.value = '1'
