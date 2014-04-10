@@ -4,7 +4,7 @@ class IndexController < ApplicationController
     @criteria = Criterion.roots
     gon.rabl template: "app/views/criteria/index.json.rabl", as: :criteria
 
-    @properties = Property::Group.includes(:fields)
+    @properties = Property::Field.all
     gon.rabl template: "app/views/properties/index.json.rabl", as: :properties
   end
 
