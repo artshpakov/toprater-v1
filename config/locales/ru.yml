@@ -1,7 +1,13 @@
 ru:
   main:
-    criteria: "Критерии"
-    properties: "Фильтры"
+    alternative: "альтернатива"
+    criterion: "критерий"
+    property: "фильтр"
+
+  realm:
+    hotels: "отели"
+    restaurants: "рестораны"
+    movies: "фильмы"
 
   nav:
     previous: "назад"

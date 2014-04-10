@@ -11,8 +11,8 @@
             a href="javascript:;" ng-click="pick_tip(tip)"
               div = "{{ tip.name }}"
               div style="line-height: 12px; color: #bbb; font-size: 12px"
-                ' {{ tip.type }}
-                | {{ tip.realm }}
+                span' ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
+                span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
 
   = render partial: "partials/cart"
 

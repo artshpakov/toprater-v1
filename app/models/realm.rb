@@ -3,7 +3,7 @@ class Realm < Struct.new(:id, :name)
   class << self
 
     def all
-      %w(Hotel Restaurant Movie).each_with_index.map do |realm, i|
+      %w(hotels restaurants movies).each_with_index.map do |realm, i|
         self.new(i+1, realm)
       end
     end

@@ -1,7 +1,13 @@
 en:
   main:
-    criteria: "Criteria"
-    properties: "Properties"
+    alternative: "alternative"
+    criterion: "criterion"
+    property: "property"
+
+  realm:
+    hotel: "hotels"
+    restaurant: "restaurants"
+    movie: "movies"
 
   nav:
     previous: "previous"
