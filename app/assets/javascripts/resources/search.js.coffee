@@ -2,8 +2,7 @@
 
   cache = []
 
-  Search = $resource '/search.json', {},
-    fetch: { url: '/search/fetch.json', isArray: true }
+  Search = $resource '/search.json'
 
   Search.items = cache
 

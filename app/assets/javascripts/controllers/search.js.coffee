@@ -2,7 +2,7 @@
 
   $scope.$watch 'query', (query) ->
     if query
-      Search.fetch { query }, (data) -> $scope.tips = data
+      Search.query { q: query }, (data) -> $scope.tips = data
     else
       $scope.reset_search()
 
