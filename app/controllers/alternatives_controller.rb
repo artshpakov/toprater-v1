@@ -7,6 +7,7 @@ class AlternativesController < ApplicationController
 
   helper_method :alternative, :alternatives
 
+
   def show
     respond_to do |format|
       format.html do
@@ -35,18 +36,9 @@ class AlternativesController < ApplicationController
     @alternatives = @alternatives.limit(21).load
   end
 
-  def count
-    @alternatives = Voltdb::CriteriaRating.select
-    if params[:prop] and params[:prop].any?
-      params[:prop].each do |property, value|
-        @alternatives = @alternatives.where(properties: {property => value})
-      end
-    end
 
-    render json: {count: @alternatives.count.load.to_i }
-  end
+  protected
 
-protected
   def alternative
     AlternativeDecorator.decorate resource
   end

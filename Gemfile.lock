@@ -53,6 +53,9 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     capistrano-unicorn (0.2.0)
       capistrano (< 3.0)
+    chewy (0.3.0)
+      activesupport (>= 3.2)
+      elasticsearch
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.4)
@@ -73,9 +76,20 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
+    elasticsearch (1.0.1)
+      elasticsearch-api (= 1.0.1)
+      elasticsearch-transport (= 1.0.1)
+    elasticsearch-api (1.0.1)
+      multi_json
+    elasticsearch-transport (1.0.1)
+      faraday
+      multi_json
     erubis (2.7.0)
     eventmachine (1.0.3)
+    every (1.1)
     execjs (2.0.2)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
     font-awesome-rails (4.0.3.1)
       railties (>= 3.2, < 5.0)
     foundation-rails (5.2.1.0)
@@ -112,6 +126,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.9.2)
+    multipart-post (2.0.0)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -239,8 +254,10 @@ DEPENDENCIES
   binding_of_caller
   capistrano
   capistrano-unicorn
+  chewy
   coffee-rails (~> 4.0)
   draper
+  every
   font-awesome-rails
   foundation-rails
   gon

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140409093039) do
+ActiveRecord::Schema.define(version: 20140410152916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140409093039) do
   create_table "alternatives", force: true do |t|
     t.string  "name",                      null: false
     t.integer "reviews_count", default: 0, null: false
+    t.integer "realm_id"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
@@ -62,8 +63,8 @@ ActiveRecord::Schema.define(version: 20140409093039) do
   create_table "property_fields", force: true do |t|
     t.integer  "group_id"
     t.string   "field_type",             null: false
+    t.string   "short_name",             null: false
     t.string   "name",                   null: false
-    t.string   "title",                  null: false
     t.integer  "status",     default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"

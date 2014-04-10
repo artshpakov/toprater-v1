@@ -8,17 +8,12 @@
   &.active
     background-color: $toggleable-active-color
     color: #fff
+    a.close
+      color: #fff
   &.inactive
     background-color: $toggleable-inactive-color
-
-
-#criteria
-  margin-top: 15px
-
-
-#criteria-wrapper
-  margin-top: -10px
-
+  a.close
+    font-size: 18px
 
 .tag
   @include toggleable
@@ -28,10 +23,8 @@
   margin: 0 7px 5px 0
   display: block
   float: left
-
-.root-criterion
-  display: block
-  padding: 10px 0
-
-.criteria-drawer
-  overflow: hidden
+  &.active
+    &.criterion
+      background-color: $criterion-color
+    &.property
+      background-color: $property-color

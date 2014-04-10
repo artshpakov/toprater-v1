@@ -20,4 +20,8 @@ class Alternative < ActiveRecord::Base
     JSON.parse(Voltdb::Kv.get("top50:alt_rating:#{id}") || "{}")
   end
 
+  def realm
+    Realm.find(realm_id)
+  end
+
 end

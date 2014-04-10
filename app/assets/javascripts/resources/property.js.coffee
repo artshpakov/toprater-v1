@@ -1,8 +1,13 @@
 @rating.factory 'Property', ["$resource", "data", ($resource, data) ->
 
-  items = data.properties
+  _.tap $resource('/properties/:id', { id: '@id' }), (Property) ->
 
-  all: items
-  active: {}
+    Property::type = 'property'
+
+    cache = _.map data.properties, (params) -> new Property params
+
+    Property::toggle = -> @active = !@active
+
+    Property.all = cache
 
 ]

@@ -1,3 +1,5 @@
 #cart
-  a role="clear-cart" href="javascript:;" ng-click="criteria.reset()" : i.fa.fa-times-circle-o
-  a.tag ng-repeat="criterion in criteria.picked" ng-click="criterion.toggle_state('active', 'inactive')" ng-class="{ active: criterion.is_active(), inactive: criterion.is_inactive() }" href="javascript:;" {{ criterion.name }}
+  a role="clear-cart" href="javascript:;" ng-click="search.reset()" : i.fa.fa-times-circle-o
+  .tag ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
+    ' {{ item.name }}
+    a.close href="javascript:;" ng-click="search.drop(item)" &times;
