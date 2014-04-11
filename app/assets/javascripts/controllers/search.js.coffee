@@ -10,6 +10,7 @@
     _.defer -> $scope.tips = []
 
   $scope.pick_tip = (tip) ->
+    $routeParams.realm or $location.path "/#{ $scope.locale }/#{ tip.realm }"
     switch tip.type
       when 'criterion'
         Search.pick _.find(Criterion.all, (criterion) -> criterion.id is tip.id)
