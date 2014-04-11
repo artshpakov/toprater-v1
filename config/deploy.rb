@@ -99,7 +99,7 @@ namespace :deploy do
   namespace :assets do
     desc "Export translations into a JS file"
     task :export_i18n, :roles => :app do
-      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake i18n:js:export"
+      run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake i18n:js:export"
     end
   end
 end
