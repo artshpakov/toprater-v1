@@ -1,33 +1,34 @@
 class CompleteIndex < Chewy::Index
 
-  #settings analysis: {
-    #analyzer: {
-      #title: {
-        #tokenizer: 'standard',
-        #filter: ['lowercase', 'asciifolding']
-      #}
-    #}
-  #}
-  
-  define_type Alternative.includes(:alternatives_criteria, :property_values) do
-    field :name # , index: 'analyzed', analyzer: 'title'
+  # curl -X POST http://localhost:9200/complete/_suggest -d '
+  # {
+  #   "doesntmatter?": {
+  #     "text" : "user que",
+  #     "completion" : {
+  #       "field" : "suggest",
+  #       "fuzzy" : { "edit_distance" : 2 }
+  #     }
+  #   }
+  # }'
+
+  define_type Realm do
+    field :suggest, type: 'completion', payloads: true, value: -> { name }
+  end
+
+  define_type Alternative do
+    field :name
     field :realm_id
-    #field :criteria, type: 'object', value: ->{ alternatives_criteria.to_a } do
-      #field :name, value: ->(ac) { ac.criterion.name }
-      #field :rating, type: 'integer', value: ->(ac) { ac.rating }
-    #end
-    #field :properties, type: 'object', value: ->{ property_values.to_a } do
-      #field :name, value: ->(ap) { ap.field.name }
-      #field :value, value: ->(ap) { ap.value }
-    #end
+    field :suggest, type: 'completion', payloads: true, value: -> { name }
   end
 
   define_type Criterion do
     field :name
+    field :suggest, type: 'completion', payloads: true, value: -> { name }
   end
 
   define_type Property::Field, name: 'fields' do
     field :name
+    field :suggest, type: 'completion', payloads: true, value: -> { name }
   end
 
 end
