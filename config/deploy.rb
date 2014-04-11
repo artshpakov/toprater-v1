@@ -47,9 +47,6 @@ after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero
 
 after 'deploy:assets:precompile', 'deploy:assets:export_i18n'
 
-
-#TODO: deploy voltdb config and run nodes in cluster mode
-
 namespace :deploy do
   after 'update_code', :roles => :app do
     run "rm -f #{current_release}/config/database.yml"
@@ -79,6 +76,25 @@ namespace :deploy do
   #task :build_missing_paperclip_styles, :roles => :app do
     #run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake paperclip:refresh:missing_styles"
   #end
+
+  namespace :voltdb do
+    desc "Restart and reimport date to voltdb"
+    task :restart do
+      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake voltdb:kill voltdb:setup"
+    end
+  end
+
+  namespace :chewy do
+    desc "Reset all elasticsearch indexes"
+    task :reset do
+      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake chewy:reset:all"
+    end
+
+    desc "Update all elasticsearch indexes"
+    task :update do
+      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake chewy:update:all"
+    end
+  end
 
   namespace :assets do
     desc "Export translations into a JS file"

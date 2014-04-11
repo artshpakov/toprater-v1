@@ -26,6 +26,7 @@ namespace :voltdb do
     check_process { |pid| abort "  VoltDB already running with PID #{pid}" }
     File.delete jar_path if File.exists? jar_path
     %x( #{Voltdb.voltdb_executable_path} compile #{ schema_path } -o #{ jar_path } )
+    abort "  Error. Could not compile VoltDB schema" unless File.exists? jar_path
     puts "  Schema compiled"
   end
 
@@ -66,7 +67,7 @@ namespace :voltdb do
     properties_default_values = Hash[property_ids.collect { |id| [ id, 'NULL' ] }]
 
     Alternative.find_each do |alternative|
-      print "."
+      print "." if Rails.env == 'development'
       criteria_values = criteria_default_values.dup
 
       alternative.alternatives_criteria.each do |ac|
@@ -109,7 +110,7 @@ namespace :voltdb do
           Voltdb::Kv.set "top50:alt_rating:#{alternative_id}", current_ratings.to_json
         end
       end
-    print "."
+    print "." if Rails.env == 'development'
     end
 
     puts "\n  Populated schema"
