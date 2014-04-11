@@ -7,7 +7,7 @@ namespace :import do
     hotels = {}
 
     DB[:hotels].each do |hotel_attributes|
-      hotel = Alternative.find_or_create_by(name: hotel_attributes[:name])
+      hotel = Alternative.find_or_create_by(name: hotel_attributes[:name], realm_id: 1)
       if hotel.id
         hotels[hotel_attributes[:ta_id]] = hotel.id
         if hotel_attributes[:photo].present?

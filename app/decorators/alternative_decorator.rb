@@ -18,7 +18,7 @@ class AlternativeDecorator < ApplicationDecorator
   def processed_reviews criterion_ids
     reviews = object.review_sentences.where(criterion_id: criterion_ids)
     Hash[Array.wrap(criterion_ids).map do |cid|
-      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i }.map {|rw| { rating: rw.score, sentences: rw.sentences }} ]
+      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i }.map {|rw| { rating: rw.score+1*2.5, sentences: rw.sentences }} ]
     end]
   end
 
