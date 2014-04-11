@@ -1,6 +1,8 @@
-@rating.controller "rating.DetailsCtrl", ["$scope", "$routeParams", "Alternative", ($scope, $routeParams, Alternative) ->
+@rating.controller "rating.DetailsCtrl", ["$scope", "$routeParams", "Alternative", "Search", ($scope, $routeParams, Alternative, Search) ->
 
-  Alternative.pick($routeParams.id, $scope.criteria.active).then (alternative) ->
+  Alternative.pick($routeParams.id).then (alternative) ->
     $scope.alternative = alternative
+
+  $scope.realm = $routeParams.realm
 
 ]

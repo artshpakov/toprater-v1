@@ -20,6 +20,10 @@ class Realm < Struct.new(:id, :name)
     def first
       all.first
     end
+
+    def pluck attribute
+      all.map { |realm| realm.public_send(attribute) }
+    end
   end
 
   def alternatives

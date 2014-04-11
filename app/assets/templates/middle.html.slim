@@ -4,7 +4,7 @@
     h2.index
       small #
       | {{ current_alternative.index() + 1 }}
-    h2 : a.title href="/{{ locale }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
+    h2 : a.title href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
     .clearfix
     .nav
       a href="javascript:;" style="float: right" ng-click="next()" ng-if="has_next()" == "#{ I18n.t('nav.next') } &rarr;"

@@ -1,17 +1,16 @@
 AlternativesPower::Application.routes.draw do
 
   scope "/(:locale)", locale: /en|ru/ do
-    get "" => 'index#index'
-    resources :alternatives, only: [:index, :show] do
-      collection do
-        get :count
-      end
-    end
-    resources :properties, only: [:index]
-    resources :criteria, only: [:index, :show]
-  end
+    root to: 'index#index'
 
-  root 'index#index'
+    scope ":realm", realm: /#{ Realm.pluck(:name).join '|' }/ do
+      root to: 'index#index', as: :realm
+      resources :alternatives, only: %i(index show)
+    end
+
+    resources :properties, only: :index
+    resources :criteria, only: :index
+  end
 
   resources :search, only: [:index]
 

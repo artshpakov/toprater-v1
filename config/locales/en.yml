@@ -3,19 +3,18 @@ en:
     alternative: "alternative"
     criterion: "criterion"
     property: "property"
+    rating: "rating"
 
   realm:
-    hotel: "hotels"
-    restaurant: "restaurants"
-    movie: "movies"
+    hotels: "hotels"
+    restaurants: "restaurants"
+    movies: "movies"
 
   nav:
     previous: "previous"
     next: "next"
 
-  properties:
-    results:
-      found:
-        one: "%{count} alternative found"
-        other: "%{count} alternatives found"
-      show: "Show me"
+  reviews:
+    found:
+      one: "%{count} review"
+      other: "%{count} reviews"

@@ -1,7 +1,8 @@
 .row
   header
     ul#realms
-      li : a href="javascript:alert('coming soon');" Отели
+      li ng-repeat="arealm in realms"
+        a ng-class="{ current: realm==arealm.name }" href="/{{ locale }}/{{ arealm.name }}" {{ "realm."+arealm.name | i18n }}
 
     div#search ng-controller="rating.SearchCtrl"
       input type="search" placeholder="Что Вас интересует?" ng-model="query" ng-blur="reset_search()"
@@ -14,7 +15,7 @@
                 span' ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
                 span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
 
-  = render partial: "partials/cart"
+    = render partial: "partials/cart"
 
 .row role="main-content"
   ng-view

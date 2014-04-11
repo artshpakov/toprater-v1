@@ -20,7 +20,7 @@
     cache.splice cache.indexOf(item), 1
 
 
-  Search.reset = -> @items = []
+  Search.reset = -> cache = @items = []
 
   Search
 

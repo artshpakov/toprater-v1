@@ -1,4 +1,4 @@
-@rating.controller "rating.SearchCtrl", ["$scope", "$location", "Criterion", "Property", "Search", ($scope, $location, Criterion, Property, Search) ->
+@rating.controller "rating.SearchCtrl", ["$scope", "$location", "$routeParams", "Criterion", "Property", "Search", ($scope, $location, $routeParams, Criterion, Property, Search) ->
 
   $scope.$watch 'query', (query) ->
     if query
@@ -16,7 +16,7 @@
       when 'property'
         Search.pick _.find(Property.all, (property) -> property.id is tip.id)
       when 'alternative'
-        $location.path "/#{ $scope.locale }/alternatives/#{ tip.id }"
+        $location.path "/#{ $scope.locale }/#{ $routeParams.realm }/alternatives/#{ tip.id }"
     $scope.query = null
 
 ]

@@ -1,19 +1,77 @@
 @import '_settings'
 
+header
+  border: 1px solid #ddd
+  border-top: none
+  box-shadow: 0 4px 10px #ddd
 
-@mixin toggleable
-  background-color: $toggleable-default-color
-  color: #000
-  cursor: pointer
-  &.active
-    background-color: $toggleable-active-color
-    color: #fff
-    a.close
-      color: #fff
-  &.inactive
-    background-color: $toggleable-inactive-color
-  a.close
-    font-size: 18px
+#realms
+  @include horizontal-list
+  li
+    padding: 0 12px
+    line-height: 35px
+    a
+      border-top: 4px solid transparent
+      display: inline-block
+      color: #9a9a9a
+      &.current
+        border-top: 4px solid $minor-color
+        color: #000
+
+
+#search
+  margin-bottom: 14px
+  input[type=search]
+    margin: 0
+  [role=search-results]
+    position: relative
+    z-index: 1000
+    ul
+      position: absolute
+      margin: 0
+      top: 0
+      left: 0
+      border: 1px solid #ccc
+      background-color: #fff
+      border-radius: 0 0 5px 5px
+      box-shadow: 0 5px 5px #ccc
+      width: 100%
+      font-size: 14px
+      li
+        a
+          display: block
+          padding: 5px 15px
+          border-bottom: 1px solid #eee
+          &:hover
+            background-color: #efefef
+        &.criterion > a
+          color: $criterion-color
+        &.property > a
+          color: $property-color
+
+
+#cart
+  overflow: hidden
+  min-height: 45px
+
+  [role=clear-cart]
+    font-size: 22px
+    float: right
+
+
+[role=toggle-cart]
+  display: block
+  width: 100%
+  border-top: 1px solid #ddd
+  text-align: center
+  font-size: 24px
+  color: #808080
+
+
+#realms, #search, #cart
+  padding: 0 18px
+
+
 
 .tag
   @include toggleable

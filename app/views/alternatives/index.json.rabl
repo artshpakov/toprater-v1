@@ -3,6 +3,7 @@ attributes :id, :name, :score, :reviews_count, :cover_url
 node :top do |alternative|
   alternative.top.map { |id, grade| { id: id.to_i, grade: grade } }
 end
+node(:realm) { "hotels" }
 # node :reviews do |alternative|
 #   alternative.processed_reviews @criterion_ids
 # end

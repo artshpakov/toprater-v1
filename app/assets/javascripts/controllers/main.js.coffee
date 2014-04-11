@@ -1,4 +1,4 @@
-@rating.controller "rating.MainCtrl", ["$scope", "Search", "Criterion", "Alternative", "Property", "locale", ($scope, Search, Criterion, Alternative, Property, locale) ->
+@rating.controller "rating.MainCtrl", ["$scope", "data", "Search", "Criterion", "Alternative", "Property", "locale", ($scope, data, Search, Criterion, Alternative, Property, locale) ->
 
   $scope.search       = Search
 
@@ -7,5 +7,8 @@
   $scope.properties   = Property
 
   $scope.locale       = locale
+  $scope.realms       = data.realms
+
+  $scope.range        = _.range
 
 ]

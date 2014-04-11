@@ -3,6 +3,7 @@ ru:
     alternative: "альтернатива"
     criterion: "критерий"
     property: "фильтр"
+    rating: "рейтинг"
 
   realm:
     hotels: "отели"
@@ -13,10 +14,8 @@ ru:
     previous: "назад"
     next: "далее"
 
-  properties:
-    results:
-      found:
-        one: "Найден %{count} результат"
-        few: "Найдены %{count} результата"
-        other: "Найдено %{count} результатов"
-      show: "Показать"
+  reviews:
+    found:
+      one: "%{count} отзыв"
+      few: "%{count} отзыва"
+      other: "%{count} отзывов"

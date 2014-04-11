@@ -1,5 +1,13 @@
-#cart
-  a role="clear-cart" href="javascript:;" ng-click="search.reset()" : i.fa.fa-times-circle-o
-  .tag ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
-    ' {{ item.name }}
-    a.close href="javascript:;" ng-click="search.drop(item)" &times;
+div ng-show="search.items.length" ng-init="cart_visible=true"
+  #cart.row ng-show="cart_visible"
+    .large-11.columns
+      .tag ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
+        ' {{ item.name }}
+        a.close href="javascript:;" ng-click="search.drop(item)" &times;
+    .large-1.columns
+      a role="clear-cart" href="javascript:;" ng-click="search.reset()"
+        i.fa.fa-times-circle-o
+
+  a role="toggle-cart" href="javascript:;" ng-click="cart_visible=!cart_visible"
+    i.fa.fa-angle-up ng-show="cart_visible"
+    i.fa.fa-angle-down ng-hide="cart_visible"

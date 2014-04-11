@@ -1,13 +1,15 @@
 @rating.factory 'Alternative', ["$resource", "Criterion", "Search", ($resource, Criterion, Search) ->
 
   criteria_to_params = ->
-    _.pluck(Search.criteria(), 'id').join(',')
+    ids = _.pluck(Search.criteria(), 'id')
+    criterion_ids: ids.join(',') if ids.length
   filters_to_params  = ->
     _.tap {}, (hash) -> for filter in Search.properties()
       hash["prop[#{ filter.id }]"] = 1
 
 
-  Alternative = $resource '/alternatives/:id.json', { id: '@id' }, update: { method: 'PUT' }
+  Alternative = $resource '/:realm/alternatives/:id.json', { id: '@id', realm: 'hotels' }, update: { method: 'PUT' }
+  # TODO get rid of hardcoded realm value
 
   Alternative.all = []
 
@@ -15,12 +17,13 @@
     Alternative.all.indexOf @
 
   Alternative.rate = ->
-    params = _.extend filters_to_params(), { criterion_ids: criteria_to_params() }
-    @query(params).$promise.then (alternatives) =>
-      @all = _.map(alternatives, (alternative) -> new Alternative alternative)
+    params = _.extend filters_to_params(), criteria_to_params()
+    unless _.isEmpty(params)
+      @query(params).$promise.then (alternatives) =>
+        @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
   Alternative.pick = (id, criteria) ->
-    @get(id: id, criterion_ids: criteria_to_params(criteria)).$promise
+    @get(id: id, criteria_to_params(Search.criteria)).$promise
 
   Alternative::top_criteria = ->
     _.map @top, (tip) ->
