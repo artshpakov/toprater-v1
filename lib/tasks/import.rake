@@ -54,7 +54,7 @@ namespace :import do
 
     DB[:reviews].each do |ratings_attributes|
       criteria.each_key do |crit_id|
-        if !hotels[ratings_attributes[:hotel_id]].nil? and !criteria[crit_id].nil? and ratings_attributes[:"criteria_#{crit_id}"] > 0
+        if !hotels[ratings_attributes[:hotel_id]].nil? and !criteria[crit_id].nil?
           alt_crit = AlternativesCriterion.find_or_initialize_by(alternative_id: hotels[ratings_attributes[:hotel_id]], criterion_id: criteria[crit_id])
           if alt_crit.new_record?
             alt_crit.update_attributes({rating: ratings_attributes[:"criteria_#{crit_id}"], reviews_count: ratings_attributes[:"count_#{crit_id}"]})
@@ -93,8 +93,8 @@ namespace :import do
           group = Property::Group.find_or_create_by(name: fac_group)
 
           fac_properties.each do |fac_property|
-            short_name = fac_property.downcase.gsub(/[\-\s]+/, "_").gsub(/[^A-Za-z_]/, "")
-            field = group.fields.find_by(short_name: short_name) || group.fields.new(name: fac_property, short_name: short_name, field_type: 'boolean')
+            short_name = fac_property.downcase.gsub(/[\-\s]+/, "_").gsub(/[^A-Za-z_]/, "").truncate(253)
+            field = group.fields.find_by(short_name: short_name) || group.fields.new(name: fac_property.truncate(253), short_name: short_name, field_type: 'boolean')
             if field.save!
               value = field.values.find_or_initialize_by(alternative_id: hotel.id)
               value.value = '1'
