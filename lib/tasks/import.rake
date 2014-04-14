@@ -54,7 +54,7 @@ namespace :import do
 
     DB[:reviews].each do |ratings_attributes|
       criteria.each_key do |crit_id|
-        if !hotels[ratings_attributes[:hotel_id]].nil? and !criteria[crit_id].nil?
+        if !hotels[ratings_attributes[:hotel_id]].nil? and !criteria[crit_id].nil? and ratings_attributes[:"count_#{crit_id}"] > 0
           alt_crit = AlternativesCriterion.find_or_initialize_by(alternative_id: hotels[ratings_attributes[:hotel_id]], criterion_id: criteria[crit_id])
           if alt_crit.new_record?
             alt_crit.update_attributes({rating: ratings_attributes[:"criteria_#{crit_id}"], reviews_count: ratings_attributes[:"count_#{crit_id}"]})
