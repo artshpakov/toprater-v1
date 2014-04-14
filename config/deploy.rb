@@ -5,6 +5,10 @@ require 'rvm/capistrano'
 # require 'thinking_sphinx/capistrano'
 require 'capistrano-unicorn'
 
+require 'hipchat/capistrano'
+set :hipchat_token, "33a2f20049c41c04dabafd05986eb3"
+set :hipchat_room_name, "crowdsolver"
+
 set :stages, %w(production staging jenkins development)
 set :default_stage, "development"
 require 'capistrano/ext/multistage'

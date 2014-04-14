@@ -51,5 +51,6 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'letter_opener'
   gem 'every'
+  gem 'hipchat', require: false
 end
 gem 'rspec-rails', group: %i(development test)
