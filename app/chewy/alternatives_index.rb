@@ -1,4 +1,33 @@
 class AlternativesIndex < Chewy::Index
+
+  # curl 'localhost:9200/alternatives/_search/?format=yaml&_source=0' -d '
+  # {"query": {
+  #   "function_score": {
+  #     "functions": [
+  #       { "script_score": { "script": "doc[cr].value", "params": { "cr": "cr_506" } } },
+  #       { "script_score": { "script": "doc[cr].value", "params": { "cr": "cr_507" } } }
+  #     ],
+  #     "score_mode": "avg",
+  #     "boost_mode": "replace"
+  #     }
+  #   }
+  # }}'
+
+  # TODO replace script_score with field_value_factor, introduced in ES 1.2
+  def self.weighted(criteria_ids=[])
+    return self if criteria_ids.empty?
+    script = "doc[cr].value"
+    query(
+      function_score: {
+        functions: criteria_ids.map { |cr_id|
+          { script_score: { script: script, params: {cr: "cr_#{cr_id}"} } }
+        },
+        score_mode: 'avg',
+        boost_mode: 'replace'
+      }
+    )
+  end
+
   define_type Alternative.includes(:alternatives_criteria, :property_values) do
     field :name
     field :realm_id, type: 'integer'
