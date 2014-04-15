@@ -1,12 +1,12 @@
 class Alternative < ActiveRecord::Base
 
-  has_many :alternatives_criteria
+  has_many :alternatives_criteria, dependent: :delete_all
   has_many :criteria, through: :alternatives_criteria
-  has_many :reviews
-  has_many :review_sentences
-  has_many :media
+  has_many :reviews, dependent: :destroy
+  has_many :review_sentences, dependent: :delete_all
+  has_many :media, dependent: :destroy
 
-  has_many :property_values, class_name: 'Property::Value'
+  has_many :property_values, class_name: 'Property::Value', dependent: :delete_all
 
   validates :name, presence: true
 
