@@ -28,19 +28,35 @@ class AlternativesIndex < Chewy::Index
     )
   end
 
+  # Trying to make chewy field type, which doesn't index null fields
+  class NotNullField < Chewy::Fields::Default
+    def compose(object)
+      result = super
+      if result.is_a?(Hash) && result.values.first.nil?
+        {}
+      else
+        result
+      end
+    end
+  end
+
   define_type Alternative.includes(:alternatives_criteria, :property_values) do
     field :name
     field :realm_id, type: 'integer'
 
-    # FIXME get rid of "null" values in indexed documents.
     Criterion.where.not(ancestry: nil).find_each do |cr|
-      field :"cr_#{cr.id}", type: 'double',
+      expand_nested NotNullField.new(
+        :"cr_#{cr.id}", type: 'double',
         value: -> { alternatives_criteria.select {|ac| ac.criterion_id == cr.id}.map(&:rating).first }
+      )
     end
 
     Property::Field.find_each do |prop|
-      field :"prop_#{prop.id}", type: 'boolean',
+
+      expand_nested NotNullField.new(
+        :"prop_#{prop.id}", type: 'boolean',
         value: -> { property_values.select {|ap| ap.field_id == prop.id}.map(&:value).first }
+      )
     end
   end
 end
