@@ -20,7 +20,7 @@ class CompleteIndex < Chewy::Index
           completion: {
             field: "suggest",
             size: size,
-            fuzzy: { edit_distance: 2}
+            fuzzy: { edit_distance: 2, min_length: 4}
           }
         }
       }
