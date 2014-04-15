@@ -14,7 +14,7 @@ class AlternativesIndex < Chewy::Index
   # }}'
 
   # TODO replace script_score with field_value_factor, introduced in ES 1.2
-  def self.weighted(criteria_ids=[])
+  def self.score_by(criteria_ids=[])
     return self if criteria_ids.empty?
     script = "doc[cr].value"
     query(

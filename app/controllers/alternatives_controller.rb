@@ -21,17 +21,23 @@ class AlternativesController < ApplicationController
   end
 
   def index
-    @alternatives = Voltdb::CriteriaRating.select
-    if params[:prop] and params[:prop].any?
-      params[:prop].each do |property, value|
-        @alternatives = @alternatives.where(properties: {property => value})
-      end
-    end
+    @criterion_ids = (params[:criterion_ids] || '').split(",")
+    @alternatives = AlternativesIndex
+      .score_by(@criterion_ids)
+      .filter(term: params[:props]) # FIXME potential hole
+      .limit(21).load
 
-    if params[:criterion_ids].present?
-      @criterion_ids = params[:criterion_ids].split(",")
-      @alternatives = @alternatives.score_by(@criterion_ids)
-    end
+    # @alternatives = Voltdb::CriteriaRating.select
+    # if params[:prop] and params[:prop].any?
+    #   params[:prop].each do |property, value|
+    #     @alternatives = @alternatives.where(properties: {property => value})
+    #   end
+    # end
+
+    # if params[:criterion_ids].present?
+    #   @criterion_ids = params[:criterion_ids].split(",")
+    #   @alternatives = @alternatives.score_by(@criterion_ids)
+    # end
 
     @alternatives = @alternatives.limit(21).load
   end
