@@ -41,6 +41,13 @@ class CompleteIndex < Chewy::Index
   end
 
   define_type Realm do
+
+    def self.import(*args)
+      args = ::Realm.all if args.blank?
+      super args
+    end
+
+    field :name
     field :suggest, type: 'completion', payloads: true, value: -> {{
       weight: 3,
       output: name,
