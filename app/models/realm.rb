@@ -1,10 +1,18 @@
-class Realm < Struct.new(:id, :name)
+class Realm
+
+  attr_accessor :id
+  attr_accessor :name
+
+  def initialize(id: nil, name:nil)
+    @id = id
+    @name = name
+  end
 
   class << self
 
     def all
       %w(hotels restaurants movies).each_with_index.map do |realm, i|
-        self.new(i+1, realm)
+        self.new(id: i+1, name: realm)
       end
     end
 
