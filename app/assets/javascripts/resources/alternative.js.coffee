@@ -22,8 +22,8 @@
       @query(params).$promise.then (alternatives) =>
         @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
-  Alternative.pick = (id, criteria) ->
-    @get(id: id, criteria_to_params(Search.criteria)).$promise
+  Alternative.pick = (id) ->
+    @get(_.extend { id }, criteria_to_params(Search.criteria)).$promise
 
   Alternative::top_criteria = ->
     _.map @top, (tip) ->
