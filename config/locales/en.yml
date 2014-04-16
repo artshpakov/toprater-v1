@@ -10,10 +10,6 @@ en:
     restaurants: "restaurants"
     movies: "movies"
 
-  nav:
-    previous: "previous"
-    next: "next"
-
   reviews:
     found:
       one: "%{count} review"

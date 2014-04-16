@@ -11,18 +11,39 @@ class AlternativeDecorator < ApplicationDecorator
     (object.score*100/5).round if object.score
   end
 
-  def link_to_lmgtfy
-    h.link_to(object.name, "http://lmgtfy.com/?q=#{object.name.gsub(' ', '+')}", target: '_blank').html_safe
+  def processed_reviews criterion_ids
+    Hash[Array.wrap(criterion_ids).map do |cid|
+      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i }.map {|rw| { rating: calculate_score(rw.score), sentences: rw.sentences }} ]
+    end]
   end
 
-  def processed_reviews criterion_ids
-    reviews = object.review_sentences.where(criterion_id: criterion_ids)
+  def criteria_scores criterion_ids
     Hash[Array.wrap(criterion_ids).map do |cid|
-      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i }.map {|rw| { rating: rw.score+1*2.5, sentences: rw.sentences }} ]
-    end]
+      relevant_reviews = reviews.select { |rw| rw.criterion_id == cid.to_i }
+      if relevant_reviews.count > 0
+        score = relevant_reviews.reduce(0) { |sum, rw| sum + rw.score } / relevant_reviews.count
+        [ cid.to_i, calculate_percentage(score) ]
+      end
+    end]    
   end
 
   def count_relevant_reviews criterion_ids
     object.review_sentences.where(criterion_id: criterion_ids).count
   end
+
+
+  protected
+
+  def calculate_score value
+    (value + 1) * 2.5
+  end
+
+  def calculate_percentage value
+    (value + 1) * 50
+  end
+
+  def reviews
+    @reviews ||= object.review_sentences.where(criterion_id: criterion_ids)
+  end
+
 end

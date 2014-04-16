@@ -14,6 +14,9 @@
 
   Criterion::toggle = -> @active = !@active
 
+  Criterion.find = (id) ->
+    _.find cache, (item) -> item.id is parseInt(id)
+
   Criterion
 
 ]

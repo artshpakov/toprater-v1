@@ -8,7 +8,9 @@
 
   $scope.current_alternative = Alternative.current_alternative
   $scope.$watch 'current_alternative', (alternative) ->
-    scroll_to alternative if alternative?
+    if alternative?
+      alternative.lazy_fetch()
+      scroll_to alternative
 
   $scope.pick = (alternative) ->
     $scope.current_alternative = Alternative.current_alternative = alternative
