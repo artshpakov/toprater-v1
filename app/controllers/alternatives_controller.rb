@@ -26,8 +26,8 @@ class AlternativesController < ApplicationController
     alternatives_query = AlternativesIndex.limit(21)
 
     if params[:prop] and params[:prop].any?
-      properties = Hash[params[:prop].map{|k,v| ["prop_#{k}", v]}]
-      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(term: properties)) # FIXME potential hole
+      properties = params[:prop].map{|k,v| {term: {"prop_#{k}" => v}} }
+      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(bool: {must: properties})) # FIXME potential hole
     end
 
     if @criterion_ids.any?
