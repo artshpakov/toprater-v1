@@ -17,6 +17,12 @@
 
 
 
+.index
+  @include rating-index
+  margin-right: 20px
+.title
+  line-height: 25px
+
 .card
   float: left
   width: 32%
@@ -33,11 +39,6 @@
     position: relative
     height: 80px
     padding: 12px 16px
-    .index
-      @include rating-index
-      margin-right: 20px
-    .title
-      line-height: 25px
 
   .image
     display: block
@@ -68,31 +69,3 @@
       overflow: hidden
       &.active
         margin-bottom: 10px
-
-
-
-.details-placeholder
-  height: 500px
-  background-color: #eee
-  clear: both
-  margin-bottom: 12px
-  overflow: hidden
-  position: relative
-
-  .headline
-    padding: 20px 30px
-    background-color: rgba(255,255,255, 0.75)
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-
-    .index
-      @include rating-index
-      margin-right: 20px
-
-    .title
-      line-height: 54px
-
-    .nav
-      overflow: hidden
