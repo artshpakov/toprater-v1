@@ -38,16 +38,29 @@ header
       width: 100%
       font-size: 14px
       li
+        height: 45px
         a
           display: block
           padding: 5px 15px
           border-bottom: 1px solid #eee
           &:hover
             background-color: #efefef
+          small
+            display: block
+            line-height: 12px
+            color: #999
+            font-size: 12px
+            span
+              margin-right: 6px
         &.criterion > a
           color: $criterion-color
         &.property > a
           color: $property-color
+        &.realm > a
+          color: $realm-color
+        &.alternative > a
+          color: $realm-color
+
 
 
 #cart
