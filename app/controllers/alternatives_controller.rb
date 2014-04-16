@@ -23,18 +23,33 @@ class AlternativesController < ApplicationController
   def index
     @criterion_ids = (params[:criterion_ids] || '').split(",")
 
-    @alternatives = AlternativesIndex.limit(21)
+    alternatives_query = AlternativesIndex.limit(21)
 
     if params[:prop] and params[:prop].any?
       properties = Hash[params[:prop].map{|k,v| ["prop_#{k}", v]}]
-      @alternatives = @alternatives.merge(AlternativesIndex.filter(term: properties)) # FIXME potential hole
+      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(term: properties)) # FIXME potential hole
     end
 
     if @criterion_ids.any?
-      @alternatives = @alternatives.merge(AlternativesIndex.score_by(@criterion_ids))
+      alternatives_query = alternatives_query.merge(AlternativesIndex.score_by(@criterion_ids))
     end
 
-    @alternatives = @alternatives.load
+    alternatives_query = alternatives_query.only(:id).to_a
+
+    alternative_ids = alternatives_query.map{|x| x.id.to_i}
+    scores = alternatives_query.map(&:_score)
+
+    @alternatives = alternative_ids.any? ? Alternative.where(id: alternative_ids) : []
+
+    if @criterion_ids.any?
+      sorted_alternatives = []
+      @alternatives.each do |a|
+        a.score = scores[alternative_ids.index(a.id)]
+        sorted_alternatives[alternative_ids.index(a.id)] = a
+      end
+      @alternatives = sorted_alternatives
+    end
+
   end
 
 

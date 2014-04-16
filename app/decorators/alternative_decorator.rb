@@ -8,7 +8,7 @@ class AlternativeDecorator < ApplicationDecorator
   #end
 
   def score
-    (object.score*100/5).round if object.score
+    (object.score*100).round if object.score
   end
 
   def link_to_lmgtfy
