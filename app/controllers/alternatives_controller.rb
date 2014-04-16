@@ -24,15 +24,16 @@ class AlternativesController < ApplicationController
 
     alternatives_query = AlternativesIndex.limit(21)
 
-    if params[:prop] and params[:prop].any?
-      properties = params[:prop].map{|k,v| {term: {"prop_#{k}" => v}} }
-      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(bool: {must: properties})) # FIXME potential hole
+    if params[:prop].present?
+      properties = params[:prop].map{|k,v| {term: {"prop_#{k}" => v.to_s}} }
+      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(bool: {must: properties}))
     end
 
-    if @criterion_ids.any?
+    if @criterion_ids.present?
       alternatives_query = alternatives_query.merge(AlternativesIndex.score_by(@criterion_ids))
     end
 
+    # this is madness!
     alternatives_query = alternatives_query.only(:id).to_a
 
     alternative_ids = alternatives_query.map{|x| x.id.to_i}
