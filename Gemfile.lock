@@ -178,6 +178,9 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.2.1)
+    redis (3.0.7)
+    redis-namespace (1.4.1)
+      redis (~> 3.0.4)
     ref (1.0.5)
     request_store (1.0.5)
     responders (1.0.0)
@@ -280,6 +283,8 @@ DEPENDENCIES
   rabl
   rack-mini-profiler
   rails (~> 4.0)
+  redis
+  redis-namespace
   rspec-rails
   russian
   rvm-capistrano

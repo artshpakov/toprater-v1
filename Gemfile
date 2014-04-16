@@ -19,6 +19,8 @@ gem 'draper'
 gem 'sequel'
 gem 'sqlite3'
 
+gem 'redis'
+gem 'redis-namespace'
 gem 'chewy'
 
 gem 'paperclip'
