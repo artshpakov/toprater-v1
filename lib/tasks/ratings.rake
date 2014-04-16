@@ -1,7 +1,7 @@
 namespace :ratings do
 
-  desc "Import hotels from sqlite DB file"
-  task build: :environment do
+  desc "Rebuild top50 alternatives by criteria ladder"
+  task rebuild: :environment do
 
     $redis.keys("top50:alt_rating:*").each{|k| $redis.del(k)}
     criteria = Criterion.where.not(ancestry: nil).pluck(:id)
@@ -26,4 +26,5 @@ namespace :ratings do
     end
 
   end
+
 end

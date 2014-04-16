@@ -5,6 +5,7 @@ class Voltdb::CriteriaRating < Volter::Model
   class << self
 
     def select
+      warn "[DEPRECATION] Voltdb::CriteriaRating marked as deprecated and will be removed someday"
       instance_variables.each do |var|
         remove_instance_variable var unless [:@table_name].include? var
       end

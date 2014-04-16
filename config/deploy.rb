@@ -81,6 +81,13 @@ namespace :deploy do
     #run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake paperclip:refresh:missing_styles"
   #end
 
+  namespace :ratings do
+    desc "Rebuild ratings ladder"
+    task :rebuild do
+      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake ratings:rebuild"
+    end
+  end
+
   namespace :voltdb do
     desc "Restart and reimport date to voltdb"
     task :restart do

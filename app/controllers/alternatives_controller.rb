@@ -1,7 +1,6 @@
 class AlternativesController < ApplicationController
 
   inherit_resources
-  custom_actions collection: [:count]
 
   respond_to :json
 
