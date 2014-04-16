@@ -13,11 +13,11 @@ class Alternative < ActiveRecord::Base
   attr_accessor :score, :properties
 
   def cover_url
-    $redis.get "alt:#{id}:cover"
+    KV.get "alt:#{id}:cover"
   end
 
   def top
-    JSON.parse($redis.get("top50:alt_rating:#{id}") || "{}")
+    JSON.parse(KV.get("top50:alt_rating:#{id}") || "{}")
   end
 
   def realm

@@ -13,7 +13,7 @@ namespace :import do
         if hotel_attributes[:photo].present?
           medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: hotel.id, url: hotel_attributes[:photo], medium_type: 'image')
           medium.update_attributes(cover: true)
-          $redis.set "alt:#{hotel.id}:cover", medium.url(:thumb)
+          KV.set "alt:#{hotel.id}:cover", medium.url(:thumb)
         end
       end
     end

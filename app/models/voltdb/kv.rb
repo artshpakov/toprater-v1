@@ -4,17 +4,17 @@ class Voltdb::Kv < Volter::KeyValueStorage
 
   def self.get key
     warn "[DEPRECATION] Voltdb::Kv is deprecated. Please use $redis instead."
-    $redis.get key
+    ::KV.get key
   end
 
   def self.set key, val
     warn "[DEPRECATION] Voltdb::Kv is deprecated. Please use $redis instead."
-    $redis.set key, val
+    ::KV.set key, val
   end
 
   def self.del key
     warn "[DEPRECATION] Voltdb::Kv is deprecated. Please use $redis instead."
-    $redis.del key
+    ::KV.del key
   end
 
 end

@@ -3,7 +3,7 @@ namespace :ratings do
   desc "Rebuild top50 alternatives by criteria ladder"
   task rebuild: :environment do
 
-    $redis.keys("top50:alt_rating:*").each{|k| $redis.del(k)}
+    KV.keys("top50:alt_rating:*").each{|k| KV.del(k)}
     criteria = Criterion.where.not(ancestry: nil).pluck(:id)
     criteria.each do |criterion_id|
       grade = 0
@@ -14,12 +14,12 @@ namespace :ratings do
           grade += 1
           last_score = score
         end
-        $redis.get("top50:alt_rating:#{alternative_id}").tap do |current_ratings|
+        KV.get("top50:alt_rating:#{alternative_id}").tap do |current_ratings|
           current_ratings ||= "{}"
           current_ratings = JSON.parse(current_ratings)
           current_ratings.merge!({criterion_id => grade})
           current_ratings = Hash[current_ratings.sort_by{|k,v| v}]
-          $redis.set "top50:alt_rating:#{alternative_id}", current_ratings.to_json
+          KV.set "top50:alt_rating:#{alternative_id}", current_ratings.to_json
         end
       end
     print "." if Rails.env == 'development'
