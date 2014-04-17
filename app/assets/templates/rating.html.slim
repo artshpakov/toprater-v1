@@ -3,28 +3,5 @@ div#realm ng-hide="alternatives.all.length"
 
 div#realm ng-show="alternatives.all.length"
   div ng-repeat="alternative in alternatives.all"
-    .card ng-class="{ 'last-in-row': last_in_row($index) }"
-      .headline
-        a.title href="javascript:;" ng-click="pick(alternative)"
-          h2.index
-            small #
-            | {{ $index+1 }}
-          | {{ alternative.name | truncate:40 }}
-
-      a.image href="javascript:;" ng-click="pick(alternative)"
-        img ng-src="{{ alternative.cover_url }}"
-        .score ng-if="alternative.score != null"
-          small' подходит на
-          | {{ alternative.score }}%
-
-      .tags-area
-        .active
-          .active.criterion.tag ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
-            b' = "\#{{ alternative.grade(criterion) }}"
-            | {{ criterion.name }}
-        .inactive
-          .tag ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:8" ng-click="search.pick(criterion)"
-            b' = "\#{{ alternative.grade(criterion) }}"
-            | {{ criterion.name }}
-
+    ng-include src="'#{ asset_path 'card.html.slim' }'"
     ng-include src="'#{ asset_path 'middle.html.slim' }'"
