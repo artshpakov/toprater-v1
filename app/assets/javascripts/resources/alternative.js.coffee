@@ -26,10 +26,12 @@
     @get(_.extend { id }, criteria_to_params(Search.criteria)).$promise
 
   Alternative::lazy_fetch = ->
-    params = ("#{ field }=#{ value }" for field, value of criteria_to_params(Search.criteria)).join("&")
-    $http.get("/#{ @realm }/alternatives/#{ @id }.json?#{ params }").success (data) =>
-      for own attribute, value of data
-        @[attribute] = value unless @[attribute]
+    unless @detailed
+      params = ("#{ field }=#{ value }" for field, value of criteria_to_params(Search.criteria)).join("&")
+      $http.get("/#{ @realm }/alternatives/#{ @id }.json?#{ params }").success (data) =>
+        for own attribute, value of data
+          @[attribute] = value unless @[attribute]
+        @detailed = true
 
   Alternative::top_criteria = ->
     _.map @top, (tip) ->
