@@ -16,8 +16,10 @@
         Search.pick _.find(Criterion.all, (criterion) -> criterion.id is tip.id)
       when 'property'
         Search.pick _.find(Property.all, (property) -> property.id is tip.id)
+      when 'realm'
+        $location.path "/#{ $scope.locale }/#{ tip.realm }"
       when 'alternative'
-        $location.path "/#{ $scope.locale }/#{ $routeParams.realm }/alternatives/#{ tip.id }"
+        $location.path "/#{ $scope.locale }/#{ tip.realm }/alternatives/#{ tip.id }"
     $scope.query = null
 
 ]

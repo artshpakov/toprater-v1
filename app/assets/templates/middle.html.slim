@@ -1,11 +1,25 @@
-.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
-  img ng-src="{{ current_alternative.cover_url }}" style="width: 100%"
-  .headline
-    h2.index
-      small #
-      | {{ current_alternative.index() + 1 }}
-    h2 : a.title href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
-    .clearfix
-    .nav
-      a href="javascript:;" style="float: right" ng-click="next()" ng-if="has_next()" == "#{ I18n.t('nav.next') } &rarr;"
-      a href="javascript:;" ng-click="previous()" ng-if="has_previous()" == "&larr; #{ I18n.t('nav.previous') }"
+.details-placeholder.row ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
+  a.arrow.arrow-left href="javascript:;" ng-click="previous()" ng-if="has_previous()" : i.fa.fa-angle-left
+  a.arrow.arrow-right href="javascript:;" ng-click="next()" ng-if="has_next()" : i.fa.fa-angle-right
+
+  .clmn.left-clmn
+    .headline
+      h2.index
+        small #
+        | {{ current_alternative.index() + 1 }}
+      a.title href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
+
+    p ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+
+    a role='main-image' href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}"
+      img ng-src="{{ current_alternative.cover_url }}"
+
+  .clmn.right-clmn
+    p Рейтинг по критериям, которые вы выбрали
+
+    table.criteria.plain
+      tr ng-repeat="(criterion_id, percentage) in current_alternative.scores | orderBy:percentage"
+        td.info = "{{ criteria.find(criterion_id).name }}"
+        td.progress
+          div.wrapper
+            div.stripe style="width: {{ percentage }}%"

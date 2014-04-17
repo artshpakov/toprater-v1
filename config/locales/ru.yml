@@ -10,10 +10,6 @@ ru:
     restaurants: "рестораны"
     movies: "фильмы"
 
-  nav:
-    previous: "назад"
-    next: "далее"
-
   reviews:
     found:
       one: "%{count} отзыв"

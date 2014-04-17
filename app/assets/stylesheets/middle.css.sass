@@ -1,0 +1,70 @@
+@import '_settings'
+
+
+$middle-card-height: 500px
+
+.details-placeholder
+  clear: both
+  margin: 0 0 12px !important
+  height: $middle-card-height
+  background-color: #999
+  color: #fff
+
+  .clmn
+    height: $middle-card-height
+    padding: 20px
+    &.left-clmn
+      width: 35%
+      border-right: 1px solid #bbb
+      float: left
+      margin-right: 20px
+    &.right-clmn
+      .criteria
+        color: #fff
+        width: 550px
+        .info
+          width: 120px
+        .progress
+          .wrapper
+            background-color: #fff
+            width: 100%
+            height: 10px
+            position: relative
+          .stripe
+            background-color: $main-color
+            height: 10px
+            position: absolute
+            left: 0
+            top: 0
+
+  .arrow
+    display: block
+    font-size: 32px
+    width: 30px
+    height: $middle-card-height
+    line-height: $middle-card-height
+    text-align: center
+    border: solid #bbb
+    color: #fff
+    &.arrow-left
+      border-width: 0 1px 0 0
+      float: left
+    &.arrow-right
+      border-width: 0 0 0 1px
+      float: right
+    &:hover
+      background-color: #aaa
+
+  .headline
+    margin-bottom: 12px
+    overflow: hidden
+    a
+      color: #fff
+      font-width: bold
+
+  [role=main-image]
+    display: block
+    height: 160px
+    overflow: hidden
+    img
+      width: 100%

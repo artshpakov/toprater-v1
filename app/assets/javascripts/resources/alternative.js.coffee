@@ -1,4 +1,4 @@
-@rating.factory 'Alternative', ["$resource", "Criterion", "Search", ($resource, Criterion, Search) ->
+@rating.factory 'Alternative', ["$resource", "Criterion", "Search", "$http", ($resource, Criterion, Search, $http) ->
 
   criteria_to_params = ->
     ids = _.pluck(Search.criteria(), 'id')
@@ -22,8 +22,16 @@
       @query(params).$promise.then (alternatives) =>
         @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
-  Alternative.pick = (id, criteria) ->
-    @get(id: id, criteria_to_params(Search.criteria)).$promise
+  Alternative.pick = (id) ->
+    @get(_.extend { id }, criteria_to_params(Search.criteria)).$promise
+
+  Alternative::lazy_fetch = ->
+    unless @detailed
+      params = ("#{ field }=#{ value }" for field, value of criteria_to_params(Search.criteria)).join("&")
+      $http.get("/#{ @realm }/alternatives/#{ @id }.json?#{ params }").success (data) =>
+        for own attribute, value of data
+          @[attribute] = value unless @[attribute]
+        @detailed = true
 
   Alternative::top_criteria = ->
     _.map @top, (tip) ->

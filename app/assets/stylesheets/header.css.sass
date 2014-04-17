@@ -5,6 +5,7 @@ header
   border-top: none
   box-shadow: 0 4px 10px #ddd
 
+
 #realms
   @include horizontal-list
   li
@@ -38,16 +39,28 @@ header
       width: 100%
       font-size: 14px
       li
+        height: 45px
         a
           display: block
           padding: 5px 15px
           border-bottom: 1px solid #eee
           &:hover
             background-color: #efefef
+          small
+            display: block
+            line-height: 12px
+            color: #999
+            font-size: 12px
+            span
+              margin-right: 6px
         &.criterion > a
           color: $criterion-color
         &.property > a
           color: $property-color
+        &.realm > a
+          color: $realm-color
+        &.alternative > a
+          color: $realm-color
 
 
 #cart
@@ -57,21 +70,6 @@ header
   [role=clear-cart]
     font-size: 22px
     float: right
-
-
-[role=toggle-cart]
-  display: block
-  width: 100%
-  border-top: 1px solid #ddd
-  text-align: center
-  font-size: 24px
-  color: #808080
-
-
-#realms, #search, #cart
-  padding: 0 18px
-
-
 
 .tag
   @include toggleable
@@ -86,3 +84,16 @@ header
       background-color: $criterion-color
     &.property
       background-color: $property-color
+
+
+#realms, #search, #cart
+  padding: 0 18px
+
+
+[role=toggle-cart]
+  display: block
+  width: 100%
+  border-top: 1px solid #ddd
+  text-align: center
+  font-size: 24px
+  color: #808080
