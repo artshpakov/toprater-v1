@@ -16,6 +16,7 @@ tmp
 .rvmrc*
 *.swp
 *.swo
+*.rdb
 
 catalog-report.html
 statement-plans/
