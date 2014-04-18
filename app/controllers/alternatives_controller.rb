@@ -50,7 +50,11 @@ class AlternativesController < ApplicationController
       end
       @alternatives = sorted_alternatives
     end
+  end
 
+  def midlevel
+    @alternative = Alternative.find_by! id: params[:id]
+    @criterion_ids = params[:criterion_ids].split(',') if params[:criterion_ids].present?
   end
 
 

@@ -1,0 +1,98 @@
+@import '_settings'
+
+
+$middle-card-height: 500px
+
+.details-placeholder
+
+  *
+    color: #fff
+  a
+    color: #ccc
+
+  clear: both
+  margin: 0 0 12px !important
+  height: $middle-card-height
+  width: 100%
+  border: none
+  background: none
+  border-spacing: 0
+  tr
+    vertical-align: top
+  td
+    padding: 0
+    border: none
+    border-right: 1px solid #a2a2a2
+    background-color: #838383 !important
+    &:last-child
+      border: none
+
+
+  .clmn
+    padding: 12px 20px
+    &.left-clmn
+      width: 35%
+    &.right-clmn
+      p
+        margin-bottom: 0
+
+  .arrow
+    cursor: pointer
+    font-size: 32px
+    width: 30px
+    vertical-align: middle
+    text-align: center
+    &:hover
+      background-color: #919191
+
+  .headline
+    margin-bottom: 12px
+    overflow: hidden
+    a
+      color: #fff
+      font-width: bold
+
+  [role=main-image]
+    display: block
+    height: 160px
+    overflow: hidden
+    img
+      width: 100%
+
+  .criteria
+    width: 100%
+    border: none
+    background: none
+    td
+      border: none
+    .position
+      width: 100px
+    .info
+      width: 100px
+    .progressbar
+      .wrapper
+        width: 100%
+        height: 10px
+        position: relative
+        background-color: #fff
+        margin-top: 5px
+      .stripe
+        height: 10px
+        position: absolute
+        left: 0
+        top: 0
+    &.picked .stripe
+      background-color: $main-color
+    &.top .stripe
+      background-color: #bbb
+
+  #reviews
+    background-color: #666
+    border-top: 1px solid #4d4d4d
+    border-bottom: 1px solid #bbb
+    .review
+      font-size: 12px
+      padding: 8px 12px
+      p
+        font-size: 12px
+        margin-bottom: 4px

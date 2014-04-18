@@ -5,7 +5,9 @@ AlternativesPower::Application.routes.draw do
 
     scope ":realm", realm: /#{ Realm.pluck(:name).join '|' }/ do
       root to: 'index#index', as: :realm
-      resources :alternatives, only: %i(index show)
+      resources :alternatives, only: %i(index show) do
+        member { get :midlevel }
+      end
     end
 
     resources :properties, only: :index

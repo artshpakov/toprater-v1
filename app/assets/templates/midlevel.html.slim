@@ -1,0 +1,49 @@
+table.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
+  tr
+    td.arrow ng-if="has_previous()" ng-click="previous()" : i.fa.fa-angle-left
+
+    td.clmn.left-clmn
+      .headline
+        h2.index
+          small #
+          | {{ current_alternative.index() + 1 }}
+        h4 : a.title href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
+
+      p
+        span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+        | &nbsp;
+
+      div : a role='main-image' href="{{ current_alternative.url(locale) }}"
+        img ng-src="{{ current_alternative.cover_url }}"
+
+    td.clmn.right-clmn
+      h4 Рейтинг по критериям, которые вы выбрали
+
+      p Вы выбрали
+      table.criteria.picked
+        tr ng-repeat="score in current_alternative.scores.picked | orderBy:percentage | limitTo:3"
+          td.position = "\#{{ score.position }} из {{ score.out_of }}"
+          td.info = "{{ criteria.find(score.id).name }}"
+          td.progressbar
+            div.wrapper
+              div.stripe style="width: {{ score.score }}%"
+
+      p Этот отель в других рейтингах
+      table.criteria.top
+        tr ng-repeat="score in current_alternative.scores.top | limitTo:3"
+          td.position = "\#{{ score.position }} из {{ score.out_of }}"
+          td.info = "{{ criteria.find(score.id).name }}"
+          td.progressbar
+            div.wrapper
+              div.stripe style="width: {{ score.score }}%"
+
+      #reviews
+        .review ng-repeat="review in current_alternative.reviews"
+          p
+            ' {{ review.sentences[0] }}
+            b' = "{{ review.sentences[1] }}"
+            | {{ review.sentences[2] }}
+          a href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
+      p: a href="{{ current_alternative.url(locale) }}" Все рейтинги с этим отелем &rarr;
+
+    td.arrow ng-if="has_next()" ng-click="next()" : i.fa.fa-angle-right
