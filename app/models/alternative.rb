@@ -13,7 +13,7 @@ class Alternative < ActiveRecord::Base
   attr_accessor :score, :properties
 
   def cover_url
-    KV.get "alt:#{id}:cover"
+    KV.get("alt:#{id}:cover") || "/images/no_picture.png"
   end
 
   def top

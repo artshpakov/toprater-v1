@@ -9,7 +9,9 @@
         | {{ current_alternative.index() + 1 }}
       a.title href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}" {{ current_alternative.name }}
 
-    p ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+    p
+      span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+      | &nbsp;
 
     a role='main-image' href="/{{ locale }}/{{ realm }}/alternatives/{{ current_alternative.id }}"
       img ng-src="{{ current_alternative.cover_url }}"
