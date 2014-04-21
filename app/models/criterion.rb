@@ -8,4 +8,6 @@ class Criterion < ActiveRecord::Base
 
   validates_presence_of :name
 
+  scope :rated, ->{ joins(:alternatives_criteria).distinct }
+
 end

@@ -67,7 +67,7 @@ class CompleteIndex < Chewy::Index
     }}
   end
 
-  define_type Criterion do
+  define_type Criterion.rated do
     field :name
     field :suggest, type: 'completion', payloads: true, value: -> {{
       weight: 2,

@@ -44,7 +44,7 @@ class AlternativesIndex < Chewy::Index
     field :name
     field :realm_id, type: 'integer'
 
-    Criterion.where.not(ancestry: nil).find_each do |cr|
+    Criterion.rated.find_each do |cr|
       expand_nested NotNullField.new(
         :"cr_#{cr.id}", type: 'double',
         value: -> { alternatives_criteria.select {|ac| ac.criterion_id == cr.id}.map(&:rating).first }
@@ -52,7 +52,6 @@ class AlternativesIndex < Chewy::Index
     end
 
     Property::Field.find_each do |prop|
-
       expand_nested NotNullField.new(
         :"prop_#{prop.id}", type: 'boolean',
         value: -> { property_values.select {|ap| ap.field_id == prop.id}.map(&:value).first }

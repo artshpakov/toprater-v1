@@ -44,8 +44,9 @@ class AlternativesController < ApplicationController
     if @criterion_ids.any?
       sorted_alternatives = []
       @alternatives.each do |a|
-        a.score = scores[alternative_ids.index(a.id)]
-        sorted_alternatives[alternative_ids.index(a.id)] = a
+        position = alternative_ids.index(a.id)
+        a.score = scores[position]
+        sorted_alternatives[position] = a
       end
       @alternatives = sorted_alternatives
     end
