@@ -7,14 +7,10 @@ namespace :ratings do
     criteria = Criterion.rated.pluck(:id)
     criteria.each do |criterion_id|
       grade = 0
-      last_score = nil
-      scored_alternatives = Hash[AlternativesIndex.score_by([criterion_id]).limit(21).only(:id).to_a.map{|x| [x.id, x._score]}]
+      scored_alternatives = Hash[AlternativesIndex.score_by([criterion_id]).limit(50).only(:id).to_a.map{|x| [x.id, x._score]}]
       scored_alternatives.each do |alternative_id, score|
         break if score == 0
-        if last_score.nil? or last_score > score
-          grade += 1
-          last_score = score
-        end
+        grade += 1
         KV.get("top50:alt_rating:#{alternative_id}").tap do |current_ratings|
           current_ratings ||= "{}"
           current_ratings = JSON.parse(current_ratings)
