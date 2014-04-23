@@ -10,6 +10,11 @@ ru:
     restaurants: "рестораны"
     movies: "фильмы"
 
+  criteria:
+    all:
+      one: "Все %{count} критерий"
+      few: "Все %{count} критерия"
+      other: "Все %{count} критериев"
   reviews:
     found:
       one: "%{count} отзыв"

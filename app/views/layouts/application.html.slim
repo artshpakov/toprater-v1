@@ -27,10 +27,4 @@ html
 
   body lang="#{locale}" ng-app="rating"
     #wrapper ng-controller="rating.MainCtrl"
-      .row
-        - if flash[:notice]
-          .alert.alert-success = flash[:notice] 
-        - if flash[:alert]
-          .alert.alert-danger = flash[:alert]
-
       == yield

@@ -1,14 +1,17 @@
-$main-color: #156fd1
+$main-color: #5babd4
 $minor-color: #11cc11
-
-$toggleable-default-color: #bbbbbb
-$toggleable-active-color: #4bc04b
-$toggleable-inactive-color: #a1c2db
 
 $realm-color: #000
 $alternative-color: #000
-$criterion-color: #278eec
-$property-color: #ee801b
+
+$criterion-color: $main-color
+$criterion-color-inactive: #ebf1f5
+$criterion-text-color: #fff
+$criterion-text-color-inactive: #7e8d9c
+$property-color: #f0e48b
+$property-color-inactive: #fffbde
+$property-text-color: #b88240
+$property-text-color-inactive: #c7a971
 
 
 @mixin horizontal-list
@@ -19,16 +22,11 @@ $property-color: #ee801b
       padding-left: 0
 
 
-@mixin toggleable
-  background-color: $toggleable-default-color
-  color: #000
+@mixin toggleable($bgcolor-active, $bgcolor-inactive, $textcolor-active, $textcolor-inactive)
+  background-color: $bgcolor-inactive
+  color: $textcolor-inactive
   cursor: pointer
+  border: 1px solid $bgcolor-active
   &.active
-    background-color: $toggleable-active-color
-    color: #fff
-    a.close
-      color: #fff
-  &.inactive
-    background-color: $toggleable-inactive-color
-  a.close
-    font-size: 18px
+    background-color: $bgcolor-active
+    color: $textcolor-active

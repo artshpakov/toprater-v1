@@ -8,6 +8,8 @@
 
   $scope.locale       = locale
   $scope.realms       = data.realms
+  
+  $scope.cards_in_row = 5
 
   $scope.range        = _.range
 

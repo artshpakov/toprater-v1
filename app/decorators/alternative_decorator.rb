@@ -8,7 +8,7 @@ class AlternativeDecorator < ApplicationDecorator
   #end
 
   def score
-    ((object.score+1)*50).round if object.score
+    ((object.score+1)*20).round if object.score
   end
 
   def reviews options={}

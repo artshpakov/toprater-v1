@@ -4,20 +4,18 @@
       h2.index
         small #
         | {{ $index+1 }}
-      | {{ alternative.name | truncate:40 }}
+      | {{ alternative.name | truncate:25 }}
 
   a.image href="javascript:;" ng-click="pick(alternative)"
     img ng-src="{{ alternative.cover_url }}"
-    .score ng-if="alternative.score != null"
-      small' подходит на
-      | {{ alternative.score }}%
+    .info ng-if="alternative.top.length" {{ "criteria.all" | i18n:{ count: alternative.top.length } }}
 
   .tags-area
-    .active
-      .active.criterion.tag ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
-        b' = "\#{{ alternative.grade(criterion) }}"
-        | {{ criterion.name }}
-    .inactive
-      .tag ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:8" ng-click="search.pick(criterion)"
-        b' = "\#{{ alternative.grade(criterion) }}"
-        | {{ criterion.name }}
+    .tag-group Вы выбрали
+    .tag.active ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
+      b' = "\#{{ alternative.grade(criterion) }}"
+      | {{ criterion.name }}
+    .tag-group Рекомендуем
+    .tag ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
+      b' = "\#{{ alternative.grade(criterion) }}"
+      | {{ criterion.name }}

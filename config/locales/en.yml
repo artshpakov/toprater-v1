@@ -10,6 +10,10 @@ en:
     restaurants: "restaurants"
     movies: "movies"
 
+  criteria:
+    all:
+      one: "All %{count} criterion"
+      other: "All %{count} criteria"
   reviews:
     found:
       one: "%{count} review"

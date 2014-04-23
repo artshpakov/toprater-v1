@@ -22,7 +22,7 @@ class AlternativesController < ApplicationController
   def index
     @criterion_ids = (params[:criterion_ids] || '').split(",")
 
-    alternatives_query = AlternativesIndex.limit(21)
+    alternatives_query = AlternativesIndex.limit(20)
 
     if params[:prop].present?
       properties = params[:prop].map{|k,v| {term: {"prop_#{k}" => v.to_s}} }

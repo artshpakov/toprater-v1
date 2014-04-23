@@ -3,7 +3,7 @@
 header
   border: 1px solid #ddd
   border-top: none
-  box-shadow: 0 4px 10px #ddd
+  background-color: #fff
 
 
 #realms
@@ -71,20 +71,20 @@ header
   [role=clear-cart]
     font-size: 22px
     float: right
+    display: block
+    height: 30px
 
-.tag
-  @include toggleable
-  font-size: 0.8em
-  padding: 0 6px
-  line-height: 22px
-  margin: 0 7px 5px 0
-  display: block
-  float: left
-  &.active
+  .tag
+    font-size: 0.8em
+    padding: 0 6px
+    line-height: 22px
+    margin: 0 7px 5px 0
+    display: block
+    float: left
     &.criterion
-      background-color: $criterion-color
+      @include toggleable($criterion-color, $criterion-color-inactive, $criterion-text-color, $criterion-text-color-inactive)
     &.property
-      background-color: $property-color
+      @include toggleable($property-color, $property-color-inactive, $property-text-color, $property-text-color-inactive)
 
 
 #realms, #search, #cart
