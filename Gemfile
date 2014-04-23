@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.0'
 
 gem 'pg'
-gem 'volter', github: 'Solver-Club/volter'
-# gem 'volter', path: '../volter'
 gem 'pry-rails'
 gem 'slim'
 gem 'russian'

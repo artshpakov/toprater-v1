@@ -33,8 +33,8 @@ set :use_sudo, false
 set :user, "www-ruby"
 set :deploy_to, "/var/www/#{application}"
 
-set :symlinks, ["config/database.yml", "config/unicorn/#{rails_env}.rb", "config/voltdb.yml", "config/chewy.yml"]
-set :dir_symlinks, %w(db/voltdb log)
+set :symlinks, ["config/database.yml", "config/unicorn/#{rails_env}.rb", "config/chewy.yml"]
+set :dir_symlinks, %w(log)
 
 after "deploy:update_code", "deploy:migrate"
 #after "deploy:update_code", "deploy:build_missing_paperclip_styles"
@@ -85,13 +85,6 @@ namespace :deploy do
     desc "Rebuild ratings ladder"
     task :rebuild do
       run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake ratings:rebuild"
-    end
-  end
-
-  namespace :voltdb do
-    desc "Restart and reimport date to voltdb"
-    task :restart do
-      run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake voltdb:kill voltdb:setup"
     end
   end
 

@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/Solver-Club/volter.git
-  revision: 76746b445e7287724839b62b1090baf1ac826d06
-  specs:
-    volter (0.0.2)
-      activesupport
-      voltrb
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -185,8 +177,6 @@ GEM
     request_store (1.0.5)
     responders (1.0.0)
       railties (>= 3.2, < 5)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
     rspec-core (2.14.8)
     rspec-expectations (2.14.5)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -249,9 +239,6 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    voltrb (0.1.0)
-      json
-      rest-client
 
 PLATFORMS
   ruby
@@ -298,4 +285,3 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   underscore-rails
   unicorn
-  volter!
