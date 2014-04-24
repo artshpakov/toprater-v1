@@ -4,6 +4,7 @@ gem 'rails', '~> 4.0'
 
 gem 'pg'
 gem 'pry-rails'
+gem 'pry-rescue', require: false
 gem 'slim'
 gem 'russian'
 
