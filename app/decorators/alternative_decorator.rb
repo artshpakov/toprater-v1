@@ -11,24 +11,22 @@ class AlternativeDecorator < ApplicationDecorator
     ((object.score+1)*20).round if object.score
   end
 
-  def reviews options={}
-    @st ||= object.review_sentences.where(criterion_id: criterion_ids)
-    if options[:limit].try(:to_i) then @st[0..options[:limit].to_i-1] else @st end
-  end
 
-
-  def processed_reviews criterion_ids
+  def processed_reviews criterion_ids, options={}
+    reviews = reviews criterion_ids
+    reviews = reviews[0..options[:limit]-1] if options[:limit].present?
     Hash[Array.wrap(criterion_ids).map do |cid|
-      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i }.map {|rw| { rating: calculate_score(rw.score), sentences: rw.sentences }} ]
+      [ cid, reviews.select { |rw| rw.criterion_id == cid.to_i } ]
     end]
   end
 
   def criteria_scores criterion_ids
+    reviews = reviews criterion_ids
     Hash[Array.wrap(criterion_ids).map do |cid|
       relevant_reviews = reviews.select { |rw| rw.criterion_id == cid.to_i }
       if relevant_reviews.count > 0
-        score = relevant_reviews.reduce(0) { |sum, rw| sum + rw.score } / relevant_reviews.count
-        [ cid.to_i, calculate_percentage(score) ]
+        percentage = relevant_reviews.reduce(0) { |sum, rw| sum + rw.score_percentage } / relevant_reviews.count
+        [ cid.to_i, percentage ]
       end
     end]    
   end
@@ -40,12 +38,8 @@ class AlternativeDecorator < ApplicationDecorator
 
   protected
 
-  def calculate_score value
-    (value + 1) * 2.5
-  end
-
-  def calculate_percentage value
-    (value + 1) * 50
+  def reviews criterion_ids
+    @reviews ||= object.review_sentences.where(criterion_id: criterion_ids)
   end
 
 end

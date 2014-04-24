@@ -11,39 +11,42 @@ $middle-card-height: 500px
     color: #ccc
 
   clear: both
-  margin: 0 0 12px !important
+  margin: 12px 0
   height: $middle-card-height
   width: 100%
-  border: none
-  background: none
-  border-spacing: 0
-  tr
-    vertical-align: top
-  td
-    padding: 0
-    border: none
-    border-right: 1px solid #a2a2a2
-    background-color: #838383 !important
-    &:last-child
-      border: none
+  background-color: $midlevel-card-color !important
+  overflow: hidden
+
+  h5
+    margin: 20px 0
 
 
   .clmn
     padding: 12px 20px
+    border-right: 1px solid #505459
+    height: $middle-card-height
+    float: left
     &.left-clmn
-      width: 35%
+      width: 330px
     &.right-clmn
+      overflow: scroll
+      float: none
       p
         margin-bottom: 0
 
   .arrow
-    cursor: pointer
     font-size: 32px
     width: 30px
-    vertical-align: middle
-    text-align: center
-    &:hover
-      background-color: #919191
+    line-height: $middle-card-height
+    color: #bbb
+    &.enabled
+      color: #fff
+      cursor: pointer
+      &:hover
+        background-color: #919191
+    &.right-arrow
+      float: right
+      border: none
 
   .headline
     margin-bottom: 12px
@@ -60,39 +63,42 @@ $middle-card-height: 500px
       width: 100%
 
   .criteria
-    width: 100%
-    border: none
-    background: none
-    td
-      border: none
-    .position
-      width: 100px
-    .info
-      width: 100px
-    .progressbar
-      .wrapper
-        width: 100%
-        height: 10px
-        position: relative
-        background-color: #fff
-        margin-top: 5px
-      .stripe
-        height: 10px
-        position: absolute
-        left: 0
-        top: 0
-    &.picked .stripe
-      background-color: $main-color
-    &.top .stripe
-      background-color: #bbb
+    .criterion
+      width: 100%
+      margin-bottom: 6px
+      cursor: pointer
+      .data
+        height: 24px
+        .position
+          width: 100px
+          float: left
+        .info
+          width: 100px
+          float: left
+        .progressbar
+          margin-left: 200px
+          .wrapper
+            width: 100%
+            height: 16px
+            position: relative
+            background-color: #fff
+          .stripe
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+      &.picked .stripe
+        background-color: $main-color
+      &.top .stripe
+        background-color: #bbb
 
-  #reviews
-    background-color: #666
-    border-top: 1px solid #4d4d4d
-    border-bottom: 1px solid #bbb
-    .review
-      font-size: 12px
-      padding: 8px 12px
-      p
+    .reviews
+      background-color: $midlevel-card-color-darkened
+      border: 1px solid #505459
+      margin: 6px 0 15px
+      .review
         font-size: 12px
-        margin-bottom: 4px
+        padding: 8px 12px
+        p
+          font-size: 12px
+          margin-bottom: 4px

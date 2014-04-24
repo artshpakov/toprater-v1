@@ -1,49 +1,46 @@
-table.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
-  tr
-    td.arrow ng-if="has_previous()" ng-click="previous()" : i.fa.fa-angle-left
+.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
+  .clmn.arrow ng-class="{ enabled: has_previous() }" ng-click="previous()" : i.fa.fa-angle-left
+  .clmn.arrow.right-arrow ng-class="{ enabled: has_next() }" ng-click="next()" : i.fa.fa-angle-right
 
-    td.clmn.left-clmn
-      .headline
-        h2.index
-          small #
-          | {{ current_alternative.index() + 1 }}
-        h4 : a.title href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
+  .clmn.left-clmn
+    .headline
+      h2.index
+        small #
+        | {{ current_alternative.index() + 1 }}
+      h4 : a.title href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
 
-      p
-        span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
-        | &nbsp;
+    p
+      span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+      | &nbsp;
 
-      div : a role='main-image' href="{{ current_alternative.url(locale) }}"
-        img ng-src="{{ current_alternative.cover_url }}"
+    div : a role='main-image' href="{{ current_alternative.url(locale) }}"
+      img ng-src="{{ current_alternative.cover_url }}"
 
-    td.clmn.right-clmn
-      h4 Рейтинг по критериям, которые вы выбрали
-
-      p Вы выбрали
-      table.criteria.picked
-        tr ng-repeat="score in current_alternative.scores.picked | orderBy:percentage | limitTo:3"
-          td.position = "\#{{ score.position }} из {{ score.out_of }}"
-          td.info = "{{ criteria.find(score.id).name }}"
-          td.progressbar
+  .clmn.right-clmn
+    h4 Рейтинг по критериям, которые вы выбрали
+    .criteria
+      h5 Вы выбрали
+      .criterion.picked ng-repeat="criterion in search.criteria()" ng-click="alternative_reviews_shown=!alternative_reviews_shown"
+        .data
+          .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
+          .info = "{{ criterion.name }}"
+          .progressbar
             div.wrapper
-              div.stripe style="width: {{ score.score }}%"
+              div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
+        .reviews ng-show="alternative_reviews_shown"
+          .review ng-repeat="review in current_alternative.reviews[criterion.id]"
+            p
+              ' {{ review.sentences[0] }}
+              b' = "{{ review.sentences[1] }}"
+              | {{ review.sentences[2] }}
+            a href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
 
-      p Этот отель в других рейтингах
-      table.criteria.top
-        tr ng-repeat="score in current_alternative.scores.top | limitTo:3"
-          td.position = "\#{{ score.position }} из {{ score.out_of }}"
-          td.info = "{{ criteria.find(score.id).name }}"
-          td.progressbar
+      h5 Этот отель в других рейтингах
+      .criterion.top ng-repeat="criterion in current_alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:5"
+        .data
+          .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
+          .info = "{{ criterion.name }}"
+          .progressbar
             div.wrapper
-              div.stripe style="width: {{ score.score }}%"
-
-      #reviews
-        .review ng-repeat="review in current_alternative.reviews"
-          p
-            ' {{ review.sentences[0] }}
-            b' = "{{ review.sentences[1] }}"
-            | {{ review.sentences[2] }}
-          a href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
-      p: a href="{{ current_alternative.url(locale) }}" Все рейтинги с этим отелем &rarr;
-
-    td.arrow ng-if="has_next()" ng-click="next()" : i.fa.fa-angle-right
+              div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
+    p: a href="{{ current_alternative.url(locale) }}" Все рейтинги с этим отелем &rarr;
