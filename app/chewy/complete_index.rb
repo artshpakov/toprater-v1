@@ -43,8 +43,8 @@ class CompleteIndex < Chewy::Index
   define_type Realm do
 
     def self.import(*args)
-      args = ::Realm.all if args.blank?
-      super args
+      args.unshift ::Realm.all if args.blank? || args[0].is_a?(Hash)
+      super *args
     end
 
     field :name
