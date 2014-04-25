@@ -1,0 +1,43 @@
+.realm-tip
+  font-size: 22px
+  margin: 30px 0
+
+#search
+  [role=search-results]
+    position: relative
+    z-index: 1000
+    ul
+      position: absolute
+      margin: 0
+      top: 0
+      left: 0
+      border: 1px solid #ccc
+      background-color: #fff
+      border-radius: 0 0 5px 5px
+      box-shadow: 0 5px 5px #ccc
+      width: 100%
+      font-size: 14px
+      li
+        height: 45px
+        padding: 5px 15px
+        &:hover
+          background-color: #efefef
+        a
+          display: block
+          height: 100%
+          border-bottom: 1px solid #eee
+          small
+            display: block
+            line-height: 12px
+            color: #999
+            font-size: 12px
+            span
+              margin-right: 6px
+        // &.criterion > a
+        //   color: $criterion-color
+        // &.property > a
+        //   color: $property-color
+        // &.realm > a
+        //   color: $realm-color
+        // &.alternative > a
+        //   color: $realm-color

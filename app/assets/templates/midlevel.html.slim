@@ -1,46 +1,295 @@
-.details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
-  .clmn.arrow ng-class="{ enabled: has_previous() }" ng-click="previous()" : i.fa.fa-angle-left
-  .clmn.arrow.right-arrow ng-class="{ enabled: has_next() }" ng-click="next()" : i.fa.fa-angle-right
+div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
+  .clear
 
-  .clmn.left-clmn
-    .headline
-      h2.index
-        small #
-        | {{ current_alternative.index() + 1 }}
-      h4 : a.title href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
+  .detailed.bg-dark.txt-light id="middle{{ row($index) }}"
+    .arrow-dark.position-1 : img.spr.arrow-dark src="/i/blank.gif" alt=""
 
-    p
-      span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
-      | &nbsp;
+    .inside
+      .slide.txt-center.left
+        a href="javascript:;" ng-click="previous()" : img.spr.slider.left src="/i/blank.gif" alt=""
 
-    div : a role='main-image' href="{{ current_alternative.url(locale) }}"
-      img ng-src="{{ current_alternative.cover_url }}"
+      .slide.txt-center.right
+        a href="javascript:;" ng-click="next()" : img.spr.slider.right.active src="/i/blank.gif" alt=""
 
-  .clmn.right-clmn
-    h4 Рейтинг по критериям, которые вы выбрали
-    .criteria
-      h5 Вы выбрали
-      .criterion.picked ng-repeat="criterion in search.criteria()" ng-click="alternative_reviews_shown=!alternative_reviews_shown"
-        .data
-          .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
-          .info = "{{ criterion.name }}"
-          .progressbar
-            div.wrapper
-              div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
-        .reviews ng-show="alternative_reviews_shown"
-          .review ng-repeat="review in current_alternative.reviews[criterion.id]"
-            p
-              ' {{ review.sentences[0] }}
-              b' = "{{ review.sentences[1] }}"
-              | {{ review.sentences[2] }}
-            a href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
+      .content.brd-l-rg.brd-l-lf
+        .block-main
+          .title
+            .numb class="progress-{{ current_alternative.score/10 | round }}" : span = "{{ current_alternative.index() + 1 }}"
+            .block-name
+              a.txt-16 href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
+              .txt-light.txt-12.mt-5 ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
 
-      h5 Этот отель в других рейтингах
-      .criterion.top ng-repeat="criterion in current_alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:5"
-        .data
-          .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
-          .info = "{{ criterion.name }}"
-          .progressbar
-            div.wrapper
-              div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
-    p: a href="{{ current_alternative.url(locale) }}" Все рейтинги с этим отелем &rarr;
+          .block-img
+            a href="{{ current_alternative.url(locale) }}"
+              img src="{{ current_alternative.cover_url }}" alt=""
+          .block-img-small
+            a href="javascript:;" ng-repeat="i in range(5)" : img[src="/i/beach2.jpg" alt=""]
+            .clear
+
+          .block-links
+            a[href="#"]
+              u
+                | Все фото
+            |  / 
+            a[href="#"]
+              u
+                | Фото пользователей
+            a.fl-right[href="#"]
+              u
+                | На карте
+          /! характеристики
+          / .features.row-inside.txt-10.txt-center
+          /   .item
+          /     img.brd-2.spr.features.wifi[src="/i/blank.gif" alt=""]
+          /     |  Wi-Fi 
+          /   .item
+          /     img.brd-2.spr.inactive.features.spa[src="/i/blank.gif" alt=""]
+          /     |  Спа 
+          /   .item
+          /     img.brd-2.spr.features.beach[src="/i/blank.gif" alt=""]
+          /     |  Пляж 
+          /   .item
+          /     img.brd-2.spr.features.breakfast[src="/i/blank.gif" alt=""]
+          /     |  Завтрак 
+          /   .item
+          /     img.brd-2.spr.features.pool[src="/i/blank.gif" alt=""]
+          /     |  Бассейн 
+          /   .clear
+          /! цена
+          / .block-price
+          /   .buy.fl-right
+          /     button.green.middle.txt-14
+          /       | Купить
+          /   .price.txt-26
+          /     | 160.000 
+          /     b
+          /       | Р
+          /   .clear
+          / .block-links
+          /   a[href="#"]
+          /     u
+          /       | Все характеристики
+
+
+        /! блок справа
+        .details.brd-l-lf
+          .brd-l-bt.txt-16.txt-white.header
+            .fl-right.brd-l-lf.close
+              a.bl href="javascript:;"
+                img.spr.close src="/i/blank.gif" alt=""
+            .pd-20 Рейтинг по критериям, которые вы выбрали
+
+          .reviews
+            .pd-20 Вы выбрали
+            div ng-repeat="criterion in search.criteria()" 
+              .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
+                .fl-right.check : a.bl href="#" : img.spr.checked[src="/i/blank.gif" alt=""]
+                .fl-left.number
+                  ' \#{{ current_alternative.scores[criterion.id].position }}
+                  span.txt-grey
+                    | из {{ current_alternative.scores[criterion.id].out_of }}
+                .fl-left.name = "{{ criterion.name }}"
+                .progress class="p-{{ current_alternative.scores[criterion.id].percentage/10 | round }}"
+              .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-show="alternative_reviews_shown"
+                .arrow : img.spr.arrow-opinions src="/i/blank.gif" alt=""
+                .midlevel-item ng-repeat="review in current_alternative.reviews[criterion.id]"
+                  .upic.fl-left : img src="/i/upic.png" alt=""
+                  .text
+                    ' &laquo;{{ review.sentences[0] }}.
+                    span.txt-white' = "{{ review.sentences[1] }}."
+                    | {{ review.sentences[2] }}&raquo;
+                    a.source.txt-10.txt-grey href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
+
+
+
+    /         .pd-20 Этот отель в других рейтингах
+    /         .midlevel-item.pl-20.txt-white
+    /           .fl-right.check
+    /             a.bl[href="#"]
+    /           .fl-left.number
+    /             | #2 
+    /             span.txt-grey
+    /               | из 24
+    /           .fl-left.name
+    /             | Безопасность детей
+    /             br
+    /             | на площадке
+    /           .progress.inactive.p-30
+    /         .midlevel-item.pl-20.txt-white
+    /           .fl-right.check
+    /             a.bl[href="#"]
+    /           .fl-left.number
+    /             | #5 
+    /             span.txt-grey
+    /               | из 133
+    /           .fl-left.name
+    /             | Уютность номера
+    /           .progress.inactive.p-70
+
+
+
+    /         .midlevel-item.pl-20.txt-white
+    /           .fl-right.check
+    /             a.bl[href="#"]
+    /           .fl-left.number
+    /             | #2 
+    /             span.txt-grey
+    /               | из 24
+    /           .fl-left.name
+    /             | Чистота пляжа
+    /           .progress.inactive.p-90
+    /         .midlevel-item.pl-20.txt-white
+    /           .fl-right.check
+    /             a.bl[href="#"]
+    /           .fl-left.number
+    /             | #2 
+    /             span.txt-grey
+    /               | из 24
+    /           .fl-left.name
+    /             | Чистота пляжа
+    /           .progress.inactive.p-20
+    /         .pd-20.brd-l-tp.brd-l-bt
+    /           | Все рейтинги с этим отелем
+    /     .clear
+    /     /! таблица с ценами
+    /     .prices.bg-darkgrey.brd-l-tp
+    /       .label.bg-darkgrey
+    /         a[href="#"]
+    /           | Все цены
+    /         img.spr.arrow.down[src="/i/blank.gif" alt=""]
+    /     table.prices.bg-darkgrey
+    /       tr
+    /         th
+    /           | Оператор
+    /         th
+    /           | Заезд
+    /         th
+    /           | Ночей
+    /         th
+    /           | Номер
+    /         th
+    /           | Мест
+    /         th
+    /           | Питание
+    /         th
+    /           | Цена
+    /         th
+    /       tr
+    /         td
+    /           | Мальдивиана
+    /         td
+    /           | 29 апреля, Сб
+    /         td
+    /           | 7
+    /         td
+    /           | Standard
+    /         td
+    /           | 2
+    /         td
+    /           | ВВ
+    /         td.txt-18.price
+    /           | 165 900 
+    /           b
+    /             | Р
+    /         td.btn
+    /           button.green.middle.txt-14
+    /             | Купить
+    /       tr
+    /         td
+    /           | Мальдивиана
+    /         td
+    /           | 29 апреля, Сб
+    /         td
+    /           | 7
+    /         td
+    /           | Standard
+    /         td
+    /           | 2
+    /         td
+    /           | ВВ
+    /         td.txt-18.price
+    /           | 165 900 
+    /           b
+    /             | Р
+    /         td.btn
+    /           button.green.middle.txt-14
+    /             | Купить
+    /       tr
+    /         td
+    /           | Мальдивиана
+    /         td
+    /           | 29 апреля, Сб
+    /         td
+    /           | 7
+    /         td
+    /           | Standard
+    /         td
+    /           | 2
+    /         td
+    /           | ВВ
+    /         td.txt-18.price
+    /           | 165 900 
+    /           b
+    /             | Р
+    /         td.btn
+    /           button.green.middle.txt-14
+    /             | Купить
+    / .line-bottom.txt-center.brd-l-tp
+    /   a[href="/"]
+    /     | Еще 35 предложений 
+    /     img.spr.arrow-small.down[src="/i/blank.gif" alt=""]
+
+
+
+
+
+
+
+
+
+  / .details-placeholder ng-if="last_in_row($index)" ng-show="belongs_here($index)" id="middle{{ row($index) }}"
+  /   .clmn.arrow ng-class="{ enabled: has_previous() }" ng-click="previous()" : i.fa.fa-angle-left
+  /   .clmn.arrow.right-arrow ng-class="{ enabled: has_next() }" ng-click="next()" : i.fa.fa-angle-right
+
+  /   .clmn.left-clmn
+  /     .headline
+  /       h2.index
+  /         small #
+  /         | {{ current_alternative.index() + 1 }}
+  /       h4 : a.title href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
+
+  /     p
+  /       span ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
+  /       | &nbsp;
+
+  /     div : a role='main-image' href="{{ current_alternative.url(locale) }}"
+  /       img ng-src="{{ current_alternative.cover_url }}"
+
+  /   .clmn.right-clmn
+  /     h4 Рейтинг по критериям, которые вы выбрали
+  /     .criteria
+  /       h5 Вы выбрали
+  /       .criterion.picked ng-repeat="criterion in search.criteria()" ng-click="alternative_reviews_shown=!alternative_reviews_shown"
+  /         .data
+  /           .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
+  /           .info = "{{ criterion.name }}"
+  /           .progressbar
+  /             div.wrapper
+  /               div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
+  /         .reviews ng-show="alternative_reviews_shown"
+  /           .review ng-repeat="review in current_alternative.reviews[criterion.id]"
+  /             p
+  /               ' {{ review.sentences[0] }}
+  /               b' = "{{ review.sentences[1] }}"
+  /               | {{ review.sentences[2] }}
+  /             a href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
+
+  /       h5 Этот отель в других рейтингах
+  /       .criterion.top ng-repeat="criterion in current_alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:5"
+  /         .data
+  /           .position = "\#{{ current_alternative.scores[criterion.id].position }} из {{ current_alternative.scores[criterion.id].out_of }}"
+  /           .info = "{{ criterion.name }}"
+  /           .progressbar
+  /             div.wrapper
+  /               div.stripe style="width: {{ current_alternative.scores[criterion.id].percentage }}%"
+  /     p: a href="{{ current_alternative.url(locale) }}" Все рейтинги с этим отелем &rarr;

@@ -1,23 +1,4 @@
-header
-  ul#realms
-    li ng-repeat="arealm in realms"
-      a ng-class="{ current: realm==arealm.name }" href="/{{ locale }}/{{ arealm.name }}" {{ "realm."+arealm.name | i18n | capitalize }}
 
-  div#search ng-controller="rating.SearchCtrl"
-    input type="search" placeholder="Что Вас интересует?" ng-model="query" ng-blur="reset_search()"
-    div role="search-results"
-      ul ng-show="tips.length"
-        li ng-repeat="tip in tips" class="result {{ tip.type }}"
-          a href="javascript:;" ng-click="pick_tip(tip)"
-            div ng-if="tip.type=='realm'"
-              | {{ "realm."+tip.name | i18n | capitalize }}
-            div ng-if="tip.type!='realm'"
-              | {{ tip.name }}
-              small ng-if="tip.type!='realm'"
-                span ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
-                span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
+/ div role="main-content"
 
-  = render partial: "partials/cart"
-
-div role="main-content"
-  ng-view
+ng-view
