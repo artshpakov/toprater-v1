@@ -1,0 +1,48 @@
+aside.bg-white ng-controller="rating.FiltersCtrl"
+  .title.main.filters.txt-14 ng-click="filters_shown=!filters_shown"
+    span ФИЛЬТРЫ
+  div ng-show="filters_shown"
+    .filter
+      .title
+        a href="javascript:;"
+          | Место / название отеля
+          b ---
+      .inside.search
+        a href="javascript:;" : img.spr.search alt="" src="/i/blank.gif"
+        input.search[type="text" placeholder="регион, город, или отель"]
+    .filter
+      .title
+        a href="javascript:;"
+          | Количество звезд
+          b ---
+      .inside.filter-stars
+        a href="javascript:;" 2*
+        a href="javascript:;" 3*
+        a href="javascript:;" 4*
+        a.active href="javascript:;" 5*
+        .clear
+    .filter
+      .title
+        a href="javascript:;"
+          | Цена
+          b +
+    .filter
+      .title
+        a href="javascript:;"
+          | Тип отеля
+          b +
+    .filter
+      .title
+        a href="javascript:;"
+          | Питание
+          b +
+    .filter
+      .title
+        a href="javascript:;"
+          | Удобства
+          b +
+    .filter
+      .title
+        a href="javascript:;"
+          | Место / название отеля
+          b +

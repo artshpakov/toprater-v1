@@ -21,7 +21,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
 
           .block-img
             a href="{{ current_alternative.url(locale) }}"
-              img src="{{ current_alternative.cover_url }}" alt=""
+              img ng-src="{{ current_alternative.cover_url }}" alt=""
           .block-img-small
             a href="javascript:;" ng-repeat="i in range(5)" : img[src="/i/beach2.jpg" alt=""]
             .clear

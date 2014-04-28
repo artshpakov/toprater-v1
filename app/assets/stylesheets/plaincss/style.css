@@ -1,3 +1,6 @@
+html, body { height: 100%; position: relative; }
+#container { height: auto; min-height: 100%; }
+
 body {
   font: 12px/14px Arial, sans-serif;
   background-color: #f0f0f0;
@@ -14,6 +17,10 @@ body {
 ::-webkit-scrollbar { width: 8px;  }
 ::-webkit-scrollbar-track { background: #fff; }
 ::-webkit-scrollbar-thumb { background: #c9ccce; }
+
+#container {
+  padding-bottom: 80px
+}
 
 .wrapper {
   width: 1200px;
@@ -174,10 +181,14 @@ header {
 
 /* footer */
 footer {
+  position: relative;
+  z-index: 1000;
   border-top: 1px solid #d9d9d9;
   background-color: #fff;
   color: #9e9e9e;
-  margin-top: 20px
+  height: 55px;
+  margin-top: -57px;
+  clear: both;
 }
 
 /* rows */
@@ -190,6 +201,7 @@ aside {
 aside .title.main {
   height: 50px;
   border-bottom: 1px solid #d4d8dc; 
+  cursor: pointer;
 }
 aside .title.filters:before {
   content: "";
@@ -362,20 +374,23 @@ ul.tags li.criterion.active:after {
   float: left;
   margin: 20px 10px 0;
   width: 220px; 
-  height: 386px;
+  height: 394px;
   overflow: hidden;
   position: relative;
 }
 
+.row .item .title{
+  margin: 15px 0;
+}
+.row .item .title .title-info {
+  margin: 0 15px 0 70px;
+}
 .row .item .title a {
-  margin: 11px 0 0 5px;
   display: block;
-  float: left;
 }
 .row .item .title .price {
-  float: left;
   color: #010101;
-  margin: 5px 0 0 5px;
+  margin: 5px 0 0;
 }
 .price b {
   font-weight: normal;
@@ -400,7 +415,7 @@ ul.tags li.criterion.active:after {
   text-align: center;
   width: 32px;
   height: 32px;
-  margin: 15px 15px 0 15px;
+  margin: 0 22px 0 15px;
 }
 .title .numb span {
   width: 41px;
@@ -451,7 +466,7 @@ ul.tags li.criterion.active:after {
 .title .numb.progress-1:after { background-position: -153px -53px; }
 .title .numb.progress-0:after { background: #fff; }
 .row .item .title {
-  height: 71px;
+  height: 50px;
   font-size: 14px;
   line-height: 16px;
 }
@@ -485,14 +500,17 @@ ul.tags li.criterion.active:after {
 }
 
 .full-wrapper { 
+  border-top: 1px solid #d4d8dc;
   position: absolute;
   top: 400px;
   width: 100%;
   height: 330px;
   transition: 0.2s all;
 }
-.full-wrapper.visible { 
-  top: 71px;
+.full-wrapper.visible {
+  top: 80px;
+  background-color: #f0f0f0;
+  border-top: 1px solid #d4d8dc;
 }
 
 
