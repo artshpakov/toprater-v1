@@ -17,7 +17,7 @@ set :application, "AlternativesPower"
 set :scm, :git
 set :repository,  "ssh://git@github.com/Solver-Club/AlternativesPower.git"
 ssh_options[:auth_methods] = %w(publickey password)
-# ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
 set :scm_verbose, true
 
