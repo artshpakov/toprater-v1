@@ -23,20 +23,17 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
             a href="{{ current_alternative.url(locale) }}"
               img ng-src="{{ current_alternative.cover_url }}" alt=""
           .block-img-small
-            a href="javascript:;" ng-repeat="i in range(5)" : img[src="/i/beach2.jpg" alt=""]
+            a href="javascript:;" ng-repeat="i in range(5)" : img src="/i/beach2.jpg" alt=""
             .clear
 
           .block-links
-            a[href="#"]
-              u
-                | Все фото
-            |  / 
-            a[href="#"]
-              u
-                | Фото пользователей
-            a.fl-right[href="#"]
-              u
-                | На карте
+            a href="javascript:;"
+              u Все фото
+            '  /
+            a href="javascript:;"
+              u Фото пользователей
+            a.fl-right href="javascript:;"
+              u На карте
           /! характеристики
           / .features.row-inside.txt-10.txt-center
           /   .item
@@ -66,7 +63,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
           /       | Р
           /   .clear
           / .block-links
-          /   a[href="#"]
+          /   a[href="javascript:;"]
           /     u
           /       | Все характеристики
 
@@ -83,7 +80,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
             .pd-20 Вы выбрали
             div ng-repeat="criterion in search.criteria()" 
               .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
-                .fl-right.check : a.bl href="#" : img.spr.checked[src="/i/blank.gif" alt=""]
+                .fl-right.check : a.bl href="javascript:;" : img.spr.checked[src="/i/blank.gif" alt=""]
                 .fl-left.number
                   ' \#{{ current_alternative.scores[criterion.id].position }}
                   span.txt-grey
@@ -105,7 +102,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
     /         .pd-20 Этот отель в других рейтингах
     /         .midlevel-item.pl-20.txt-white
     /           .fl-right.check
-    /             a.bl[href="#"]
+    /             a.bl[href="javascript:;"]
     /           .fl-left.number
     /             | #2 
     /             span.txt-grey
@@ -117,7 +114,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
     /           .progress.inactive.p-30
     /         .midlevel-item.pl-20.txt-white
     /           .fl-right.check
-    /             a.bl[href="#"]
+    /             a.bl[href="javascript:;"]
     /           .fl-left.number
     /             | #5 
     /             span.txt-grey
@@ -130,7 +127,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
 
     /         .midlevel-item.pl-20.txt-white
     /           .fl-right.check
-    /             a.bl[href="#"]
+    /             a.bl[href="javascript:;"]
     /           .fl-left.number
     /             | #2 
     /             span.txt-grey
@@ -140,7 +137,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
     /           .progress.inactive.p-90
     /         .midlevel-item.pl-20.txt-white
     /           .fl-right.check
-    /             a.bl[href="#"]
+    /             a.bl[href="javascript:;"]
     /           .fl-left.number
     /             | #2 
     /             span.txt-grey
@@ -154,7 +151,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
     /     /! таблица с ценами
     /     .prices.bg-darkgrey.brd-l-tp
     /       .label.bg-darkgrey
-    /         a[href="#"]
+    /         a[href="javascript:;"]
     /           | Все цены
     /         img.spr.arrow.down[src="/i/blank.gif" alt=""]
     /     table.prices.bg-darkgrey
