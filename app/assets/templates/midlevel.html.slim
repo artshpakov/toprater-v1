@@ -1,15 +1,12 @@
-div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
+div ng-if="last_in_row($index)" ng-show="current_alternative && belongs_here($index)"
   .clear
 
   .detailed.bg-dark.txt-light id="middle{{ row($index) }}"
     .arrow-dark.position-1 : img.spr.arrow-dark src="/i/blank.gif" alt=""
 
     .inside
-      .slide.txt-center.left
-        a href="javascript:;" ng-click="previous()" : img.spr.slider.left src="/i/blank.gif" alt=""
-
-      .slide.txt-center.right
-        a href="javascript:;" ng-click="next()" : img.spr.slider.right.active src="/i/blank.gif" alt=""
+      .slide.txt-center.left ng-class="{ enabled: has_previous() }" ng-click="previous()" : i.fa.fa-angle-left
+      .slide.txt-center.right ng-class="{ enabled: has_next() }" ng-click="next()" : i.fa.fa-angle-right
 
       .content.brd-l-rg.brd-l-lf
         .block-main
@@ -72,7 +69,7 @@ div ng-if="last_in_row($index)" ng-show="belongs_here($index)"
         .details.brd-l-lf
           .brd-l-bt.txt-16.txt-white.header
             .fl-right.brd-l-lf.close
-              a.bl href="javascript:;"
+              a.bl href="javascript:;" ng-click="current_alternative=null"
                 img.spr.close src="/i/blank.gif" alt=""
             .pd-20 Рейтинг по критериям, которые вы выбрали
 

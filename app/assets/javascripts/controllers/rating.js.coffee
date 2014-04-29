@@ -25,7 +25,7 @@
     angular.element("body").animate { scrollTop: element.offsetTop - 70 }, 'fast'
 
   $scope.belongs_here = (index) ->
-    $scope.current_alternative and 0 <= index - $scope.current_alternative.index() < $scope.cards_in_row
+    0 <= index - $scope.current_alternative.index() < $scope.cards_in_row
   $scope.last_in_row = (index) ->
     (index+1)%$scope.cards_in_row == 0 or index == Alternative.all.length-1
 
@@ -34,9 +34,9 @@
   $scope.has_next     = ->
     $scope.current_alternative? and $scope.current_alternative.index() < Alternative.all.length-1 
   $scope.previous     = ->
-    $scope.pick Alternative.all[$scope.current_alternative.index()-1]
+    $scope.pick Alternative.all[$scope.current_alternative.index()-1] if $scope.has_previous()
   $scope.next         = ->
-    $scope.pick Alternative.all[$scope.current_alternative.index()+1]
+    $scope.pick Alternative.all[$scope.current_alternative.index()+1] if $scope.has_next()
 
   $scope.row = (index) -> Math.floor index/$scope.cards_in_row
 

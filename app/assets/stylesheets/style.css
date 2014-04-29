@@ -591,8 +591,8 @@ ul.params li div.unchecked {
 /* карточка: развернутый вид */
 .detailed {
   margin: 20px 0 0;
-  padding: 0 0 40px 0;
   position: relative;
+  height: 543px;
 }
 .detailed .content {
   margin: 0 31px; 
@@ -613,10 +613,11 @@ ul.params li div.unchecked {
   top: -6px;
 }
 .detailed .arrow-dark.position-1 { margin-left: 93px; }
-.detailed .slide { width: 30px; padding-top: 260px; }
+.detailed .slide { width: 30px; color: #808080; font-size: 30px; height: 100%; line-height: 543px; }
 .detailed .slide.left { float: left; }
 .detailed .slide.right { float: right; }
-.detailed .slide a {  display: block;  }
+.detailed .slide.enabled { cursor: pointer; color: #fff; }
+.detailed .slide.enabled:hover { background-color: #505458; }
 
 .detailed .block-main { width: 320px; float: left;}
 .detailed .title { height: 79px; }
