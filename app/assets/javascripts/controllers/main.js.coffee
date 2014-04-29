@@ -9,7 +9,12 @@
   $scope.locale       = locale
   $scope.realms       = data.realms
   
-  $scope.cards_in_row = 4
+  calculate_columns_count = -> if $scope.filters_shown then 4 else 5
+  $scope.cards_in_row = calculate_columns_count()
+  $scope.$watch 'filters_shown', ->
+    $scope.cards_in_row = calculate_columns_count()
+  $scope.toggle_filters = ->
+    $scope.filters_shown = !$scope.filters_shown
 
   $scope.range        = _.range
 

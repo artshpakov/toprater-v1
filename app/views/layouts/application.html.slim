@@ -31,32 +31,10 @@ html
   body lang="#{locale}" ng-app="rating"
     #container
       .wrapper
-        header.bg-grey
-          nav.fl-right
-            a href="/" Как это работает?
-          #logo-container.fl-left
-            #logo
-              a href="/"
-                b Senti
-                | meta
-            #logo-under.txt-grey.txt-9 Experience Search
-            #logo-right.txt-12.txt-it alpha
+        == render partial: "partials/header"
 
       .wrapper ng-controller="rating.MainCtrl"
-        section.w-970
-          == render partial: "partials/cart"
-          == yield
-        == render partial: "partials/filters"
+        == yield
         .clear
 
-        javascript:
-          var as = document.getElementsByTagName("aside")[0];
-          if (as) {
-            var hdr = document.getElementsByTagName("header")[0];
-            var ftr = document.getElementsByTagName("footer")[0];
-            var curHgh = parseInt(document.body.offsetHeight) - parseInt(ftr.offsetHeight) - parseInt(hdr.offsetHeight);
-            as.setAttribute("style", "height: "+curHgh+"px; ");
-          }
-
-    footer
-      .wrapper.txt-12.pd-20 &copy; Sentimeta, #{ Date.today.strftime '%Y' }. Все права защищены.
+    == render partial: "partials/footer"

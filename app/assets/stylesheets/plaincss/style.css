@@ -22,10 +22,6 @@ body {
   width: 1200px;
   margin: 0 auto;
 }
-.wrapper.main-content {
-  padding-bottom: 80px;
-}
-
 a { 
   text-decoration: none; 
   color: #007ec0;
@@ -194,9 +190,10 @@ footer {
 /* rows */
 aside {
   width: 228px;
-  float: left;
+  float: right;
   border-left: 1px solid #d4d8dc; 
-  border-right: 1px solid #d4d8dc; 
+  border-right: 1px solid #d4d8dc;
+  /*margin-bottom: 80px;*/
 }
 aside .title.main {
   height: 50px;
@@ -221,6 +218,16 @@ section {
 }
 
 /* filters */
+aside.rolled-down {
+  margin-bottom: 80px;
+}
+aside #filters-body {
+  display: none;
+}
+aside.rolled-down #filters-body {
+  display: block;
+}
+
 aside .filter {
   border-bottom: 1px solid #d4d8dc;
 }
@@ -298,6 +305,7 @@ section div.tags {
   border-bottom: 1px solid #d4d8dc; 
   border-left: 1px solid #d4d8dc; 
   padding: 7px 9px 3px;
+  overflow: hidden;
 }
 div.cleartags {
   margin: 4px 3px 0 0;
@@ -369,6 +377,14 @@ ul.tags li.criterion.active:after {
 :-ms-input-placeholder    { font-style: italic; color: #b1b7bd; }
 
 /* rows */
+#rating {
+  padding-bottom: 80px;
+  width: 970px;
+}
+#rating.wide {
+  width: 1200px;
+}
+
 .row .item { 
   float: left;
   margin: 20px 9px 0;
@@ -415,6 +431,9 @@ ul.tags li.criterion.active:after {
   width: 32px;
   height: 32px;
   margin: 0 22px 0 15px;
+}
+.detailed .title .numb {
+  margin-top: 15px;
 }
 .title .numb span {
   width: 41px;
@@ -699,7 +718,7 @@ ul.params li div.unchecked {
   left: 101px;
 }
 .reviews .opinions .text {
-  margin-left: 84px;
+  margin: 0 15px 0 84px;
 }
 .reviews .opinions .upic {
   margin: 0 26px 0 25px;

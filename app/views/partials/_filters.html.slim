@@ -1,7 +1,7 @@
-aside.bg-white ng-controller="rating.FiltersCtrl"
-  .title.main.filters.txt-14 ng-click="filters_shown=!filters_shown"
+aside.bg-white ng-class="{ 'rolled-down': filters_shown }"
+  .title.main.filters.txt-14 ng-click="toggle_filters()"
     span ФИЛЬТРЫ
-  div ng-show="filters_shown"
+  #filters-body
     .filter
       .title
         a href="javascript:;"

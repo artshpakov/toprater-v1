@@ -1,1 +1,8 @@
-ng-view
+== render partial: "partials/filters"
+section.w-970
+  == render partial: "partials/querystring"
+
+section#rating ng-class="{ wide: cards_in_row==5 }"
+  == render partial: "partials/cart"
+
+  ng-view

@@ -1,26 +1,6 @@
-div ng-controller="rating.SearchCtrl"
-  #search.bg-white
-    .fl-right.slide.up.bg-light.txt-center.cursor ng-click="cart_visible=!cart_visible"
-      img.spr.slide.up alt="" src="/i/blank.gif"
-    #searchline
-      input.search-top type="text" placeholder="Укажите, что для Вас важно в отеле. Например: цена/качество" ng-model="query" ng-blur="reset_search()"
-      div role="search-results" style="z-index: 1000"
-        ul ng-show="tips.length"
-          li ng-repeat="tip in tips" class="result {{ tip.type }}"
-            a href="javascript:;" ng-click="pick_tip(tip)"
-              div ng-if="tip.type=='realm'"
-                | {{ "realm."+tip.name | i18n | capitalize }}
-              div ng-if="tip.type!='realm'"
-                | {{ tip.name }}
-                small ng-if="tip.type!='realm'"
-                  span ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
-                  span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
-    .clear
-
-  .tags.bg-light ng-show="cart_visible" ng-init="cart_visible=true"
-    .cleartags.fl-right.cursor
-      img.spr.cleartags alt="" src="/i/blank.gif" ng-click="search.reset()"
-    ul.tags
-      li ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
-        span = "{{ item.name }}"
-    .clear
+.tags.bg-light ng-show="cart_visible" ng-init="cart_visible=true"
+  .cleartags.fl-right.cursor
+    img.spr.cleartags alt="" src="/i/blank.gif" ng-click="search.reset()"
+  ul.tags
+    li ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
+      span = "{{ item.name }}"
