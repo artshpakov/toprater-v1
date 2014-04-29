@@ -1,5 +1,5 @@
-html, body { height: 100%; position: relative; }
-#container { height: auto; min-height: 100%; }
+html, body { height: 100%; }
+#container { min-height: 100%; height: auto; }
 
 body {
   font: 12px/14px Arial, sans-serif;
@@ -18,14 +18,14 @@ body {
 ::-webkit-scrollbar-track { background: #fff; }
 ::-webkit-scrollbar-thumb { background: #c9ccce; }
 
-#container {
-  padding-bottom: 80px
-}
-
 .wrapper {
   width: 1200px;
   margin: 0 auto;
 }
+.wrapper.main-content {
+  padding-bottom: 80px;
+}
+
 a { 
   text-decoration: none; 
   color: #007ec0;
@@ -276,7 +276,6 @@ aside .filter-stars a.active {
 }
 #search { 
   height: 50px;
-  /*overflow: hidden;*/
   border-bottom: 1px solid #d4d8dc;
   border-left: 1px solid #d4d8dc; 
 }
@@ -372,7 +371,7 @@ ul.tags li.criterion.active:after {
 /* rows */
 .row .item { 
   float: left;
-  margin: 20px 10px 0;
+  margin: 20px 9px 0;
   width: 220px; 
   height: 394px;
   overflow: hidden;
