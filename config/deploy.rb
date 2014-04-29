@@ -33,7 +33,7 @@ set :use_sudo, false
 set :user, "www-ruby"
 set :deploy_to, "/var/www/#{application}"
 
-set :symlinks, ["config/database.yml", "config/unicorn/#{rails_env}.rb"]
+set :symlinks, ["config/database.yml", "config/unicorn/#{rails_env}.rb", "config/chewy.yml"]
 set :dir_symlinks, %w(log)
 
 after "deploy:update_code", "deploy:migrate"
