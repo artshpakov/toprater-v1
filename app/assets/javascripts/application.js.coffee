@@ -1,6 +1,5 @@
 #= require jquery
 #= require jquery_ujs
-#= require foundation
 #= require underscore
 #= require i18n
 
@@ -12,10 +11,7 @@
 
 #= require_self
 #= require_tree .
-#= require vendor/modernizr
 
-
-$ -> $(document).foundation()
 
 @rating = angular.module 'rating', ['ngResource', 'ngRoute', 'ng-rails-csrf', 'ngSanitize']
 @rating.value 'data', window.rating_data

@@ -23,7 +23,7 @@ html
       };
     script type="text/javascript" src='/javascripts/translations.js'
 
-    = stylesheet_link_tag 'plaincss/main', media: "all"
+    = stylesheet_link_tag :application, media: "all"
     = include_gon namespace: 'rating_data'
     = javascript_include_tag :application
     = csrf_meta_tags
