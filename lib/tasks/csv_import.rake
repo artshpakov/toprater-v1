@@ -30,11 +30,11 @@ namespace :csv_import do
     db = Sequel.connect("sqlite://#{HOTELS_DB_PATH}")
 
     db[:hotels].each do |hotel_attributes|
-      hotel = Alternative.find_or_create_by(name: hotel_attributes[:name], realm_id: 1)
+      hotel = Alternative.where(:name => hotel_attributes[:name], :realm_id => 1).first_or_initialize
       hotel.ta_id = hotel_attributes[:ta_id]
       hotel.lat   = hotel_attributes[:lat]
       hotel.lng   = hotel_attributes[:lng]
-      hotel.save
+      hotel.save!
 
       state[:external_hotel_ids] ||= {}
       state[:external_hotel_ids][hotel_attributes[:ta_id]] = hotel.id
@@ -59,11 +59,11 @@ namespace :csv_import do
     count = 0
     db[:hotels].each do |hotel|
       count += 1
-      record = Alternative.where(:name => hotel[:name], :realm_id => 1).first_or_create
+      record = Alternative.where(:name => hotel[:name], :realm_id => 1).first_or_initialize
       record.ta_id = hotel[:ta_id]
       record.lat   = hotel[:lat]
       record.lng   = hotel[:lng]
-      record.save
+      record.save!
 
       # TODO: move to method
       if hotel[:photo].present?
@@ -205,7 +205,7 @@ namespace :csv_import do
       if record.new_record?
         record.sentences = [ row[3], row[4], row[5] ]
         record.score     = row[6]
-        record.save
+        record.save!
 
         counters[:created] += 1
       end
