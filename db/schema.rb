@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410152916) do
+ActiveRecord::Schema.define(version: 20140430162001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20140410152916) do
     t.string  "name",                      null: false
     t.integer "reviews_count", default: 0, null: false
     t.integer "realm_id"
+    t.integer "ta_id"
+    t.float   "lat"
+    t.float   "lng"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
@@ -27,6 +30,7 @@ ActiveRecord::Schema.define(version: 20140410152916) do
     t.integer "criterion_id"
     t.float   "rating"
     t.integer "reviews_count",  default: 0, null: false
+    t.integer "rank"
   end
 
   add_index "alternatives_criteria", ["alternative_id"], name: "index_alternatives_criteria_on_alternative_id", using: :btree
@@ -38,6 +42,7 @@ ActiveRecord::Schema.define(version: 20140410152916) do
     t.string  "description"
     t.integer "status",      default: 0, null: false
     t.string  "ancestry"
+    t.integer "external_id"
   end
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
