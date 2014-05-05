@@ -103,65 +103,34 @@ namespace :csv_import do
     puts "Processing criterions from #{CRITERIONS_CSV_PATH}"
     pavel_criterion = Criterion.find_or_create_by(name: "Павел", short_name: "pavel")
 
-    idx = 0
-    CSV.foreach(CRITERIONS_CSV_PATH) do |row|
-      if idx == 0 # skip CSV header
-        idx += 1
-        next
-      end
-
+    CSV.foreach(CRITERIONS_CSV_PATH, headers: true) do |row|
       record = Criterion.where(:short_name => row[1], :name => row[1]).first_or_create!
       record.update_attributes({ :parent => pavel_criterion, :external_id => row[0] })
-
-      idx += 1
     end
 
-    puts "createrions processed"
+    puts "criterions processed"
   end
 
   task :alternatives_criterion => :environment do
     puts "Proccessing AlternativesCriterion from #{REVIEWS_CSV_PATH}" 
 
-    idx    = 0
-    header = nil
-
-    get_count = -> ( row, criteria_id ) {
-      idx = header.index("count_#{criteria_id}")
-      idx ? row[idx] : nil
-    }
-
-    get_rating = -> ( row, criteria_id ) {
-      idx = header.index("criteria_#{criteria_id}")
-      idx ? row[idx] : nil
-    }
-
-    get_rank = -> ( row, criteria_id ) {
-      idx = header.index("rank_#{criteria_id}")
-      idx ? row[idx] : nil
-    }
-
     counters = { :processed => 0, :missed_hotel => 0, :created => 0 }
 
-    CSV.foreach(REVIEWS_CSV_PATH) do |row|
-      if idx == 0
-        header = row
-        idx   += 1
-        next
-      end
+    CSV.foreach(REVIEWS_CSV_PATH, headers: true) do |row|
 
       hotel_id = Alternative.where(:ta_id => row[0]).first.try(:id)
       next if hotel_id.nil?
 
       Criterion.all.each do |criterion|
-        criteria_count = get_count.(row, criterion.external_id)
+        criteria_count = row["count_#{criterion.external_id}"]
 
         if criteria_count.to_i > 0
           record = AlternativesCriterion.where(:alternative_id => hotel_id, :criterion_id => criterion.id).first_or_initialize
 
           if record.new_record? # really?
             record.reviews_count = criteria_count
-            record.rating        = get_rating.(row, criterion.external_id)
-            record.rank          = get_rank.(row, criterion.external_id)
+            record.rating        = row["criteria_#{criterion.external_id}"]
+            record.rank          = row["rank_#{criterion.external_id}"]
             record.save!
 
             counters[:created] += 1
@@ -170,7 +139,6 @@ namespace :csv_import do
       end
 
       counters[:processed] += 1
-      idx += 1
 
     end # CSV.foreach
 
@@ -181,16 +149,10 @@ namespace :csv_import do
 
   task :review_sentences => :environment do
     puts "Processing ReviewSentence from #{DETAILS_CSV_PATH}"
-    idx = 0
 
     counters = { :missied_criteria_or_review => 0, :created => 0}
 
-    CSV.foreach(DETAILS_CSV_PATH) do |row|
-      if idx == 0
-        idx += 1
-        next
-      end
-
+    CSV.foreach(DETAILS_CSV_PATH, headers: true) do |row|
       criterion_id = Criterion.where(:external_id => row[2]).last.try(:id)
       hotel_id     = Alternative.where(:ta_id => row[0]).first.try(:id)
       review_id    = Review::Tripadvisor.where(:agency_id => row[1].to_i).first.try(:id)
@@ -210,7 +172,6 @@ namespace :csv_import do
         counters[:created] += 1
       end
 
-      idx += 1
     end # CSV.foreach
 
     puts counters.inspect
