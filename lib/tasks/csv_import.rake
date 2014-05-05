@@ -11,11 +11,6 @@ namespace :csv_import do
   HOTELS_2_DB_PATH    = ENV['hotels_2_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
   TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
-  # shared state across all tasks
-  def state
-    @state ||= {}
-  end
-
   task :all => :environment do
     Rake::Task['csv_import:criterions'].invoke
     Rake::Task['csv_import:hotels'].invoke
@@ -36,9 +31,6 @@ namespace :csv_import do
       hotel.lng   = hotel_attributes[:lng]
       hotel.save!
 
-      state[:external_hotel_ids] ||= {}
-      state[:external_hotel_ids][hotel_attributes[:ta_id]] = hotel.id
-
       # TODO: move to method
       if hotel_attributes[:photo].present?
         medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: hotel.id, url: hotel_attributes[:photo], medium_type: 'image')
@@ -48,7 +40,6 @@ namespace :csv_import do
     end
 
     db.disconnect
-    puts "Processed #{state[:external_hotel_ids].keys.size} hotels"
   end
 
   task :hotels_2 => :environment do
