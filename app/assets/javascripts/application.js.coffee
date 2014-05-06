@@ -8,11 +8,12 @@
 #= require angular-sanitize
 #= require angular-route
 #= require ng-rails-csrf
+#= require angular-bindonce
 
 #= require_self
 #= require_tree .
 
 
-@rating = angular.module 'rating', ['ngResource', 'ngRoute', 'ng-rails-csrf', 'ngSanitize']
+@rating = angular.module 'rating', ['ngResource', 'ngRoute', 'ng-rails-csrf', 'ngSanitize', 'pasvaz.bindonce']
 @rating.value 'data', window.rating_data
 @rating.value 'locale', window.i18njs.locale

@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 gem 'rails', '~> 4.0'
 
@@ -39,6 +40,9 @@ gem 'angularjs-rails', '~> 1.2.0'
 gem 'ng-rails-csrf'
 
 gem 'unicorn'
+
+# js libs
+gem 'rails-assets-angular-bindonce'
 
 group :development do
   gem 'thin'

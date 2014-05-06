@@ -2,13 +2,13 @@
   .numb class="progress-{{ alternative.score/10 | round }}"
     span # {{ $index+1 }}
   .title-info
-    a href="javascript:;" ng-click="pick(alternative)" {{ alternative.name | truncate:25:false }}
+    a href="javascript:;" ng-click="pick(alternative)" bindonce='alternative' bo-text="alternative.name | truncate:25:false"
     .price.txt-12
       | от 153.000 
       b Р
 
 .img-area
-  img ng-src="{{ alternative.cover_url }}" alt=""
+  img bindonce='alternative' bo-src="alternative.cover_url" alt=""
   .show-all.bg-blue ng-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
     .fl-right.show-all-right : img.spr.arrow.up alt="" src="/i/blank.gif"
     a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top.length } }}
@@ -16,16 +16,16 @@
 ul.params
   li.caption.noborder
     span Вы выбрали
-  li.checked.cursor ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
+  li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
     .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-    span.numb \#{{ alternative.grade(criterion) }}
-    span = "{{ criterion.name }}"
+    span.numb bo-text="alternative.grade(criterion)"
+    span bo-text='criterion.name'
   li.caption
     span Рекомендуем
-  li.cursor ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
+  li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-    span.numb \#{{ alternative.grade(criterion) }}
-    span = "{{ criterion.name }}"
+    span.numb bo-text="alternative.grade(criterion)"
+    span bo-text="criterion.name"
 
 .full-wrapper ng-class="{ visible: alternative.full_version_shown }"
   .show-all.bg-blue.full
@@ -36,13 +36,13 @@ ul.params
     ul.params.full
       li.caption.noborder
         span Вы выбрали
-      li.checked.cursor ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
+      li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
         .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-        span.numb \#{{ alternative.grade(criterion) }}
-        span = "{{ criterion.name }}"
+        span.numb bo-text="alternative.grade(criterion)"
+        span bo-text="criterion.name"
       li.caption
         span Рекомендуем
-      li.cursor ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
+      li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-        span.numb \#{{ alternative.grade(criterion) }}
-        span = "{{ criterion.name }}"
+        span.numb bo-text="alternative.grade(criterion)"
+        span bo-text="criterion.name"
