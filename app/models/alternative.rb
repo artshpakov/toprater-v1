@@ -5,8 +5,10 @@ class Alternative < ActiveRecord::Base
   has_many :reviews, dependent: :destroy
   has_many :review_sentences, dependent: :delete_all
   has_many :media, dependent: :destroy
+  has_many :sources
 
   has_many :property_values, class_name: 'Property::Value', dependent: :delete_all
+
 
   validates :name, presence: true
 
