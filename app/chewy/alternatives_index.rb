@@ -44,6 +44,8 @@ class AlternativesIndex < Chewy::Index
     field :name
     field :realm_id, type: 'integer'
 
+    field :location, type: 'geo_point', lat_lon: true, value: -> { lat && lng && [lng, lat] }
+
     Criterion.rated.find_each do |cr|
       expand_nested NotNullField.new(
         :"cr_#{cr.id}", type: 'double',
