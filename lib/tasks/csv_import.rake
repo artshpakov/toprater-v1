@@ -105,9 +105,10 @@ namespace :csv_import do
   task :alternatives_criterion => :environment do
     puts "Proccessing AlternativesCriterion from #{REVIEWS_CSV_PATH}" 
 
-    counters = { :processed => 0, :missed_hotel => 0, :created => 0 }
+    counters = { :processed => 0, :created => 0 }
 
     CSV.foreach(REVIEWS_CSV_PATH, headers: true) do |row|
+      counters[:processed] += 1
 
       hotel_id = Alternative.where(:ta_id => row[0]).first.try(:id)
       next if hotel_id.nil?
@@ -128,8 +129,6 @@ namespace :csv_import do
           end
         end
       end
-
-      counters[:processed] += 1
 
     end # CSV.foreach
 
