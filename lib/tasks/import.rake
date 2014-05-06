@@ -135,6 +135,20 @@ namespace :import do
         hotel_source.save!
       end
     end
+
+    desc "Import solvertour media"
+    task media: :environment do
+
+      CSV.foreach(File.join(Rails.root, 'tmp/solvertour-media.csv'), headers: true) do |medium_attributes|
+        alternative_id = Alternative::Source::Solvertour.where(agency_id: medium_attributes["hotel_id"]).pluck(:alternative_id).first
+        if alternative_id
+          medium = Medium::Solvertour.find_or_initialize_by(alternative_id: alternative_id, agency_id: medium_attributes["_id"])
+          medium.url = medium_attributes["path"]
+          medium.save!
+        end
+      end
+    end
+
   end
 
 end

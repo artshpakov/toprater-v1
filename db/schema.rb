@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20140506062919) do
     t.integer "realm_id"
     t.float   "lat"
     t.float   "lng"
+    t.integer "ta_id"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
