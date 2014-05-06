@@ -16,4 +16,6 @@ AlternativesPower::Application.routes.draw do
 
   resources :search, only: [:index]
 
+  get 'stats' => 'stats#index'
+
 end
