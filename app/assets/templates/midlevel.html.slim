@@ -1,4 +1,4 @@
-div ng-if="last_in_row($index)" ng-show="current_alternative && belongs_here($index)"
+div ng-if="last_in_row($index) && current_alternative && belongs_here($index)"
   .clear
 
   .detailed.bg-dark.txt-light id="middle{{ row($index) }}"

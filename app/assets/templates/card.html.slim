@@ -7,9 +7,9 @@
       | от 153.000 
       b Р
 
-.img-area
-  img bindonce='alternative' bo-src="alternative.cover_url" alt=""
-  .show-all.bg-blue ng-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
+.img-area bindonce='alternative'
+  img bo-src="alternative.cover_url" alt=""
+  .show-all.bg-blue bo-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
     .fl-right.show-all-right : img.spr.arrow.up alt="" src="/i/blank.gif"
     a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top.length } }}
 
