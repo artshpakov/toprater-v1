@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20140506062919) do
     t.string  "name",                      null: false
     t.integer "reviews_count", default: 0, null: false
     t.integer "realm_id"
+    t.integer "ta_id"
     t.float   "lat"
     t.float   "lng"
-    t.integer "ta_id"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
@@ -65,6 +65,14 @@ ActiveRecord::Schema.define(version: 20140506062919) do
   end
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
+
+  create_table "data", id: false, force: true do |t|
+    t.text  "id"
+    t.text  "name"
+    t.text  "phone"
+    t.float "lng"
+    t.float "lat"
+  end
 
   create_table "media", force: true do |t|
     t.integer  "alternative_id"

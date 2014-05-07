@@ -5,5 +5,5 @@
   .row
     div bindonce=true ng-repeat="alternative in alternatives.all"
       .item.bg-white.brd-grey.brd-2 
-        ng-include src="'#{ asset_path 'card.html.slim' }'"
-      ng-include src="'#{ asset_path 'midlevel.html.slim' }'"
+        div card=true
+      div midlevel=true
