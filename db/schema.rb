@@ -11,18 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140430162001) do
+ActiveRecord::Schema.define(version: 20140506062919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "alternative_sources", force: true do |t|
+    t.integer  "alternative_id"
+    t.string   "name"
+    t.integer  "realm_id"
+    t.string   "agency_id"
+    t.string   "type"
+    t.text     "url"
+    t.float    "lat"
+    t.float    "lng"
+    t.json     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "alternative_sources", ["agency_id"], name: "index_alternative_sources_on_agency_id", using: :btree
+  add_index "alternative_sources", ["alternative_id"], name: "index_alternative_sources_on_alternative_id", using: :btree
+  add_index "alternative_sources", ["realm_id"], name: "index_alternative_sources_on_realm_id", using: :btree
+  add_index "alternative_sources", ["type"], name: "index_alternative_sources_on_type", using: :btree
 
   create_table "alternatives", force: true do |t|
     t.string  "name",                      null: false
     t.integer "reviews_count", default: 0, null: false
     t.integer "realm_id"
-    t.integer "ta_id"
     t.float   "lat"
     t.float   "lng"
+    t.integer "ta_id"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
