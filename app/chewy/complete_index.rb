@@ -11,7 +11,8 @@ class CompleteIndex < Chewy::Index
   #   }
   # }'
 
-  def self.complete(text, size: 5)
+  def self.complete(text, size: 5, correct: false)
+    fuzziness = correct ? {fuzzy: { edit_distance: 1, min_length: 4}} : {}
     client.suggest(
       index: 'complete',
       body: {
@@ -20,8 +21,7 @@ class CompleteIndex < Chewy::Index
           completion: {
             field: "suggest",
             size: size,
-            fuzzy: { edit_distance: 1, min_length: 4}
-          }
+          }.merge(fuzziness)
         }
       }
     )
@@ -37,6 +37,14 @@ class CompleteIndex < Chewy::Index
       when "criterion";   ::Criterion
       when "field";       ::Property::Field
       end.find( o["payload"]["id"] )
+    end
+  end
+
+  def self.complete_loaded_with_corrections(text, size: 5)
+    results = complete_loaded(text, size: size)
+    if results.size < size
+      results += complete_loaded(text, size: size, correct: true)
+      results = results.uniq[0...size]
     end
   end
 
