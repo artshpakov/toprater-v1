@@ -124,6 +124,7 @@ namespace :import do
     desc "Import solvertour hotels"
     task hotels: :environment do
 
+      counter = 0
       CSV.foreach(File.join(Rails.root, 'tmp/solvertour-hotels.csv'), headers: true) do |hotel_attributes|
         hotel_source = Alternative::Source::Solvertour.find_or_initialize_by(agency_id: hotel_attributes["_id"], realm_id: 1)
         hotel_source.name = hotel_attributes["name"]
@@ -133,20 +134,27 @@ namespace :import do
         end
         hotel_source.data = {}
         hotel_source.save!
+        counter += 1
       end
+
+      puts "Processed #{counter} hotel sources"
     end
 
     desc "Import solvertour media"
     task media: :environment do
 
+      counter = 0
       CSV.foreach(File.join(Rails.root, 'tmp/solvertour-media.csv'), headers: true) do |medium_attributes|
         alternative_id = Alternative::Source::Solvertour.where(agency_id: medium_attributes["hotel_id"]).pluck(:alternative_id).first
         if alternative_id
           medium = Medium::Solvertour.find_or_initialize_by(alternative_id: alternative_id, agency_id: medium_attributes["_id"])
           medium.url = medium_attributes["path"]
           medium.save!
+          counter += 1
         end
       end
+
+      puts "Processed #{counter} solvertour media"
     end
 
   end
