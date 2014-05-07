@@ -46,6 +46,7 @@ class CompleteIndex < Chewy::Index
       results += complete_loaded(text, size: size, correct: true)
       results = results.uniq[0...size]
     end
+    results
   end
 
   define_type Realm do
