@@ -80,7 +80,7 @@ class CompleteIndex < Chewy::Index
     field :suggest, type: 'completion', payloads: true, value: -> {{
       weight: 2,
       output: name,
-      input: [name],
+      input: all_suffixes(name),
       payload: { type: 'criterion', id: id }
     }}
   end
@@ -90,7 +90,7 @@ class CompleteIndex < Chewy::Index
     field :suggest, type: 'completion', payloads: true, value: -> {{
       weight: 2,
       output: name,
-      input: [name],
+      input: all_suffixes(name),
       payload: { type: 'field', id: id }
     }}
   end
