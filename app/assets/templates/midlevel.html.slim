@@ -20,7 +20,7 @@ div ng-if="last_in_row($index) && current_alternative && belongs_here($index)"
             a href="{{ current_alternative.url(locale) }}"
               img ng-src="{{ current_alternative.cover_url }}" alt=""
           .block-img-small
-            a href="javascript:;" ng-repeat="i in range(5)" : img src="/i/beach2.jpg" alt=""
+            a href="javascript:;" ng-repeat="medium in current_alternative.media" : img ng-src="{{medium.small_url}}" style="width:44px" alt=""
             .clear
 
           .block-links

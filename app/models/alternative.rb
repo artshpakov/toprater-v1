@@ -9,7 +9,6 @@ class Alternative < ActiveRecord::Base
 
   has_many :property_values, class_name: 'Property::Value', dependent: :delete_all
 
-
   validates :name, presence: true
 
   attr_accessor :score, :properties

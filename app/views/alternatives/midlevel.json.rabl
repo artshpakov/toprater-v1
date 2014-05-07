@@ -31,8 +31,15 @@ node :relevant_reviews_count do
 end
 
 node :reviews do
-  alternative.processed_reviews(@criterion_ids, limit: 2).tap do |rws|
+  alternative.processed_reviews(@criterion_ids, limit: 10).tap do |rws|
     rws.each { |cid, rw| rws[cid] = partial('review_sentences/show', object: rw) }
+  end
+end
+
+node :media do
+  # TODO: move to serializer
+  alternative.media.not_covers.limit(5).map do |media|
+    { :small_url => media.url(:small), :thumb_url => media.url(:thumb), :preview_url => media.url(:preview) }
   end
 end
 

@@ -2,6 +2,7 @@ class Medium < ActiveRecord::Base
   belongs_to :alternative
 
   scope :covers, -> { where(cover: true) }
+  scope :not_covers, -> { where(cover: false) }
 
   has_attached_file :file,
     styles: {
