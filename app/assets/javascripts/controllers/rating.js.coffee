@@ -40,4 +40,7 @@
 
   $scope.row = (index) -> Math.floor index/$scope.cards_in_row
 
+  $scope.closeMidlevel = ->
+    $scope.current_alternative = undefined
+
 ]

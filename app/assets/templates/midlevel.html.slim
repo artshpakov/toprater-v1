@@ -1,4 +1,4 @@
-div ng-if="last_in_row($index) && current_alternative && belongs_here($index)"
+div ng-if="current_alternative && last_in_row($index) && belongs_here($index)"
   .clear
 
   .detailed.bg-dark.txt-light id="middle{{ row($index) }}"
@@ -72,7 +72,7 @@ div ng-if="last_in_row($index) && current_alternative && belongs_here($index)"
         .details.brd-l-lf
           .brd-l-bt.txt-16.txt-white.header
             .fl-right.brd-l-lf.close
-              a.bl href="javascript:;" ng-click="current_alternative=null"
+              a.bl href="javascript:;" ng-click="closeMidlevel()"
                 img.spr.close src="/i/blank.gif" alt=""
             .pd-20 Рейтинг по критериям, которые вы выбрали
 
