@@ -40,6 +40,23 @@
   Alternative::grade = (criterion) ->
     _.find(@top, (tip) -> tip.id is criterion.id)?.grade
 
+  Alternative::progress = (criterion) -> (
+    PARTION_AMOUNT = 10
+
+    if @scores && @scores[criterion.id]
+      position = @scores[criterion.id].position
+      total    = @scores[criterion.id].out_of
+
+      # normalize
+      position  = total if position > total
+      partition = total / PARTION_AMOUNT
+
+      PARTION_AMOUNT - Math.floor(position / partition)
+
+    else
+      0
+  )
+
   Alternative::url = (locale) ->
     "/#{ locale }/#{ @realm }/alternatives/#{ @id }"
 
