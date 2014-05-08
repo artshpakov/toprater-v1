@@ -84,7 +84,8 @@ div ng-if="last_in_row($index) && current_alternative && belongs_here($index)"
                     | из {{ current_alternative.scores[criterion.id].out_of }}
                 .fl-left.name = "{{ criterion.name }}"
                 .progress class="p-{{ current_alternative.progress(criterion) }}"
-              .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-show="alternative_reviews_shown"
+
+              .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-if="alternative_reviews_shown && current_alternative.reviews[criterion.id]"
                 .arrow : img.spr.arrow-opinions src="/i/blank.gif" alt=""
                 .midlevel-item ng-repeat="review in current_alternative.reviews[criterion.id]"
                   .upic.fl-left : img src="/i/upic.png" alt=""
