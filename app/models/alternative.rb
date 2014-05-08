@@ -24,7 +24,7 @@ class Alternative < ActiveRecord::Base
       result.unshift( self.alternatives_criteria.where(:criterion_id => options[:with_ids]).to_a )
     end
 
-    return result.flatten.uniq.sort_by { |c| c.rank }.reverse
+    return result.flatten.uniq { |c| c.criterion_id }.sort_by { |c| c.rank }.reverse
   end
 
   def realm

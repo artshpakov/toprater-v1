@@ -1,4 +1,4 @@
-div ng-if="current_alternative && last_in_row($index) && belongs_here($index)"
+div ng-if="current_alternative && last_in_row($index) && belongs_here($index) && search.criteria().length > 0"
   .clear
 
   .detailed.bg-dark.txt-light id="middle{{ row($index) }}"
@@ -80,7 +80,7 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index)"
             .pd-20 Вы выбрали
             div ng-repeat="criterion in search.criteria()" 
               .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
-                .fl-right.check : a.bl href="javascript:;" : img.spr.checked[src="/i/blank.gif" alt=""]
+                .fl-right.check : a.bl ng-click='search.drop(criterion)' : img.spr.checked[src="/i/blank.gif" alt=""]
                 .fl-left.number
                   ' \#{{ current_alternative.scores[criterion.id].position }}
                   span.txt-grey
