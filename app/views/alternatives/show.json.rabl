@@ -16,7 +16,9 @@ node :relevant_reviews_count do
 end
 
 node :top do |alternative|
-  alternative.top.map { |id, grade| { id: id.to_i, grade: grade } }
+  @criterion_ids.map do |c_id|
+    { :id => c_id.to_i, :grade => alternative.alternatives_criteria.where(:criterion_id => c_id).first.try(:rank) }
+  end
 end
 
 node :thumbnails do

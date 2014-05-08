@@ -17,8 +17,14 @@ class Alternative < ActiveRecord::Base
     KV.get("alt:#{id}:cover") || "/images/no_picture.png"
   end
 
-  def top
-    JSON.parse(KV.get("top50:alt_rating:#{id}") || "{}")
+  def best_criteria(options = {}, limit = 5)
+    result = self.alternatives_criteria.order('rank DESC').limit(limit).to_a
+
+    if options[:with_ids].present?
+      result.unshift( self.alternatives_criteria.where(:criterion_id => options[:with_ids]).to_a )
+    end
+
+    return result.flatten.uniq.sort_by { |c| c.rank }.reverse
   end
 
   def realm

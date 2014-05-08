@@ -4,26 +4,19 @@ attributes :id, :name, :reviews_count, :cover_url
 node(:realm) { "hotels" }
 
 node :scores do
-  raw_picked  = alternative.criteria_scores(@criterion_ids)
-  raw_top     = alternative.top
+  raw_picked = alternative.criteria_scores(@criterion_ids)
 
-  picked = raw_picked
-  picked.keys.each do |id|
-    percentage  = raw_picked[id]
-    position    = raw_top[id]
-    out_of      = (position || 1)+rand(150)
-    picked[id]  = { percentage: percentage, position: position, out_of: out_of }
+  result = {}
+
+  @criterion_ids.each do |c_id|
+    result[c_id] = {
+      'percentage' => raw_picked[c_id.to_i],
+      'position'   => alternative.alternatives_criteria.where(:criterion_id => c_id).first.try(:rank),
+      'out_of'     => Criterion.find(c_id).alternatives_criteria.count
+    }
   end
 
-  top = raw_top.delete_if { |id, position| id.in? raw_picked.keys }
-  top.keys.each do |id|
-    percentage  = raw_picked[id] || rand(100)
-    position    = raw_top[id]
-    out_of      = (position || 1)+rand(150)
-    top[id]     = { percentage: percentage, position: position, out_of: out_of }
-  end
-
-  picked.merge top
+  result
 end
 
 node :relevant_reviews_count do
@@ -31,7 +24,7 @@ node :relevant_reviews_count do
 end
 
 node :reviews do
-  alternative.processed_reviews(@criterion_ids, limit: 10).tap do |rws|
+  alternative.processed_reviews(@criterion_ids, limit: 100).tap do |rws|
     rws.each { |cid, rw| rws[cid] = partial('review_sentences/show', object: rw) }
   end
 end
