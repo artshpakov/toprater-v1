@@ -66,14 +66,6 @@ ActiveRecord::Schema.define(version: 20140506062919) do
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
 
-  create_table "data", id: false, force: true do |t|
-    t.text  "id"
-    t.text  "name"
-    t.text  "phone"
-    t.float "lng"
-    t.float "lat"
-  end
-
   create_table "media", force: true do |t|
     t.integer  "alternative_id"
     t.string   "type"
