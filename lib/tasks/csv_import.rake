@@ -4,15 +4,15 @@ namespace :csv_import do
 
   DATA_FILES_PATH = ENV['data_files_path'] || File.join('tmp', 'csv_import')
 
-  CRITERIONS_CSV_PATH = ENV['criterions_path'] || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
-  REVIEWS_CSV_PATH    = ENV['reviews_path']    || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
-  DETAILS_CSV_PATH    = ENV['details_path']    || Rails.root.join(DATA_FILES_PATH, 'details.csv')
-  HOTELS_DB_PATH      = ENV['hotels_db_path']  || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-data.db')
+  CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
+  REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
+  DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
+  HOTELS_DB_PATH      = ENV['hotels_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-data.db')
   HOTELS_2_DB_PATH    = ENV['hotels_2_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
-  TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
+  TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
   task :all => :environment do
-    Rake::Task['csv_import:criterions'].invoke
+    Rake::Task['csv_import:criteria'].invoke
     Rake::Task['csv_import:hotels'].invoke
     Rake::Task['csv_import:hotels_2'].invoke
     Rake::Task['csv_import:tripadvisor_reviews'].invoke
@@ -90,16 +90,16 @@ namespace :csv_import do
     db.disconnect
   end
 
-  task :criterions => :environment do
-    puts "Processing criterions from #{CRITERIONS_CSV_PATH}"
+  task :criteria => :environment do
+    puts "Processing criteria from #{CRITERIA_CSV_PATH}"
     pavel_criterion = Criterion.find_or_create_by(name: "Павел", short_name: "pavel")
 
-    CSV.foreach(CRITERIONS_CSV_PATH, headers: true) do |row|
+    CSV.foreach(CRITERIA_CSV_PATH, headers: true) do |row|
       record = Criterion.where(:short_name => row[1], :name => row[1]).first_or_create!
       record.update_attributes({ :parent => pavel_criterion, :external_id => row[0] })
     end
 
-    puts "criterions processed"
+    puts "criteria processed"
   end
 
   task :alternatives_criterion => :environment do
