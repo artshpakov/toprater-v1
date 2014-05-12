@@ -49,32 +49,34 @@ class CompleteIndex < Chewy::Index
     results
   end
 
-  define_type Realm do
+#  # Removed till we have more than one realm
+#  define_type Realm do
+#
+#    def self.import(*args)
+#      args.unshift ::Realm.all if args.blank? || args[0].is_a?(Hash)
+#      super *args
+#    end
+#
+#    field :name
+#    field :suggest, type: 'completion', payloads: true, value: -> {{
+#      weight: 3,
+#      output: name,
+#      input: [name],
+#      payload: { type: 'realm', id: id }
+#    }}
+#  end
 
-    def self.import(*args)
-      args.unshift ::Realm.all if args.blank? || args[0].is_a?(Hash)
-      super *args
-    end
-
-    field :name
-    field :suggest, type: 'completion', payloads: true, value: -> {{
-      weight: 3,
-      output: name,
-      input: [name],
-      payload: { type: 'realm', id: id }
-    }}
-  end
-
-  define_type Alternative do
-    field :name
-    field :realm_id
-    field :suggest, type: 'completion', payloads: true, value: -> {{
-      weight: 1,
-      output: name,
-      input: [name],
-      payload: { type: 'alternative', id: id }
-    }}
-  end
+#  # Removed till we have "big alternative's card"
+#  define_type Alternative do
+#    field :name
+#    field :realm_id
+#    field :suggest, type: 'completion', payloads: true, value: -> {{
+#      weight: 1,
+#      output: name,
+#      input: [name],
+#      payload: { type: 'alternative', id: id }
+#    }}
+#  end
 
   define_type Criterion.rated do
     field :name
@@ -86,14 +88,15 @@ class CompleteIndex < Chewy::Index
     }}
   end
 
-  define_type Property::Field, name: 'fields' do
-    field :name
-    field :suggest, type: 'completion', payloads: true, value: -> {{
-      weight: 2,
-      output: name,
-      input: all_suffixes(name),
-      payload: { type: 'field', id: id }
-    }}
-  end
+#  # Removed till we have short names for properties
+#  define_type Property::Field, name: 'fields' do
+#    field :name
+#    field :suggest, type: 'completion', payloads: true, value: -> {{
+#      weight: 2,
+#      output: name,
+#      input: all_suffixes(name),
+#      payload: { type: 'field', id: id }
+#    }}
+#  end
 
 end
