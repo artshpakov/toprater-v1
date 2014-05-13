@@ -49,7 +49,7 @@ class AlternativesIndex < Chewy::Index
     Criterion.rated.find_each do |cr|
       expand_nested NotNullField.new(
         :"cr_#{cr.id}", type: 'double',
-        value: -> { alternatives_criteria.select {|ac| ac.criterion_id == cr.id}.map{|x| (x.rating+1)*2.5 }.first }
+        value: -> { alternatives_criteria.select {|ac| ac.criterion_id == cr.id}.first.try(&:corrected_rating) }
       )
     end
 

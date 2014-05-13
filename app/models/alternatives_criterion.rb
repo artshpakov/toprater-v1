@@ -3,6 +3,11 @@ class AlternativesCriterion < ActiveRecord::Base
   belongs_to :alternative
   belongs_to :criterion
 
+  # ajust -1..1 scale to 1..5
+  def corrected_rating
+    (rating + 1) * 2.5
+  end
+
   # Using just average rating sucks. let's make first try in oh so many...
   def self.update_weighted_ratings!
     # (sigmoid( x - 5 ) + 0.75)/1.75 * R, where x is reviews_count
