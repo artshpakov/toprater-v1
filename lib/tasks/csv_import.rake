@@ -178,7 +178,7 @@ namespace :csv_import do
           end
 
           new_record = ReviewSentence.where(:alternative_id => ta_id, 
-                                            :criterion_id => criterion.find { |c| c.external_id == tmp_record.external_criterion_id }.id, 
+                                            :criterion_id => criteria.id, 
                                             :review_id => reviews.find { |r| r.agency_id == tmp_record.agency_id }.id).first_or_initialize
 
           new_record.sentences = [ tmp_record.sent1, tmp_record.sent2, tmp_record.sent3 ]
