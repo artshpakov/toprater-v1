@@ -137,6 +137,63 @@ namespace :csv_import do
 
   end # task :reviews
 
+  task :review_sentences_fast => :environment do
+    db = ActiveRecord::Base.connection
+
+    # create TEMP table
+    table_name = "csv_import_data_temp"
+    db.execute("CREATE TEMP TABLE #{table_name} ( ta_id integer, agency_id integer, external_criterion_id integer, sent1 text, sent2 text, sent3 text, score float )")
+    db.execute("CREATE INDEX ta_and_agency_ids_idx ON #{table_name} (ta_id, agency_id)")
+
+    # fill TEMP table with data
+    db.execute("COPY #{table_name} FROM '#{DETAILS_CSV_PATH}' CSV HEADER")
+
+    class TempModel < ActiveRecord::Base
+      self.table_name = 'csv_import_data_temp'
+    end
+
+    criterion = Criterion.scoped.to_a
+
+    # Process data
+    alt_ids = Alternative.pluck(:ta_id)
+    created_counter = 0
+    missed_criteria_count = 0
+    progress_bar = ProgressBar.create(:title => 'total', :total => alt_ids.count)
+
+    alt_ids.each do |ta_id|
+      progress_bar.increment
+      # pick records (partioned by ta_id and persisted reviews)
+      tmp_records = TempModel.where(:ta_id => ta_id).joins("INNER JOIN reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id").to_a
+
+      if tmp_records.any?
+        agency_ids = tmp_records.map(&:agency_id)
+        reviews = Review::Tripadvisor.where(:agency_id => agency_ids)
+
+        tmp_records.each do |tmp_record|
+          criteria = criterion.find { |c| c.external_id == tmp_record.external_criterion_id }
+
+          unless criteria
+            missed_criteria_count += 1
+            next
+          end
+
+          new_record = ReviewSentence.where(:alternative_id => ta_id, 
+                                            :criterion_id => criterion.find { |c| c.external_id == tmp_record.external_criterion_id }.id, 
+                                            :review_id => reviews.find { |r| r.agency_id == tmp_record.agency_id }.id).first_or_initialize
+
+          new_record.sentences = [ tmp_record.sent1, tmp_record.sent2, tmp_record.sent3 ]
+          new_record.score     = tmp_record.score
+
+          new_record.save! # tune this
+          created_counter += 1
+        end
+      end
+    end
+
+    puts "Created or updated records -> #{created_counter}, missed count -> #{missed_criteria_count}"
+
+  end
+
   task :review_sentences => :environment do
     puts "Processing ReviewSentence from #{DETAILS_CSV_PATH}"
 

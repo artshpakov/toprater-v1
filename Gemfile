@@ -7,6 +7,7 @@ gem 'pg'
 gem 'pry-rails'
 gem 'slim'
 gem 'russian'
+gem 'ruby-progressbar'
 
 gem 'ancestry'
 gem 'gon'
