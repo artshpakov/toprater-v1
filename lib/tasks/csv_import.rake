@@ -141,8 +141,7 @@ namespace :csv_import do
     require 'benchmark'
 
     db = ActiveRecord::Base.connection
-
-    ReviewSentence.delete_all
+    db.execute('TRUNCATE review_sentences')
 
     # create TEMP table
     table_name = "csv_import_data_temp"
@@ -162,13 +161,13 @@ namespace :csv_import do
             reviews.id, 
             array_to_json(ARRAY[#{table_name}.sent1, #{table_name}.sent2, #{table_name}.sent3]),
             #{table_name}.score,
-            '#{Time.zone.now}',
-            '#{Time.zone.now}'
+            now(),
+            now()
 
           FROM #{table_name}
 
           INNER JOIN
-            alternatives ON alternatives.ta_id IN ( SELECT alternatives.ta_id FROM alternatives ) AND alternatives.ta_id = #{table_name}.ta_id
+            alternatives ON alternatives.ta_id = #{table_name}.ta_id
           INNER JOIN 
             reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id
           INNER JOIN
