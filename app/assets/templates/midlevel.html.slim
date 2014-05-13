@@ -94,7 +94,7 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
                   .upic.fl-left : img src="/i/upic.png" alt=""
                   .text
                     ' &laquo;{{ review.sentences[0] }}.
-                    span.txt-white' = "{{ review.sentences[1] }}."
+                    span.txt-white' title="{{ review.score }}" = "{{ review.sentences[1] }}."
                     | {{ review.sentences[2] }}&raquo;
                     a.source.txt-10.txt-grey href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
 
