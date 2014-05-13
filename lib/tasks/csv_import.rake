@@ -138,7 +138,11 @@ namespace :csv_import do
   end # task :reviews
 
   task :review_sentences_fast => :environment do
+    require 'benchmark'
+
     db = ActiveRecord::Base.connection
+
+    ReviewSentence.delete_all
 
     # create TEMP table
     table_name = "csv_import_data_temp"
@@ -148,49 +152,32 @@ namespace :csv_import do
     # fill TEMP table with data
     db.execute("COPY #{table_name} FROM '#{DETAILS_CSV_PATH}' CSV HEADER")
 
-    class TempModel < ActiveRecord::Base
-      self.table_name = 'csv_import_data_temp'
+    bench = Benchmark.measure do
+
+      db.execute <<-SQL
+        INSERT INTO review_sentences ( alternative_id, criterion_id, review_id, sentences, score, created_at, updated_at )
+          SELECT 
+            alternatives.id, 
+            criteria.id, 
+            reviews.id, 
+            array_to_json(ARRAY[#{table_name}.sent1, #{table_name}.sent2, #{table_name}.sent3]),
+            #{table_name}.score,
+            '#{Time.zone.now}',
+            '#{Time.zone.now}'
+
+          FROM #{table_name}
+
+          INNER JOIN
+            alternatives ON alternatives.ta_id IN ( SELECT alternatives.ta_id FROM alternatives ) AND alternatives.ta_id = #{table_name}.ta_id
+          INNER JOIN 
+            reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id
+          INNER JOIN
+            criteria ON criteria.external_id = #{table_name}.external_criterion_id
+      SQL
+
     end
 
-    criterion = Criterion.scoped.to_a
-
-    # Process data
-    alt_ids = Alternative.pluck(:ta_id)
-    created_counter = 0
-    missed_criteria_count = 0
-    progress_bar = ProgressBar.create(:title => 'total', :total => alt_ids.count)
-
-    alt_ids.each do |ta_id|
-      progress_bar.increment
-      # pick records (partioned by ta_id and persisted reviews)
-      tmp_records = TempModel.where(:ta_id => ta_id).joins("INNER JOIN reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id").to_a
-
-      if tmp_records.any?
-        agency_ids = tmp_records.map(&:agency_id)
-        reviews = Review::Tripadvisor.where(:agency_id => agency_ids)
-
-        tmp_records.each do |tmp_record|
-          criteria = criterion.find { |c| c.external_id == tmp_record.external_criterion_id }
-
-          unless criteria
-            missed_criteria_count += 1
-            next
-          end
-
-          new_record = ReviewSentence.where(:alternative_id => ta_id, 
-                                            :criterion_id => criteria.id, 
-                                            :review_id => reviews.find { |r| r.agency_id == tmp_record.agency_id }.id).first_or_initialize
-
-          new_record.sentences = [ tmp_record.sent1, tmp_record.sent2, tmp_record.sent3 ]
-          new_record.score     = tmp_record.score
-
-          new_record.save! # tune this
-          created_counter += 1
-        end
-      end
-    end
-
-    puts "Created or updated records -> #{created_counter}, missed count -> #{missed_criteria_count}"
+    puts bench
 
   end
 
