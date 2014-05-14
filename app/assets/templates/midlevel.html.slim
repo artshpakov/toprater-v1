@@ -2,7 +2,8 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
   .clear
 
   .detailed.bg-dark.txt-light id="middle{{ row($index) }}"
-    .arrow-dark.position-1 : img.spr.arrow-dark src="/i/blank.gif" alt=""
+    .arrow-dark.position-1 style="margin-left: {{ 110+240 * (current_alternative.index() % cards_in_row) }}px"
+      img.spr.arrow-dark src="/i/blank.gif" alt=""
 
     .inside
       .slide.txt-center.left ng-class="{ enabled: has_previous() }" ng-click="previous()" : i.fa.fa-angle-left
