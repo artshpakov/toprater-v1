@@ -17,7 +17,7 @@ class Alternative < ActiveRecord::Base
     KV.get("alt:#{id}:cover") || "/images/no_picture.png"
   end
 
-  def best_criteria(options = {}, limit = 5)
+  def best_criteria(options = {}, limit = nil)
     result = self.alternatives_criteria.order('rank DESC').limit(limit).to_a
 
     if options[:with_ids].present?
