@@ -1,6 +1,6 @@
 div ng-controller="rating.SearchCtrl"
   #search.bg-white
-    .fl-right.slide.up.bg-light.txt-center.cursor ng-click="cart_visible=!cart_visible"
+    .fl-right.slide.up.bg-light.txt-center.cursor ng-click="$parent.cart_visible=!$parent.cart_visible"
       img.spr.slide.up alt="" src="/i/blank.gif"
     #searchline
       input.search-top type="text" placeholder="Укажите, что для Вас важно в отеле. Например: цена/качество" ng-model="query" ng-blur="reset_search()"

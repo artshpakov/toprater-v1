@@ -12,20 +12,20 @@
   img bo-src="alternative.cover_url" alt="" ng-click='pick(alternative)' class='alternative-card-logo'
   .show-all.bg-blue bo-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
     .fl-right.show-all-right : img.spr.arrow.up alt="" src="/i/blank.gif"
-    a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top.length } }}
+    a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top_count } }}
 
 ul.params
   li.caption.noborder
     span Вы выбрали
   li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
     .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-    span.numb bo-text="alternative.grade(criterion)"
+    span.numb bo-text="'#' + alternative.grade(criterion)"
     span bo-text='criterion.name'
   li.caption
     span Рекомендуем
   li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-    span.numb bo-text="alternative.grade(criterion)"
+    span.numb bo-text=""
     span bo-text="criterion.name"
 
 .full-wrapper ng-class="{ visible: alternative.full_version_shown }"
@@ -39,11 +39,11 @@ ul.params
         span Вы выбрали
       li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
         .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-        span.numb bo-text="alternative.grade(criterion)"
+        span.numb bo-text="'#' + alternative.grade(criterion)"
         span bo-text="criterion.name"
       li.caption
         span Рекомендуем
       li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-        span.numb bo-text="alternative.grade(criterion)"
+        span.numb bo-text=""
         span bo-text="criterion.name"

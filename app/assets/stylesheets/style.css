@@ -113,6 +113,7 @@ button.middle {
 
 /* sizes */
 .w-970 { width: 970px; }
+.w-full { width: 1199px; }
 
 /* borders */
 .brd-2 { border-radius: 2px; }
@@ -524,6 +525,7 @@ ul.tags li.criterion.active:after {
   width: 100%;
   height: 330px;
   transition: 0.2s all;
+  overflow-y: auto;
 }
 .full-wrapper.visible {
   top: 80px;
@@ -533,11 +535,12 @@ ul.tags li.criterion.active:after {
 
 
 div.params.full { 
-  overflow-y: auto;
-  overflow-x: none;
   margin-top: 25px
 }
 
+ul.params.full {
+  margin-bottom: 16px;
+}
 ul.params li {
   color: #666;
   background-color: #fff;
