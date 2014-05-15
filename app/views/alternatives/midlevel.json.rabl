@@ -24,7 +24,7 @@ node :relevant_reviews_count do
 end
 
 node :reviews do
-  alternative.processed_reviews(@criterion_ids, limit: 100).tap do |rws|
+  alternative.processed_reviews(@criterion_ids).tap do |rws|
     rws.each { |cid, rw| rws[cid] = partial('review_sentences/show', object: rw) }
   end
 end
