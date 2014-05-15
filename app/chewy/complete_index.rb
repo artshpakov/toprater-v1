@@ -66,17 +66,16 @@ class CompleteIndex < Chewy::Index
 #    }}
 #  end
 
-#  # Removed till we have "big alternative's card"
-#  define_type Alternative do
-#    field :name
-#    field :realm_id
-#    field :suggest, type: 'completion', payloads: true, value: -> {{
-#      weight: 1,
-#      output: name,
-#      input: [name],
-#      payload: { type: 'alternative', id: id }
-#    }}
-#  end
+  define_type Alternative do
+    field :name
+    field :realm_id
+    field :suggest, type: 'completion', payloads: true, value: -> {{
+      weight: 1,
+      output: name,
+      input: [name],
+      payload: { type: 'alternative', id: id }
+    }}
+  end
 
   define_type Criterion.rated do
     field :name
