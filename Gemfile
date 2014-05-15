@@ -25,6 +25,7 @@ gem 'chewy'
 
 gem 'paperclip'
 gem 'settingslogic'
+gem 'rollbar'
 
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.0'
