@@ -5,10 +5,10 @@ en:
     property: "property"
     rating: "rating"
 
-  realm:
-    hotels: "hotels"
-    restaurants: "restaurants"
-    movies: "movies"
+  # realm:
+  #   hotels: "hotels"
+  #   restaurants: "restaurants"
+  #   movies: "movies"
 
   criteria:
     all:
@@ -20,14 +20,14 @@ en:
       other: "%{count} reviews"
 
   search:
-    placeholder: "Please specify what's of most importance for you. For example: quality"
+    placeholder: "What matters to you in a hotel, e.g., quality"
 
   card:
-    picked: "Your choice"
-    recommended: "We recommend"
-    hide: "Fewer"
+    picked: "You selected"
+    recommended: "Recommended"
+    hide: "Minimize"
   midlevel:
-    title: "Ratings on the criteria of your choice"
+    title: "Rating built on criteria you've selected"
     outof: "out of"
 
   copyright: "All rights reserved"
