@@ -17,9 +17,7 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
               a.txt-16 href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
               .txt-light.txt-12.mt-5 ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
 
-          .block-img
-            a href="{{ current_alternative.url(locale) }}"
-              img ng-src="{{ current_alternative.cover_url }}" alt=""
+          .block-img style="background-image: url('{{ current_alternative.cover_url }}')"
           .block-img-small
             a href="javascript:;" ng-repeat="medium in current_alternative.media" : img ng-src="{{medium.small_url}}" style="width:44px" alt=""
             .clear

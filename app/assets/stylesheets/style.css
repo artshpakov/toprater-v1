@@ -494,6 +494,7 @@ ul.tags li.criterion.active:after {
   position: relative;
   overflow: hidden;
 }
+
 .row .item .show-all.full {
   position: absolute;
   top: 0;
@@ -625,7 +626,16 @@ ul.params li div.unchecked {
 .detailed .block-main { width: 320px; float: left;}
 .detailed .title { height: 79px; }
 .detailed .block-name { padding: 21px 0 0 70px; }
-.detailed .block-img { margin: 0 auto 10px; width: 280px; height: 180px; overflow: hidden; }
+.detailed .block-img {
+  margin: 0 auto 10px;
+  width: 280px;
+  height: 180px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .detailed .block-links { padding: 0 31px 10px 20px; }
 .detailed .block-price { padding: 0 31px 7px 20px; }
 .detailed .block-price .price { padding-top: 8px; }

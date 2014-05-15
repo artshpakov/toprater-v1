@@ -9,7 +9,7 @@
     /*   b Р */
 
 .img-area bindonce='alternative'
-  img bo-src="alternative.cover_url" alt="" ng-click='pick(alternative)' class='alternative-card-logo'
+  .alternative-card-logo style="background-image: url('{{ alternative.cover_url }}')" ng-click='pick(alternative)'
   .show-all.bg-blue bo-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
     .fl-right.show-all-right : img.spr.arrow.up alt="" src="/i/blank.gif"
     a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top_count } }}
