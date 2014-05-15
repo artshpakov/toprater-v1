@@ -19,13 +19,13 @@ ul.params
     span Вы выбрали
   li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
     .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-    span.numb bo-text="alternative.get_rating(criterion)"
+    span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
     span bo-text='criterion.name'
   li.caption
     span Рекомендуем
   li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-    span.numb bo-text="alternative.get_rating(criterion)"
+    span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
     span bo-text="criterion.name"
 
 .full-wrapper ng-class="{ visible: alternative.full_version_shown }"
@@ -39,11 +39,11 @@ ul.params
         span Вы выбрали
       li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
         .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
-        span.numb bo-text="alternative.get_rating(criterion)"
+        span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
         span bo-text="criterion.name"
       li.caption
         span Рекомендуем
       li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
-        span.numb bo-text="alternative.get_rating(criterion)"
+        span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
         span bo-text="criterion.name"

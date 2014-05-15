@@ -17,11 +17,11 @@ class Alternative < ActiveRecord::Base
     KV.get("alt:#{id}:cover") || "/images/no_picture.png"
   end
 
-  def best_criteria(options = {}, limit = nil)
+  def best_criteria(with_ids: [], limit: nil)
     result = self.alternatives_criteria.order('rank DESC').limit(limit).to_a
 
-    if options[:with_ids].present?
-      result.unshift( self.alternatives_criteria.where(:criterion_id => options[:with_ids]).to_a )
+    if with_ids.present?
+      result.unshift( self.alternatives_criteria.where(:criterion_id => with_ids).to_a )
     end
 
     return result.flatten.uniq { |c| c.criterion_id }.sort_by { |c| c.rank }.reverse
