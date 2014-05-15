@@ -6,6 +6,10 @@ require 'rvm/capistrano'
 require 'capistrano-unicorn'
 
 require 'hipchat/capistrano'
+require 'rollbar/capistrano'
+set :rollbar_token, '5127cac1f1d74cdc8470f0bbd63a4be7'
+set(:rollbar_env) { stage }
+
 set :hipchat_token, "33a2f20049c41c04dabafd05986eb3"
 set :hipchat_room_name, "crowdsolver"
 
