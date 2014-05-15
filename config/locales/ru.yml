@@ -5,10 +5,10 @@ ru:
     property: "фильтр"
     rating: "рейтинг"
 
-  # realm:
-  #   hotels: "отели"
-  #   restaurants: "рестораны"
-  #   movies: "фильмы"
+  realm:
+    hotels: "отели"
+    restaurants: "рестораны"
+    movies: "фильмы"
 
   criteria:
     all:

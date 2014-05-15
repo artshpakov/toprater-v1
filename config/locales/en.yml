@@ -5,10 +5,10 @@ en:
     property: "property"
     rating: "rating"
 
-  # realm:
-  #   hotels: "hotels"
-  #   restaurants: "restaurants"
-  #   movies: "movies"
+  realm:
+    hotels: "hotels"
+    restaurants: "restaurants"
+    movies: "movies"
 
   criteria:
     all:
