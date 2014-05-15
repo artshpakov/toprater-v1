@@ -16,8 +16,10 @@ node :relevant_reviews_count do
 end
 
 node :top do |alternative|
-  @criterion_ids.map do |c_id|
-    { :id => c_id.to_i, :grade => alternative.alternatives_criteria.where(:criterion_id => c_id).first.try(:rank) }
+  records = alternative.alternatives_criteria.where(:id => @criterion_ids).to_a
+
+  records.map do |record|
+    { :id => record.id, :grade => record.rank, :rating => recor.corrected_rating.round(1) }
   end
 end
 

@@ -40,6 +40,9 @@
   Alternative::grade = (criterion) ->
     _.find(@top, (tip) -> tip.id is criterion.id)?.grade
 
+  Alternative::get_rating = (criterion) ->
+    _.findWhere(@top, { id: criterion.id }).rating
+
   Alternative::progress = (criterion) -> (
     PARTION_AMOUNT = 10
 
