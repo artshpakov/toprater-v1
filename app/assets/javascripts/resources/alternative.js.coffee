@@ -18,9 +18,9 @@
 
   Alternative.rate = ->
     params = _.extend filters_to_params(), criteria_to_params()
-    unless _.isEmpty(params)
-      @query(params).$promise.then (alternatives) =>
-        @all = _.map(alternatives, (alternative) -> new Alternative alternative)
+    # unless _.isEmpty(params)
+    @query(params).$promise.then (alternatives) =>
+      @all = _.map(alternatives, (alternative) -> new Alternative alternative)
 
   Alternative.pick = (id) ->
     @get(_.extend { id }, criteria_to_params(Search.criteria)).$promise

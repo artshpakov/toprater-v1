@@ -1,7 +1,8 @@
-#realm ng-hide="alternatives.all.length"
-  ng-include src="'#{ asset_path 'realm.html.slim' }'"
+/ #realm ng-hide="alternatives.all.length"
+/   ng-include src="'#{ asset_path 'realm.html.slim' }'"
 
-#realm ng-show="alternatives.all.length"
+/ #realm ng-show="alternatives.all.length"
+#realm
   .row
     div ng-repeat="alternative in alternatives.all track by alternative.id"
       .item.bg-white.brd-grey.brd-2 
