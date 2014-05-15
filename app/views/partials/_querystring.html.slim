@@ -3,7 +3,7 @@ div ng-controller="rating.SearchCtrl"
     .fl-right.slide.up.bg-light.txt-center.cursor ng-click="$parent.cart_visible=!$parent.cart_visible"
       img.spr.slide.up alt="" src="/i/blank.gif"
     #searchline
-      input.search-top type="text" placeholder="Укажите, что для Вас важно в отеле. Например: цена/качество" ng-model="query" ng-blur="reset_search()"
+      input.search-top type="text" placeholder="#{ t "search.placeholder" }" ng-model="query" ng-blur="reset_search()"
       div role="search-results" style="z-index: 1000"
         ul ng-show="tips.length"
           li ng-repeat="tip in tips" class="result {{ tip.type }}"

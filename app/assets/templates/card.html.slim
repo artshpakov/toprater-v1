@@ -16,13 +16,13 @@
 
 ul.params
   li.caption.noborder
-    span Вы выбрали
+    span = "{{ 'card.picked' | i18n }}"
   li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
     .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
     span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
     span bo-text='criterion.name'
   li.caption
-    span Рекомендуем
+    span = "{{ 'card.recommended' | i18n }}"
   li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
     span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
@@ -31,18 +31,18 @@ ul.params
 .full-wrapper ng-class="{ visible: alternative.full_version_shown }"
   .show-all.bg-blue.full
     .fl-right.show-all-right : img.spr.arrow.down alt="" src="/i/blank.gif"
-    a href="javascript:;" ng-click="alternative.full_version_shown=false" Свернуть
+    a href="javascript:;" ng-click="alternative.full_version_shown=false" {{ 'card.hide' | i18n }}
 
   .params.full
     ul.params.full
       li.caption.noborder
-        span Вы выбрали
+        span = "{{ 'card.picked' | i18n }}"
       li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria()" ng-click="search.drop(criterion)" ng-if="alternative.grade(criterion)"
         .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
         span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
         span bo-text="criterion.name"
       li.caption
-        span Рекомендуем
+        span = "{{ 'card.recommended' | i18n }}"
       li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
         span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"

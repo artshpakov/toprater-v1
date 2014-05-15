@@ -75,17 +75,17 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
             .fl-right.brd-l-lf.close
               a.bl href="javascript:;" ng-click="closeMidlevel()"
                 img.spr.close src="/i/blank.gif" alt=""
-            .pd-20 Рейтинг по критериям, которые вы выбрали
+            .pd-20 = "{{ 'midlevel.title' | i18n }}"
 
           .reviews
-            .pd-20 Вы выбрали
+            .pd-20 = "{{ 'card.picked' | i18n }}"
             div ng-repeat="criterion in search.criteria()" 
               .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
                 .fl-right.check : a.bl ng-click='search.drop(criterion)' : img.spr.checked[src="/i/blank.gif" alt=""]
                 .fl-left.number
                   ' \#{{ current_alternative.scores[criterion.id].position }}
                   span.txt-grey
-                    | из {{ current_alternative.scores[criterion.id].out_of }}
+                    | {{ "midlevel.outof" | i18n }} {{ current_alternative.scores[criterion.id].out_of }}
                 .fl-left.name = "{{ criterion.name }}"
                 .progress class="p-{{ current_alternative.progress(criterion) }}"
 

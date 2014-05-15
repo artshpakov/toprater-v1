@@ -20,3 +20,16 @@ ru:
       one: "%{count} отзыв"
       few: "%{count} отзыва"
       other: "%{count} отзывов"
+
+  search:
+    placeholder: "Укажите, что для Вас важно в отеле. Например: качество"
+
+  card:
+    picked: "Вы выбрали"
+    recommended: "Рекомендуем"
+    hide: "Свернуть"
+  midlevel:
+    title: "Рейтинг по критериям, которые вы выбрали"
+    outof: "из"
+
+  copyright: "Все права защищены"

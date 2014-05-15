@@ -18,3 +18,16 @@ en:
     found:
       one: "%{count} review"
       other: "%{count} reviews"
+
+  search:
+    placeholder: "Please specify what's of most importance for you. For example: quality"
+
+  card:
+    picked: "Your choice"
+    recommended: "We recommend"
+    hide: "Fewer"
+  midlevel:
+    title: "Ratings on the criteria of your choice"
+    outof: "out of"
+
+  copyright: "All rights reserved"
