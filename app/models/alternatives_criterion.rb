@@ -3,9 +3,9 @@ class AlternativesCriterion < ActiveRecord::Base
   belongs_to :alternative
   belongs_to :criterion
 
-  # ajust -1..1 scale to 0..5 (FIXME why 0?)
+  # ajust -1..1 scale to 1..5
   def corrected_rating
-    (weighted_rating + 1) * 2.5
+    [(weighted_rating + 2) * 1.6666666666666667, 5.0].min
   end
 
   # Using just average rating sucks. let's make first try in oh so many...
