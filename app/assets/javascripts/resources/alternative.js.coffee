@@ -20,7 +20,11 @@
     params = _.extend filters_to_params(), criteria_to_params()
     # unless _.isEmpty(params)
     @query(params).$promise.then (alternatives) =>
-      @all = _.map(alternatives, (alternative) -> new Alternative alternative)
+      @all = _.map alternatives, (attrs) ->
+        alternative = new Alternative attrs
+        alternative.top_criteria = _.map alternative.top, (tip) ->
+          _.find Criterion.all, (criterion) -> criterion.id is tip.id
+        alternative
 
   Alternative.pick = (id) ->
     @get(_.extend { id }, criteria_to_params(Search.criteria)).$promise
@@ -31,11 +35,12 @@
       $http.get("/#{ @realm }/alternatives/#{ @id }/midlevel.json?#{ params }").success (data) =>
         for own attribute, value of data
           @[attribute] = value unless @[attribute]
-        @detailed = true
 
-  Alternative::top_criteria = ->
-    _.map @top, (tip) ->
-      _.find Criterion.all, (criterion) -> criterion.id is tip.id
+        @top = data.top
+        @top_criteria = _.map data.top, (tip) ->
+          _.find Criterion.all, (criterion) -> criterion.id is tip.id
+
+        @detailed = true
 
   Alternative::grade = (criterion) ->
     _.find(@top, (tip) -> tip.id is criterion.id)?.grade

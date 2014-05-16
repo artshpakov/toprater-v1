@@ -43,4 +43,8 @@
   $scope.closeMidlevel = ->
     $scope.current_alternative = undefined
 
+  $scope.toggle_extended_version = (alternative) ->
+    alternative.extended = !alternative.extended
+    alternative.lazy_fetch()
+
 ]

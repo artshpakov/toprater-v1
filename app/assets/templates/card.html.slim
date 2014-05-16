@@ -10,7 +10,7 @@
 
 .img-area bindonce='alternative'
   .alternative-card-logo style="background-image: url('{{ alternative.cover_url }}')" ng-click='pick(alternative)'
-  .show-all.bg-blue bo-if="alternative.top.length" ng-click="alternative.full_version_shown=true"
+  .show-all.bg-blue bo-if="alternative.top.length" ng-click="toggle_extended_version(alternative)"
     .fl-right.show-all-right : img.spr.arrow.up alt="" src="/i/blank.gif"
     a href="javascript:;" {{ "criteria.all" | i18n:{ count: alternative.top_count } }}
 
@@ -23,15 +23,15 @@ ul.params
     span bo-text='criterion.name'
   li.caption
     span = "{{ 'card.recommended' | i18n }}"
-  li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
+  li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
     span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
     span bo-text="criterion.name"
 
-.full-wrapper ng-class="{ visible: alternative.full_version_shown }"
+.full-wrapper ng-class="{ visible: alternative.extended }"
   .show-all.bg-blue.full
     .fl-right.show-all-right : img.spr.arrow.down alt="" src="/i/blank.gif"
-    a href="javascript:;" ng-click="alternative.full_version_shown=false" {{ 'card.hide' | i18n }}
+    a href="javascript:;" ng-click="toggle_extended_version(alternative)" {{ 'card.hide' | i18n }}
 
   .params.full
     ul.params.full
@@ -43,7 +43,7 @@ ul.params
         span bo-text="criterion.name"
       li.caption
         span = "{{ 'card.recommended' | i18n }}"
-      li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria() | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
+      li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
         span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
         span bo-text="criterion.name"

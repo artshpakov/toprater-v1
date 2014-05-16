@@ -37,6 +37,13 @@ node :media do
 end
 
 
+node :top do |alternative|
+  alternative.best_criteria(with_ids: @criterion_ids).map do |criterion|
+    { :id => criterion.criterion_id, :grade => criterion.rank, :rating => criterion.corrected_rating.round(1) }
+  end
+end
+
+
 # node :reviews do
 #   alternative.reviews(limit: 2).map { |rw| partial 'review_sentences/show', object: rw }
 # end
