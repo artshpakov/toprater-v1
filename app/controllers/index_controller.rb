@@ -9,7 +9,7 @@ class IndexController < ApplicationController
     @properties = Property::Field.all
     gon.rabl template: "app/views/properties/index.json.rabl", as: :properties
  
-    presets = Criterion.where(short_name: ['sea', 'boat trip', 'heathy food', 'chef']).pluck(:id)
+    presets = Criterion.where(short_name: ['Overall Hotel Experience', 'Delicious Food']).pluck(:id)
     presets = Criterion.order("RANDOM()").limit(4).pluck(:id) if presets.empty?
 
     gon.preset = presets.map{|pf| [pf, true]}
