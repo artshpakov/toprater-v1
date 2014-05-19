@@ -27,7 +27,9 @@ html
     = include_gon namespace: 'rating_data'
     = javascript_include_tag :application
     = csrf_meta_tags
+
     == render partial: "stats/ga" if Rails.env.production?
+    == render partial: "stats/metrika" if Rails.env.production?
 
   body lang="#{locale}" ng-app="rating"
     #container
