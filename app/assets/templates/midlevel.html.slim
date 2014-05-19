@@ -70,13 +70,13 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
         .details.brd-l-lf
           .brd-l-bt.txt-16.txt-white.header
             .fl-right.brd-l-lf.close
-              a.bl href="javascript:;" ng-click="closeMidlevel()"
+              a.bl href="javascript:;" ng-click="close_midlevel()"
                 img.spr.close src="/i/blank.gif" alt=""
             .pd-20 = "{{ 'midlevel.title' | i18n }}"
 
           .reviews
             .pd-20 = "{{ 'card.picked' | i18n }}"
-            div ng-repeat="criterion in search.criteria()" 
+            div ng-repeat="criterion in search.criteria()" ng-init="alternative_reviews_shown = ($index==0)"
               .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
                 .fl-right.check : a.bl ng-click='search.drop(criterion)' : img.spr.checked[src="/i/blank.gif" alt=""]
                 .fl-left.number
@@ -86,16 +86,16 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
                 .fl-left.name = "{{ criterion.name }}"
                 .progress class="p-{{ current_alternative.progress(criterion) }}"
 
-              .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-if="alternative_reviews_shown && current_alternative.reviews[criterion.id]"
+              .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-show="alternative_reviews_shown" ng-if="current_alternative.reviews[criterion.id]"
                 .arrow : img.spr.arrow-opinions src="/i/blank.gif" alt=""
-                .midlevel-item ng-repeat="review in current_alternative.reviews[criterion.id]"
+                .midlevel-item ng-repeat="review in current_alternative.reviews[criterion.id] | limitTo:3"
                   .upic.fl-left : img src="/i/upic.png" alt=""
                   .text
                     ' &laquo;{{ review.sentences[0] }}
                     span.txt-white' "{{ review.sentences[1] }}"
                     ' {{ review.sentences[2] }}&raquo;
                     span.txt-white = "{{ review.score }}"
-                    a.source.txt-10.txt-grey href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
+                    span.source.txt-10.txt-grey = "{{ review.agency_name }}"
 
 
 
