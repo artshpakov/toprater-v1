@@ -22,6 +22,9 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
             a href="javascript:;" ng-repeat="medium in current_alternative.media" : img ng-src="{{medium.small_url}}" style="width:44px" alt=""
             .clear
 
+          p : button ng-click="toggle_popup()" Все цены
+          p : button ng-click="toggle_popup()" Подробнее об отеле
+
           /* FREEZE */
           /* .block-links */
           /*   a href="javascript:;" */

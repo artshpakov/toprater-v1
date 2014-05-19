@@ -18,4 +18,9 @@
 
   $scope.range        = _.range
 
+
+  $scope.popup_shown = false
+  $scope.toggle_popup = ->
+    $scope.popup_shown = !$scope.popup_shown
+
 ]

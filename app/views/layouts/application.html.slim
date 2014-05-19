@@ -32,11 +32,13 @@ html
     == render partial: "stats/metrika" if Rails.env.production?
 
   body lang="#{locale}" ng-app="rating"
-    #container
+    #container ng-controller="rating.MainCtrl"
+      == render partial: "partials/popup"
+      
       .wrapper
         == render partial: "partials/header"
 
-      .wrapper ng-controller="rating.MainCtrl"
+      .wrapper
         == yield
         .clear
 

@@ -30,4 +30,11 @@ en:
     title: "Rating built on criteria you've selected"
     outof: "out of"
 
+  signup: "Sign up"
+  how_it_works: "Show me how it works"
   copyright: "All rights reserved"
+  popup:
+    coming_soon: "Coming soon..."
+    post_email: "Post your e-mail to be in touch"
+    email: "E-mail"
+    send: "Subscribe"
