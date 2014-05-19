@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140512202400) do
+ActiveRecord::Schema.define(version: 20140519130441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20140512202400) do
     t.integer "ta_id"
     t.float   "lat"
     t.float   "lng"
+    t.integer "stars"
+    t.text    "address"
   end
 
   create_table "alternatives_criteria", id: false, force: true do |t|
@@ -66,6 +68,16 @@ ActiveRecord::Schema.define(version: 20140512202400) do
   end
 
   add_index "criteria", ["ancestry"], name: "index_criteria_on_ancestry", using: :btree
+
+  create_table "details_csv", id: false, force: true do |t|
+    t.integer "hotel_id"
+    t.integer "review_id"
+    t.integer "external_criteria_id"
+    t.text    "sent1"
+    t.text    "sent2"
+    t.text    "sent3"
+    t.float   "score"
+  end
 
   create_table "media", force: true do |t|
     t.integer  "alternative_id"

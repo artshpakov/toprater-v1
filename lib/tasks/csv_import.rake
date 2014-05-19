@@ -7,53 +7,32 @@ namespace :csv_import do
   CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
   REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
   DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
-  HOTELS_DB_PATH      = ENV['hotels_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-data.db')
-  HOTELS_2_DB_PATH    = ENV['hotels_2_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
+  HOTELS_DB_PATH    = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
   TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
   task :all => :environment do
     Rake::Task['csv_import:criteria'].invoke
     Rake::Task['csv_import:hotels'].invoke
-    Rake::Task['csv_import:hotels_2'].invoke
     Rake::Task['csv_import:tripadvisor_reviews'].invoke
     Rake::Task['csv_import:alternatives_criterion'].invoke
     Rake::Task['csv_import:review_sentences'].invoke
   end
 
-  desc "old shitty hotels data (count: 160)"
   task :hotels => :environment do
+    puts "Proccessing hotels from #{HOTELS_DB_PATH}"
     db = Sequel.connect("sqlite://#{HOTELS_DB_PATH}")
-
-    db[:hotels].each do |hotel_attributes|
-      hotel = Alternative.where(:name => hotel_attributes[:name], :realm_id => 1).first_or_initialize
-      hotel.ta_id = hotel_attributes[:ta_id]
-      hotel.lat   = hotel_attributes[:lat]
-      hotel.lng   = hotel_attributes[:lng]
-      hotel.save!
-
-      # TODO: move to method
-      if hotel_attributes[:photo].present?
-        medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: hotel.id, url: hotel_attributes[:photo], medium_type: 'image')
-        medium.update_attributes(cover: true)
-        KV.set "alt:#{hotel.id}:cover", medium.url(:thumb)
-      end
-    end
-
-    db.disconnect
-  end
-
-  task :hotels_2 => :environment do
-    puts "Proccessing hotels from #{HOTELS_2_DB_PATH}"
-    db = Sequel.connect("sqlite://#{HOTELS_2_DB_PATH}")
 
 
     count = 0
     db[:hotels].each do |hotel|
       count += 1
       record = Alternative.where(:name => hotel[:name], :realm_id => 1).first_or_initialize
-      record.ta_id = hotel[:ta_id]
-      record.lat   = hotel[:lat]
-      record.lng   = hotel[:lng]
+      record.ta_id   = hotel[:ta_id]
+      record.lat     = hotel[:lat]
+      record.lng     = hotel[:lng]
+      record.stars   = hotel[:stars]
+      record.address = hotel[:address]
+
       record.save!
 
       # TODO: move to method
