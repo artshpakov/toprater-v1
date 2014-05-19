@@ -3,7 +3,7 @@
     .content.brd-l-rg.brd-l-lf
       .block-main
         .title
-          .numb class="progress-{{ current_alternative.score/10 | round }}" : span = "{{ current_alternative.index() + 1 }}"
+          .numb class="progress-{{ current_alternative.score/10 | round }}" : span {{ current_alternative.index() + 1 }}
           .block-name
             a.txt-16 href="{{ current_alternative.url(locale) }}" {{ current_alternative.name }}
             .txt-light.txt-12.mt-5 ng-show="current_alternative.reviews_count" {{ 'reviews.found' | i18n:{count: current_alternative.reviews_count} }}
@@ -21,10 +21,10 @@
           .fl-right.brd-l-lf.close
             a.bl href="javascript:;" ng-click="closeMidlevel()"
               img.spr.close src="/i/blank.gif" alt=""
-          .pd-20 = "{{ 'midlevel.title' | i18n }}"
+          .pd-20 {{ 'midlevel.title' | i18n }}
 
         .reviews
-          .pd-20 = "{{ 'card.picked' | i18n }}"
+          .pd-20 {{ 'card.picked' | i18n }}
           div ng-repeat="criterion in search.criteria()" 
             .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
               .fl-right.check : a.bl ng-click='search.drop(criterion)' : img.spr.checked[src="/i/blank.gif" alt=""]
@@ -32,7 +32,7 @@
                 ' \#{{ current_alternative.scores[criterion.id].position }}
                 span.txt-grey
                   | {{ "midlevel.outof" | i18n }} {{ current_alternative.scores[criterion.id].out_of }}
-              .fl-left.name = "{{ criterion.name }}"
+              .fl-left.name {{ criterion.name }}
               .progress class="p-{{ current_alternative.progress(criterion) }}"
 
             .opinions.brd-l-tp.brd-l-bt.pt-20.pl-20 ng-if="alternative_reviews_shown && current_alternative.reviews[criterion.id]"
@@ -41,9 +41,9 @@
                 .upic.fl-left : img src="/i/upic.png" alt=""
                 .text
                   ' &laquo;{{ review.sentences[0] }}
-                  span.txt-white' "{{ review.sentences[1] }}"
+                  span.txt-white' {{ review.sentences[1] }}
                   ' {{ review.sentences[2] }}&raquo;
-                  span.txt-white = "{{ review.score }}"
+                  span.txt-white {{ review.score }}
                   a.source.txt-10.txt-grey href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
 
 hr

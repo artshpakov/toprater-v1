@@ -16,13 +16,13 @@
 
 ul.params
   li.caption.noborder
-    span = "{{ 'card.picked' | i18n }}"
+    span {{ 'card.picked' | i18n }}
   li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria() | limitTo:2" ng-click="criterion.toggle()" ng-if="alternative.grade(criterion)"
     .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
     span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
     span bo-text='criterion.name'
   li.caption
-    span = "{{ 'card.recommended' | i18n }}"
+    span {{ 'card.recommended' | i18n }}
   li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria | filter:unused() | orderBy:grade | limitTo:2" ng-click="search.pick(criterion)"
     .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
     span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
@@ -36,13 +36,13 @@ ul.params
   .params.full
     ul.params.full
       li.caption.noborder
-        span = "{{ 'card.picked' | i18n }}"
+        span {{ 'card.picked' | i18n }}
       li.checked.cursor bindonce=true ng-repeat="criterion in search.criteria()" ng-click="criterion.toggle()" ng-if="alternative.grade(criterion)"
         .fl-right.checked : img.spr.checked alt="" src="/i/blank.gif"
         span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"
         span bo-text="criterion.name"
       li.caption
-        span = "{{ 'card.recommended' | i18n }}"
+        span {{ 'card.recommended' | i18n }}
       li.cursor bindonce=true ng-repeat="criterion in alternative.top_criteria | filter:unused() | orderBy:grade" ng-click="search.pick(criterion)"
         .fl-right.unchecked : img.spr alt="" src="/i/blank.gif"
         span.numb bo-text="alternative.get_rating(criterion) | toStringWithFloatNum"

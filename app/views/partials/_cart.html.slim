@@ -3,4 +3,4 @@
     img.spr.cleartags alt="" src="/i/blank.gif" ng-click="search.reset()"
   ul.tags
     li ng-repeat="item in search.items" class="{{ item.type }}" ng-class="{ active: item.active }" ng-click="item.toggle()"
-      span = "{{ item.name }}"
+      span {{ item.name }}
