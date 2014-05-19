@@ -7,44 +7,20 @@ namespace :csv_import do
   CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
   REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
   DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
-  HOTELS_DB_PATH      = ENV['hotels_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-data.db')
-  HOTELS_2_DB_PATH    = ENV['hotels_2_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
+  HOTELS_DB_PATH    = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
   TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
   task :all => :environment do
     Rake::Task['csv_import:criteria'].invoke
     Rake::Task['csv_import:hotels'].invoke
-    Rake::Task['csv_import:hotels_2'].invoke
     Rake::Task['csv_import:tripadvisor_reviews'].invoke
     Rake::Task['csv_import:alternatives_criterion'].invoke
     Rake::Task['csv_import:review_sentences'].invoke
   end
 
-  desc "old shitty hotels data (count: 160)"
   task :hotels => :environment do
+    puts "Proccessing hotels from #{HOTELS_DB_PATH}"
     db = Sequel.connect("sqlite://#{HOTELS_DB_PATH}")
-
-    db[:hotels].each do |hotel_attributes|
-      hotel = Alternative.where(:name => hotel_attributes[:name], :realm_id => 1).first_or_initialize
-      hotel.ta_id = hotel_attributes[:ta_id]
-      hotel.lat   = hotel_attributes[:lat]
-      hotel.lng   = hotel_attributes[:lng]
-      hotel.save!
-
-      # TODO: move to method
-      if hotel_attributes[:photo].present?
-        medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: hotel.id, url: hotel_attributes[:photo], medium_type: 'image')
-        medium.update_attributes(cover: true)
-        KV.set "alt:#{hotel.id}:cover", medium.url(:thumb)
-      end
-    end
-
-    db.disconnect
-  end
-
-  task :hotels_2 => :environment do
-    puts "Proccessing hotels from #{HOTELS_2_DB_PATH}"
-    db = Sequel.connect("sqlite://#{HOTELS_2_DB_PATH}")
 
 
     count = 0
@@ -57,11 +33,31 @@ namespace :csv_import do
       record.save!
 
       # TODO: move to method
+      # - Photo 
       if hotel[:photo].present?
         medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: record.id, url: hotel[:photo], medium_type: 'image')
         medium.update_attributes(cover: true)
         KV.set "alt:#{record.id}:cover", medium.url(:thumb)
       end
+
+      group = Property::Group.where(:name => Alternative::HOTEL_ATTRIBUTES_GROUP_NAME).first_or_create!
+
+      # - Address
+      if hotel[:address].present?
+        field = Property::Field.where(:name => 'Address', :short_name => 'address', :group_id => group.id, :field_type => 'text').first_or_create!
+        property = Property::Value.where(:field_id => field.id, :alternative_id => record.id).first_or_initialize
+        property.value = hotel[:address]
+        property.save! if property.value_changed?
+      end
+
+      # - Stars
+      if hotel[:stars].present?
+        field = Property::Field.where(:name => 'Stars', :short_name => 'stars', :group_id => group.id, :field_type => 'integer').first_or_create!
+        property = Property::Value.where(:field_id => field.id, :alternative_id => record.id).first_or_initialize
+        property.value = hotel[:stars]
+        property.save! if property.value_changed?
+      end
+
     end
 
     puts "Processed #{count} hotels"

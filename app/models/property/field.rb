@@ -4,4 +4,7 @@ class Property::Field < ActiveRecord::Base
 
   belongs_to :group
   has_many :values
+
+  scope :with_types, ->(types) { where(:field_type => types) }
+
 end

@@ -1,5 +1,7 @@
 class Alternative < ActiveRecord::Base
 
+  HOTEL_ATTRIBUTES_GROUP_NAME = 'Hotel attributes'
+
   has_many :alternatives_criteria, dependent: :delete_all
   has_many :criteria, through: :alternatives_criteria
   has_many :reviews, dependent: :destroy

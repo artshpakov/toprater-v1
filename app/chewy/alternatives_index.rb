@@ -53,11 +53,14 @@ class AlternativesIndex < Chewy::Index
       )
     end
 
-    Property::Field.find_each do |prop|
-      expand_nested NotNullField.new(
-        :"prop_#{prop.id}", type: 'boolean',
-        value: -> { property_values.select {|ap| ap.field_id == prop.id}.map(&:value).first }
-      )
+    ['boolean', 'integer'].each do |property_type|
+      Property::Field.with_types('boolean').find_each do |prop|
+        expand_nested NotNullField.new(
+          :"prop_#{prop.id}", type: property_type,
+          value: -> { property_values.select {|ap| ap.field_id == prop.id}.map(&:value).first }
+        )
+      end
     end
+
   end
 end
