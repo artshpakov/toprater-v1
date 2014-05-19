@@ -40,9 +40,10 @@
               .midlevel-item ng-repeat="review in current_alternative.reviews[criterion.id]"
                 .upic.fl-left : img src="/i/upic.png" alt=""
                 .text
-                  ' &laquo;{{ review.sentences[0] }}.
-                  span.txt-white' title="{{ review.score }}" = "{{ review.sentences[1] }}."
-                  | {{ review.sentences[2] }}&raquo;
+                  ' &laquo;{{ review.sentences[0] }}
+                  span.txt-white' "{{ review.sentences[1] }}"
+                  ' {{ review.sentences[2] }}&raquo;
+                  span.txt-white = "{{ review.score }}"
                   a.source.txt-10.txt-grey href="{{ review.agency_url }}" target="_blank" {{ review.agency_name }}
 
 hr
