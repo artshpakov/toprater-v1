@@ -1,7 +1,6 @@
-/ render partial: "partials/filters"
-/ section.w-970
-section.w-full style="border-right:1px solid #d4d8dc"
-  == render partial: "partials/querystring"
+= render partial: "partials/filters"
+section.w-970 
+  = render partial: "partials/querystring"
 
 section#rating ng-class="{ wide: cards_in_row==5 }"
   == render partial: "partials/cart"

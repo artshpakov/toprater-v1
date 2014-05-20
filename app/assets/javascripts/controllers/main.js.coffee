@@ -23,4 +23,27 @@
   $scope.toggle_popup = ->
     $scope.popup_shown = !$scope.popup_shown
 
+  $scope.StaticFilters = {
+    list: [
+      { id: window.rating_data.stars_property_id, type: 'static_filter', name: 'stars', value: null, values: [2,3,4,5], active: false }
+    ]
+
+    get         : (name) -> _.findWhere(@list, name: name)
+
+    is_selected : (filter_type, value) -> Search.is_picked @get(filter_type), value
+
+    pick        : (type, value) ->
+      filter_object = @get(type)
+
+      if value == filter_object.value
+        filter_object.value = null
+        Search.drop(filter_object)
+      else
+        if Search.is_picked(filter_object)
+          Search.drop(filter_object)
+
+        filter_object.value = value
+        Search.pick filter_object, true, true
+  }
+
 ]

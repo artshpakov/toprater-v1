@@ -1,6 +1,7 @@
 class Alternative < ActiveRecord::Base
 
   HOTEL_ATTRIBUTES_GROUP_NAME = 'Hotel attributes'
+  STARS_PROPERTY_FIELD_SHORT_NAME = 'stars'
 
   has_many :alternatives_criteria, dependent: :delete_all
   has_many :criteria, through: :alternatives_criteria
@@ -31,6 +32,13 @@ class Alternative < ActiveRecord::Base
 
   def realm
     Realm.find(realm_id)
+  end
+
+  def self.stars_property_id
+    group = Property::Group.where(:name => HOTEL_ATTRIBUTES_GROUP_NAME).first
+    field = Property::Field.where(:group_id => group.id, :short_name => STARS_PROPERTY_FIELD_SHORT_NAME).first
+
+    field.try(:id)
   end
 
 end

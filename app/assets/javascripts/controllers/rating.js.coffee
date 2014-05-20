@@ -1,9 +1,10 @@
-@rating.controller "rating.RatingCtrl", ["$scope", "$routeParams", "Alternative", "Search", ($scope, $routeParams, Alternative, Search) ->
+@rating.controller "rating.RatingCtrl", ["$scope", "$routeParams", "Alternative", "Search", '$rootScope', ($scope, $routeParams, Alternative, Search, $rootScope) ->
 
   $scope.$parent.realm = $routeParams.realm
 
   $scope.$watch 'search.items.length',    -> Alternative.rate()
   $scope.$watch 'search.active().length', -> Alternative.rate()
+  $rootScope.$on 'signal:force_search', -> Alternative.rate()
 
 
   $scope.current_alternative = Alternative.current_alternative

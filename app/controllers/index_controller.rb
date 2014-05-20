@@ -3,6 +3,8 @@ class IndexController < ApplicationController
   def index
     gon.realms = Realm.all
 
+    gon.stars_property_id = Alternative.stars_property_id
+
     @criteria = Criterion.roots
     gon.rabl template: "app/views/criteria/index.json.rabl", as: :criteria
 

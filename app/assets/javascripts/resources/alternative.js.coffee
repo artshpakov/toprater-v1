@@ -3,9 +3,17 @@
   criteria_to_params = ->
     ids = _.pluck(Search.criteria(), 'id')
     criterion_ids: ids.join(',') if ids.length
+
   filters_to_params  = ->
     _.tap {}, (hash) -> for filter in Search.properties()
       hash["prop[#{ filter.id }]"] = 1
+
+  static_filters_to_params = ->
+    result = {}
+    _.each Search.static_filters(), (filter) ->
+      result["gte_prop[#{filter.id}]"] = filter.value
+
+    result
 
 
   Alternative = $resource '/:realm/alternatives/:id.json', { id: '@id', realm: 'hotels' }, update: { method: 'PUT' }
@@ -17,7 +25,11 @@
     Alternative.all.indexOf @
 
   Alternative.rate = ->
-    params = _.extend filters_to_params(), criteria_to_params()
+    params = {}
+
+    _.each [filters_to_params(), criteria_to_params(), static_filters_to_params()], (paramsObject) ->
+      params = _.extend(params, paramsObject)
+
     # unless _.isEmpty(params)
     @query(params).$promise.then (alternatives) =>
       @all = _.map alternatives, (attrs) ->
