@@ -78,7 +78,7 @@ div ng-if="current_alternative && last_in_row($index) && belongs_here($index) &&
                 img.spr.close src="/i/blank.gif" alt=""
             .pd-20 {{ 'midlevel.title' | i18n }}
 
-          .reviews
+          .reviews sm-nanoscroll=true
             .pd-20 {{ 'card.picked' | i18n }}
             div ng-repeat="criterion in search.criteria()" ng-init="alternative_reviews_shown = ($index==0)"
               .midlevel-item.pl-20.txt-white ng-click="alternative_reviews_shown=!alternative_reviews_shown"
