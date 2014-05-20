@@ -20,8 +20,6 @@ class AlternativesController < ApplicationController
   end
 
   def index
-    @criterion_ids = (params[:criterion_ids] || '').split(",")
-
     alternatives_query = AlternativesIndex.limit(20)
 
     if params[:prop].present?
@@ -29,8 +27,8 @@ class AlternativesController < ApplicationController
       alternatives_query = alternatives_query.merge(AlternativesIndex.filter(bool: {must: properties}))
     end
 
-    if @criterion_ids.present?
-      alternatives_query = alternatives_query.merge(AlternativesIndex.score_by(@criterion_ids))
+    if params[:criterion_ids].present?
+      alternatives_query = alternatives_query.merge(AlternativesIndex.score_by(params[:criterion_ids]))
     end
 
     # this is madness!
@@ -41,7 +39,7 @@ class AlternativesController < ApplicationController
 
     @alternatives = alternative_ids.any? ? Alternative.where(id: alternative_ids) : []
 
-    if @criterion_ids.any?
+    if params[:criterion_ids].any?
       sorted_alternatives = []
       @alternatives.each do |a|
         position = alternative_ids.index(a.id)
