@@ -11,7 +11,7 @@
   static_filters_to_params = ->
     result = {}
     _.each Search.static_filters(), (filter) ->
-      result["gte_prop[#{filter.id}]"] = filter.value
+      result["prop[#{filter.id}]"] = filter.value
 
     result
 

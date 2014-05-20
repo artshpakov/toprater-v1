@@ -29,13 +29,6 @@ class AlternativesController < ApplicationController
       alternatives_query = alternatives_query.merge(AlternativesIndex.filter(bool: {must: properties}))
     end
 
-    if params[:gte_prop].present?
-      filter_query = {}
-      params[:gte_prop].each { |k,v| filter_query["prop_#{k}"] = { :gte => v.to_i } }
-
-      alternatives_query = alternatives_query.merge(AlternativesIndex.filter(:range => filter_query))
-    end
-
     if @criterion_ids.present?
       alternatives_query = alternatives_query.merge(AlternativesIndex.score_by(@criterion_ids))
     end
