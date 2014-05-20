@@ -30,7 +30,8 @@ ul.params
 
 .full-wrapper ng-class="{ visible: alternative.extended }"
   .show-all.bg-blue.full
-    .fl-right.show-all-right : img.spr.arrow.down alt="" src="/i/blank.gif"
+    a.fl-right.show-all-right href="javascript:;" ng-click="toggle_extended_version(alternative)"
+      img.spr.arrow.down alt="" src="/i/blank.gif"
     a href="javascript:;" ng-click="toggle_extended_version(alternative)" {{ 'card.hide' | i18n }}
 
   .params.full
