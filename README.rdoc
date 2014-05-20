@@ -3,3 +3,9 @@
 Put SQlite databases in rails /tmp
 
 $ rake import:hotels import:booking
+
+== Seeds
+
+Seeds contains important Alternatives (hotels) properties. For example hotel-stars properties. This data is required for ui.
+
+$ bundle exec rake db:seed

@@ -35,10 +35,11 @@ class Alternative < ActiveRecord::Base
   end
 
   def self.stars_property_id
-    group = Property::Group.where(:name => HOTEL_ATTRIBUTES_GROUP_NAME).first
-    field = Property::Field.where(:group_id => group.id, :short_name => STARS_PROPERTY_FIELD_SHORT_NAME).first
+    if group = Property::Group.where(:name => HOTEL_ATTRIBUTES_GROUP_NAME).first
+      field = Property::Field.where(:group_id => group.id, :short_name => STARS_PROPERTY_FIELD_SHORT_NAME).first
 
-    field.try(:id)
+      field.try(:id)
+    end
   end
 
 end
