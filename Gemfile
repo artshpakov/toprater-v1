@@ -45,6 +45,7 @@ gem 'unicorn'
 
 # js libs
 gem 'rails-assets-angular-bindonce'
+gem 'rails-assets-jquery-mousewheel'
 
 group :development do
   gem 'thin'

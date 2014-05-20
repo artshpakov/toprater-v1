@@ -162,6 +162,9 @@ GEM
       railties (= 4.0.4)
       sprockets-rails (~> 2.0.0)
     rails-assets-angular-bindonce (0.3.1)
+    rails-assets-jquery (2.1.1)
+    rails-assets-jquery-mousewheel (3.1.9)
+      rails-assets-jquery (>= 1.2.2)
     railties (4.0.4)
       actionpack (= 4.0.4)
       activesupport (= 4.0.4)
@@ -272,6 +275,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 4.0)
   rails-assets-angular-bindonce
+  rails-assets-jquery-mousewheel
   redis
   redis-namespace
   rollbar
