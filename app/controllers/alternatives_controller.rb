@@ -6,6 +6,8 @@ class AlternativesController < ApplicationController
 
   helper_method :alternative, :alternatives
 
+  before_filter :get_criterion_ids
+
 
   def show
     respond_to do |format|
@@ -14,14 +16,11 @@ class AlternativesController < ApplicationController
       end
       format.json do
         @alternative = Alternative.find_by! id: params[:id]
-        @criterion_ids = params[:criterion_ids].split(',') if params[:criterion_ids].present?
       end
     end
   end
 
   def index
-    @criterion_ids = (params[:criterion_ids] || '').split(",")
-
     alternatives_query = AlternativesIndex.limit(20)
 
     if params[:prop].present?
@@ -54,7 +53,6 @@ class AlternativesController < ApplicationController
 
   def midlevel
     @alternative = Alternative.find_by! id: params[:id]
-    @criterion_ids = params[:criterion_ids].split(',') if params[:criterion_ids].present?
   end
 
 
@@ -66,6 +64,12 @@ class AlternativesController < ApplicationController
 
   def alternatives
     AlternativeDecorator.decorate_collection collection
+  end
+
+  def get_criterion_ids
+    if params[:criterion_ids].present?
+      @criterion_ids = params[:criterion_ids].split(',')
+    end
   end
 
 end
