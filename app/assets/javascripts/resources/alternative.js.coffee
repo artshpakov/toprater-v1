@@ -1,7 +1,8 @@
 @rating.factory 'Alternative', ["$resource", "Criterion", "Search", "$http", ($resource, Criterion, Search, $http) ->
 
   criteria_to_params = ->
-    { 'criterion_ids[]': _.pluck(Search.criteria(), 'id') }
+    ids = _.pluck(Search.criteria(), 'id')
+    criterion_ids: ids.join(',') if ids.length
 
   filters_to_params  = ->
     _.tap {}, (hash) -> for filter in Search.properties()
