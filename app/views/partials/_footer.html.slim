@@ -1,2 +1,6 @@
 footer
+  div style="float:left"
+    == render partial: "stats/ga"
+    == render partial: "stats/metrika"
+
   .wrapper.txt-12.pd-20 &copy; Sentimeta, #{ Date.today.strftime '%Y' }. #{ t "copyright" }.
