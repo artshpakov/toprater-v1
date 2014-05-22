@@ -40,7 +40,7 @@ class AlternativesController < ApplicationController
 
     @alternatives = alternative_ids.any? ? Alternative.where(id: alternative_ids) : []
 
-    if @criterion_ids.any?
+    if @criterion_ids.present?
       sorted_alternatives = []
       @alternatives.each do |a|
         position = alternative_ids.index(a.id)
