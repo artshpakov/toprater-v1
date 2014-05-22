@@ -21,6 +21,8 @@
 
     data: {
       displayKey: 'name'
+      templates:
+        suggestion: (tip) -> "<div class='result #{ tip.type }'>#{ tip.name }<small><span>#{ I18n.translate("main.#{tip.type}") }</span><span>#{ I18n.translate("realm.#{tip.realm}") }</span></small></div>"
       source: (search_term, callback_fn) ->
         Search.query {q: search_term}, (response) ->
           callback_fn(response)

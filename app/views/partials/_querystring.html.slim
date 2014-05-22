@@ -3,19 +3,17 @@ div ng-controller="rating.SearchCtrl"
     .fl-right.slide.up.bg-light.txt-center.cursor ng-click="$parent.cart_visible=!$parent.cart_visible"
       img.spr.slide.up alt="" src="/i/blank.gif"
     #searchline
-      /* input.search-top type="text" placeholder="#{ t "search.placeholder" }" ng-model="query" ng-blur="reset_search()" */
+      input#search-box.sfTypeahead.search-top type='text' options='search_box.options' ng-model='search_box.selected_object' datasets='search_box.data' placeholder=t('search.placeholder')
 
-      input id='search-box' class='sfTypeahead' type='text' options='search_box.options' ng-model='search_box.selected_object' datasets='search_box.data'
-
-      div role="search-results" style="z-index: 1000"
-        ul ng-show="tips.length"
-          li ng-repeat="tip in tips" class="result {{ tip.type }}"
-            a href="javascript:;" ng-click="pick_tip(tip)"
-              div ng-if="tip.type=='realm'"
-                | {{ "realm."+tip.name | i18n | capitalize }}
-              div ng-if="tip.type!='realm'"
-                | {{ tip.name }}
-                small ng-if="tip.type!='realm'"
-                  span ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
-                  span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
+      / div role="search-results" style="z-index: 1000"
+      /   ul ng-show="tips.length"
+      /     li ng-repeat="tip in tips" class="result {{ tip.type }}"
+      /       a href="javascript:;" ng-click="pick_tip(tip)"
+      /         div ng-if="tip.type=='realm'"
+      /           | {{ "realm."+tip.name | i18n | capitalize }}
+      /         div ng-if="tip.type!='realm'"
+      /           | {{ tip.name }}
+      /           small ng-if="tip.type!='realm'"
+      /             span ng-if="tip.type" {{ 'main.' + tip.type | i18n }}
+      /             span ng-if="tip.realm" {{ 'realm.' + tip.realm | i18n }}
     .clear
