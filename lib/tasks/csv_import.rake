@@ -7,7 +7,7 @@ namespace :csv_import do
   CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
   REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
   DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
-  HOTELS_DB_PATH    = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
+  HOTELS_DB_PATH      = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
   TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
   task :all => :environment do
@@ -18,14 +18,24 @@ namespace :csv_import do
     Rake::Task['csv_import:review_sentences'].invoke
   end
 
+  task :delete_all => :environment do
+    Alternative.delete_all
+    AlternativesCriterion.delete_all
+    Review.delete_all
+    ReviewSentence.delete_all
+    Property::Field.delete_all
+    Criterion.delete_all
+  end
+
   task :hotels => :environment do
     puts "Proccessing hotels from #{HOTELS_DB_PATH}"
     db = Sequel.connect("sqlite://#{HOTELS_DB_PATH}")
 
+    progress_bar = ProgressBar.create(:title => 'hotels', :total => db[:hotels].count)
 
-    count = 0
     db[:hotels].each do |hotel|
-      count += 1
+      progress_bar.increment
+
       record = Alternative.where(:name => hotel[:name], :realm_id => 1).first_or_initialize
       record.ta_id = hotel[:ta_id]
       record.lat   = hotel[:lat]
@@ -60,30 +70,62 @@ namespace :csv_import do
 
     end
 
-    puts "Processed #{count} hotels"
     db.disconnect
   end
 
   task :tripadvisor_reviews => :environment do
     puts "processing Reviews from #{TRIADVISOR_DATA_DB_PATH}"
-    db = Sequel.connect("sqlite://#{TRIADVISOR_DATA_DB_PATH}")
 
-    db[:reviews].where(owner_response: nil).each do |review_attributes|
-      hotel_id = Alternative.where(:ta_id => review_attributes[:hotel_id]).first.try(:id)
-      if hotel_id
-        review = Review::Tripadvisor.find_or_initialize_by(alternative_id: hotel_id, agency_id: review_attributes[:ta_id])
-        if review.new_record?
-          review_attributes[:date] = begin
-            Time.parse(review_attributes[:date])
-          rescue
-            nil
-          end
-          review.update_attributes(review_attributes.slice(:body, :date))
-        end
-      end
-    end
+    # csv file for export from sqlite3
+    export_file_path = File.join(Rails.root, DATA_FILES_PATH, "export_#{Time.now.to_i}.csv")
 
-    db.disconnect
+    # export to sqlite3
+    original_fields = {
+      :ta_id => 'integer',
+      :member => 'text',
+      :body => 'text',
+      :badges => 'text',
+      :date => 'date',
+      :rating => 'float',
+      :title => 'varchar(255)',
+      :url => 'varchar(255)',
+      :hotel_id => 'integer',
+      :lang => 'varchar(255)',
+      :owner_response => 'boolean',
+      :respond_to => 'integer'
+    }
+
+    `sqlite3 #{TRIADVISOR_DATA_DB_PATH} "SELECT #{ original_fields.keys.join(', ') } FROM reviews" -header -csv >> #{export_file_path}`
+
+    # process in pg
+    db = ActiveRecord::Base.connection
+
+    # create TEMP table
+    table_name = 'reviews_csv_import_temp'
+
+    db.execute <<-SQL
+      CREATE TEMP TABLE #{table_name} ( #{ original_fields.map { |k,v| "#{k} #{v}" }.join(', ') } );
+    SQL
+
+    # import to TEMP table
+    db.execute <<-SQL
+      COPY #{table_name} FROM '#{export_file_path}' CSV HEADER;
+    SQL
+
+    # # import from TEMP table to real table
+    db.execute <<-SQL
+      INSERT INTO reviews ( alternative_id, body, date, type, agency_id )
+        SELECT
+          alternatives.id,
+          #{table_name}.body,
+          #{table_name}.date,
+          'Review::TripAdvisor',
+          #{table_name}.ta_id
+        FROM #{table_name}
+
+        INNER JOIN
+          alternatives ON alternatives.ta_id = #{table_name}.ta_id
+    SQL
   end
 
   task :criteria => :environment do
