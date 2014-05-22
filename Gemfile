@@ -46,6 +46,8 @@ gem 'unicorn'
 # js libs
 gem 'rails-assets-angular-bindonce'
 gem 'rails-assets-jquery-mousewheel'
+gem 'rails-assets-typeahead.js'
+gem 'rails-assets-angular-typeahead'
 
 group :development do
   gem 'thin'
