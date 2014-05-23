@@ -10,13 +10,13 @@ namespace :csv_import do
   HOTELS_DB_PATH      = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
   TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
-  task :all => :environment do
-    Rake::Task['csv_import:criteria'].invoke
-    Rake::Task['csv_import:hotels'].invoke
-    Rake::Task['csv_import:tripadvisor_reviews'].invoke
-    Rake::Task['csv_import:alternatives_criterion'].invoke
-    Rake::Task['csv_import:review_sentences'].invoke
-  end
+  # task :all => :environment do
+  #   Rake::Task['csv_import:criteria'].invoke
+  #   Rake::Task['csv_import:hotels'].invoke
+  #   Rake::Task['csv_import:tripadvisor_reviews'].invoke
+  #   Rake::Task['csv_import:alternatives_criterion_fast'].invoke
+  #   Rake::Task['csv_import:review_sentences_fast'].invoke
+  # end
 
   task :delete_all => :environment do
     Alternative.delete_all
@@ -43,7 +43,7 @@ namespace :csv_import do
       record.save!
 
       # TODO: move to method
-      # - Photo 
+      # - Photo
       if hotel[:photo].present?
         medium = Medium::TripAdvisor.find_or_initialize_by(alternative_id: record.id, url: hotel[:photo], medium_type: 'image')
         medium.update_attributes(cover: true)
@@ -140,40 +140,39 @@ namespace :csv_import do
     puts "criteria processed"
   end
 
-  task :alternatives_criterion => :environment do
-    puts "Proccessing AlternativesCriterion from #{REVIEWS_CSV_PATH}" 
+  task :alternatives_criterion_fast => :environment do
+    input_path = ENV['input_path']
 
-    counters = { :processed => 0, :created => 0 }
+    db = ActiveRecord::Base.connection
+    table_name = 'alternatives_criterion_temp'
 
-    CSV.foreach(REVIEWS_CSV_PATH, headers: true) do |row|
-      counters[:processed] += 1
+    db.execute <<-SQL
+      CREATE TEMP TABLE #{table_name} ( ta_id integer, criterion_id integer, rating float, reviews_count integer, rank integer );
 
-      hotel_id = Alternative.where(:ta_id => row[0]).first.try(:id)
-      next if hotel_id.nil?
+      COPY #{table_name} FROM '#{input_path}' CSV;
 
-      Criterion.all.each do |criterion|
-        criteria_count = row["count_#{criterion.external_id}"]
+      CREATE INDEX ta_id_idx ON #{table_name} (ta_id);
+    SQL
 
-        if criteria_count.to_i > 0
-          record = AlternativesCriterion.where(:alternative_id => hotel_id, :criterion_id => criterion.id).first_or_initialize
+    db.execute <<-SQL
+      INSERT INTO alternatives_criteria (alternative_id, criterion_id, rating, reviews_count, rank)
 
-          if record.new_record? # really?
-            record.reviews_count = criteria_count
-            record.rating        = row["criteria_#{criterion.external_id}"]
-            record.rank          = row["rank_#{criterion.external_id}"]
-            record.save!
+        SELECT
+          alternatives.id,
+          criteria.id,
+          #{table_name}.rating,
+          #{table_name}.reviews_count,
+          #{table_name}.rank
 
-            counters[:created] += 1
-          end
-        end
-      end
+        FROM #{table_name}
 
-    end # CSV.foreach
+        INNER JOIN
+          alternatives ON alternatives.ta_id = #{table_name}.ta_id
+        INNER JOIN
+          criteria ON criteria.external_id = #{table_name}.criterion_id
+    SQL
 
-    puts "Reviews.csv processed"
-    puts counters.inspect
-
-  end # task :reviews
+  end
 
   task :review_sentences_fast => :environment do
     require 'benchmark'
@@ -184,19 +183,19 @@ namespace :csv_import do
     # create TEMP table
     table_name = "csv_import_data_temp"
     db.execute("CREATE TEMP TABLE #{table_name} ( ta_id integer, agency_id integer, external_criterion_id integer, sent1 text, sent2 text, sent3 text, score float )")
-    db.execute("CREATE INDEX ta_and_agency_ids_idx ON #{table_name} (ta_id, agency_id)")
 
     # fill TEMP table with data
     db.execute("COPY #{table_name} FROM '#{DETAILS_CSV_PATH}' CSV HEADER")
+    db.execute("CREATE INDEX ta_and_agency_ids_idx ON #{table_name} (ta_id, agency_id)")
 
     bench = Benchmark.measure do
 
       db.execute <<-SQL
         INSERT INTO review_sentences ( alternative_id, criterion_id, review_id, sentences, score, created_at, updated_at )
-          SELECT 
-            alternatives.id, 
-            criteria.id, 
-            reviews.id, 
+          SELECT
+            alternatives.id,
+            criteria.id,
+            reviews.id,
             array_to_json(ARRAY[#{table_name}.sent1, #{table_name}.sent2, #{table_name}.sent3]),
             #{table_name}.score,
             now(),
@@ -206,7 +205,7 @@ namespace :csv_import do
 
           INNER JOIN
             alternatives ON alternatives.ta_id = #{table_name}.ta_id
-          INNER JOIN 
+          INNER JOIN
             reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id
           INNER JOIN
             criteria ON criteria.external_id = #{table_name}.external_criterion_id
@@ -218,34 +217,34 @@ namespace :csv_import do
 
   end
 
-  task :review_sentences => :environment do
-    puts "Processing ReviewSentence from #{DETAILS_CSV_PATH}"
+  task :prepare_reviews_csv_for_import => :environment do
+    path = ENV['input_path']
+    out_path = ENV['out_path']
 
-    counters = { :missied_criteria_or_review => 0, :created => 0}
+    out_file = File.new(out_path, 'w')
+    out_file.close
 
-    CSV.foreach(DETAILS_CSV_PATH, headers: true) do |row|
-      criterion_id = Criterion.where(:external_id => row[2]).last.try(:id)
-      hotel_id     = Alternative.where(:ta_id => row[0]).first.try(:id)
-      review_id    = Review::Tripadvisor.where(:agency_id => row[1].to_i).first.try(:id)
+    criterion_ids = Criterion.where('external_id IS NOT NULL').pluck(:external_id)
+    criterion_keys = {}
+    criterion_ids.each { |id| criterion_keys[id] = "criteria_#{id}" }
 
-      if criterion_id.blank? or review_id.blank?
-        counters[:missied_criteria_or_review] += 1
-        next
+    CSV.open(out_path, 'a') do |csv|
+      CSV.foreach(path, :headers => true) do |row|
+
+        # row -> ext_ta_id, ext_crit_id, rating, reviews_count, rank
+        new_rows = []
+
+        criterion_ids.each do |id|
+          if row['count_' + id.to_s].to_i > 0
+            new_rows << [ row['hotel_id'].to_i, id, row['criteria_' + id.to_s].to_f, row['count_' + id.to_s].to_i, row['rank_' + id.to_s].to_i ]
+          end
+        end
+
+        new_rows.each do |new_row|
+          csv << new_row
+        end
       end
-
-      record = ReviewSentence.where(:alternative_id => hotel_id, :criterion_id => criterion_id, :review_id => review_id).first_or_initialize
-
-      if record.new_record?
-        record.sentences = [ row[3], row[4], row[5] ]
-        record.score     = row[6]
-        record.save!
-
-        counters[:created] += 1
-      end
-
-    end # CSV.foreach
-
-    puts counters.inspect
-  end # task :details
+    end
+  end
 
 end
