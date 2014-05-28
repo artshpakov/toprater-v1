@@ -119,7 +119,7 @@ namespace :csv_import do
       :respond_to => 'integer'
     }
 
-    `sqlite3 #{input_path} "SELECT #{ original_fields.keys.join(', ') } FROM reviews" -header -csv >> #{export_file_path}`
+    `sqlite3 -header -csv #{input_path} "SELECT #{ original_fields.keys.join(', ') } FROM reviews" >> #{export_file_path}`
 
     # process in pg
     db = ActiveRecord::Base.connection
