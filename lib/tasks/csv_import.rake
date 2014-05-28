@@ -23,13 +23,13 @@ namespace :csv_import do
   # end
 
   def input_path
-    path = ENV['INPUT_PATH'] || ENV['input_path']
+    path = ENV['input_path']
     check_path!(path)
     path
   end
 
   def output_path
-    path = ENV['OUTPUT_PATH'] || ENV['output_path']
+    path = ENV['output_path']
     check_path!(path)
     path
   end
