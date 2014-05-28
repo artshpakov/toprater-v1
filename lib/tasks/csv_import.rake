@@ -1,14 +1,18 @@
+# Each task has input point and some of tasks has output points.
+# Input point should be provided with INPUT_PATH env variable (same for OUTPUT_PATH).
+
 require 'csv'
 
 namespace :csv_import do
 
-  DATA_FILES_PATH = ENV['data_files_path'] || File.join('tmp', 'csv_import')
+  # DATA_FILES_PATH = ENV['data_files_path'] || File.join('tmp', 'csv_import')
+  TMP_PATH = Rails.root.join('tmp')
 
-  CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
-  REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
-  DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
-  HOTELS_DB_PATH      = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
-  TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
+  # CRITERIA_CSV_PATH   = ENV['criteria_path']    || Rails.root.join(DATA_FILES_PATH, 'criteria.csv')
+  # REVIEWS_CSV_PATH    = ENV['reviews_path']     || Rails.root.join(DATA_FILES_PATH, 'reviews.csv')
+  # DETAILS_CSV_PATH    = ENV['details_path']     || Rails.root.join(DATA_FILES_PATH, 'details.csv')
+  # HOTELS_DB_PATH      = ENV['hotels_db_path'] || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-hotels-noreviews-it.db')
+  # TRIADVISOR_DATA_DB_PATH = ENV['ta_db_path']   || Rails.root.join(DATA_FILES_PATH, 'tripadvisor-12-02-2014.db')
 
   # task :all => :environment do
   #   Rake::Task['csv_import:criteria'].invoke
@@ -17,6 +21,24 @@ namespace :csv_import do
   #   Rake::Task['csv_import:alternatives_criterion_fast'].invoke
   #   Rake::Task['csv_import:review_sentences_fast'].invoke
   # end
+
+  def input_path
+    path = ENV['INPUT_PATH'] || ENV['input_path']
+    check_path!(path)
+    path
+  end
+
+  def output_path
+    path = ENV['OUTPUT_PATH'] || ENV['output_path']
+    check_path!(path)
+    path
+  end
+
+  def check_path!(path)
+    unless File.exists?(path)
+      raise Exception, "File not found #{path}"
+    end
+  end
 
   task :delete_all => :environment do
     Alternative.delete_all
@@ -27,9 +49,10 @@ namespace :csv_import do
     Criterion.delete_all
   end
 
+  # Old data source: HOTELS_DB_PATH
   task :hotels => :environment do
-    puts "Proccessing hotels from #{HOTELS_DB_PATH}"
-    db = Sequel.connect("sqlite://#{HOTELS_DB_PATH}")
+    puts "Proccessing hotels from #{input_path}"
+    db = Sequel.connect("sqlite://#{input_path}")
 
     progress_bar = ProgressBar.create(:title => 'hotels', :total => db[:hotels].count)
 
@@ -73,11 +96,12 @@ namespace :csv_import do
     db.disconnect
   end
 
+  # Old data source: TRIADVISOR_DATA_DB_PATH
   task :tripadvisor_reviews => :environment do
-    puts "processing Reviews from #{TRIADVISOR_DATA_DB_PATH}"
+    puts "processing Reviews from #{input_path}"
 
     # csv file for export from sqlite3
-    export_file_path = File.join(Rails.root, DATA_FILES_PATH, "export_#{Time.now.to_i}.csv")
+    export_file_path = File.join(TMP_PATH, "export_#{Time.now.to_i}.csv")
 
     # export to sqlite3
     original_fields = {
@@ -95,7 +119,7 @@ namespace :csv_import do
       :respond_to => 'integer'
     }
 
-    `sqlite3 #{TRIADVISOR_DATA_DB_PATH} "SELECT #{ original_fields.keys.join(', ') } FROM reviews" -header -csv >> #{export_file_path}`
+    `sqlite3 #{input_path} "SELECT #{ original_fields.keys.join(', ') } FROM reviews" -header -csv >> #{export_file_path}`
 
     # process in pg
     db = ActiveRecord::Base.connection
@@ -128,11 +152,12 @@ namespace :csv_import do
     SQL
   end
 
+  # Old data source: CRITERIA_CSV_PATH
   task :criteria => :environment do
-    puts "Processing criteria from #{CRITERIA_CSV_PATH}"
+    puts "Processing criteria from #{input_path}"
     pavel_criterion = Criterion.find_or_create_by(name: "Павел", short_name: "pavel")
 
-    CSV.foreach(CRITERIA_CSV_PATH, headers: true) do |row|
+    CSV.foreach(input_path, headers: true) do |row|
       record = Criterion.where(:short_name => row[1], :name => row[1]).first_or_create!
       record.update_attributes({ :parent => pavel_criterion, :external_id => row[0] })
     end
@@ -141,8 +166,6 @@ namespace :csv_import do
   end
 
   task :alternatives_criterion_fast => :environment do
-    input_path = ENV['input_path']
-
     db = ActiveRecord::Base.connection
     table_name = 'alternatives_criterion_temp'
 
@@ -174,6 +197,7 @@ namespace :csv_import do
 
   end
 
+  # Old data source: DETAILS_CSV_PATH
   task :review_sentences_fast => :environment do
     require 'benchmark'
 
@@ -185,7 +209,7 @@ namespace :csv_import do
     db.execute("CREATE TEMP TABLE #{table_name} ( ta_id integer, agency_id integer, external_criterion_id integer, sent1 text, sent2 text, sent3 text, score float )")
 
     # fill TEMP table with data
-    db.execute("COPY #{table_name} FROM '#{DETAILS_CSV_PATH}' CSV HEADER")
+    db.execute("COPY #{table_name} FROM '#{input_path}' CSV HEADER")
     db.execute("CREATE INDEX ta_and_agency_ids_idx ON #{table_name} (ta_id, agency_id)")
 
     bench = Benchmark.measure do
@@ -218,18 +242,14 @@ namespace :csv_import do
   end
 
   task :prepare_reviews_csv_for_import => :environment do
-    path = ENV['input_path']
-    out_path = ENV['out_path']
-
-    out_file = File.new(out_path, 'w')
-    out_file.close
+    File.new(output_path, 'w').close()
 
     criterion_ids = Criterion.where('external_id IS NOT NULL').pluck(:external_id)
     criterion_keys = {}
     criterion_ids.each { |id| criterion_keys[id] = "criteria_#{id}" }
 
-    CSV.open(out_path, 'a') do |csv|
-      CSV.foreach(path, :headers => true) do |row|
+    CSV.open(output_path, 'a') do |csv|
+      CSV.foreach(input_path, :headers => true) do |row|
 
         # row -> ext_ta_id, ext_crit_id, rating, reviews_count, rank
         new_rows = []
