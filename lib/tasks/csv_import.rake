@@ -127,13 +127,11 @@ namespace :csv_import do
     # create TEMP table
     table_name = 'reviews_csv_import_temp'
 
-    db.execute <<-SQL
-      CREATE TEMP TABLE #{table_name} ( #{ original_fields.map { |k,v| "#{k} #{v}" }.join(', ') } );
-    SQL
-
     # import to TEMP table
     db.execute <<-SQL
+      CREATE TEMP TABLE #{table_name} ( #{ original_fields.map { |k,v| "#{k} #{v}" }.join(', ') } );
       COPY #{table_name} FROM '#{export_file_path}' CSV HEADER;
+      CREATE INDEX ta_id_idx ON #{table_name} (ta_id);
     SQL
 
     # # import from TEMP table to real table
