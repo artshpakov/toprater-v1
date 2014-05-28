@@ -59,7 +59,8 @@ namespace :csv_import do
     db[:hotels].each do |hotel|
       progress_bar.increment
 
-      record = Alternative.where(:name => hotel[:name], :realm_id => 1).first_or_initialize
+      record = Alternative.where(:ta_id => hotel[:ta_id], :realm_id => 1).first_or_initialize
+      record.name  = hotel[:name]
       record.ta_id = hotel[:ta_id]
       record.lat   = hotel[:lat]
       record.lng   = hotel[:lng]
