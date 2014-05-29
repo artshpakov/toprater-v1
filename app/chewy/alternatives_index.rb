@@ -48,7 +48,7 @@ class AlternativesIndex < Chewy::Index
 
     # TODO:
     # FIXME: prop_country_name is bad idea, but it works for now
-    expand_nested NotNullField.new(:prop_country_name, type: 'string', value: ->(record) { record.country_name.downcase })
+    expand_nested NotNullField.new(:prop_country_name, type: 'string', value: ->(record) { record.country_name.try(:downcase ) })
 
     Criterion.rated.find_each do |cr|
       expand_nested NotNullField.new(
