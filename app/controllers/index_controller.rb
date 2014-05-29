@@ -5,6 +5,8 @@ class IndexController < ApplicationController
 
     gon.stars_property_id = Alternative.stars_property_id
 
+    gon.country_names = Country.names
+
     @criteria = Criterion.roots
     gon.rabl template: "app/views/criteria/index.json.rabl", as: :criteria
 

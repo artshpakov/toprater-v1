@@ -22,6 +22,10 @@ en:
   search:
     placeholder: "What matters to you in a hotel, e.g., quality"
 
+  static_filters:
+    country: Country
+    country_prompt: select country
+
   card:
     picked: "You selected"
     recommended: "Recommended"
