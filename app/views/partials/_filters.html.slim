@@ -7,8 +7,8 @@ aside.bg-white ng-class="{ 'rolled-down': filters_shown }"
     /*   .inside.search */
     /*     a href="javascript:;" : img.spr.search alt="" src="/i/blank.gif" */
     /*     input.search[type="text" placeholder="регион, город, или отель"] */
-    /* .filter data-title=t('static_filters.country') */
-      /* = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country_prompt'), 'ng-change' => 'StaticFilters.pick("country", selected_country)', 'ng-model' => 'selected_country' */
+    .filter data-title=t('static_filters.country')
+      = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country_prompt'), 'ng-change' => 'StaticFilters.pick("country", selected_country)', 'ng-model' => 'selected_country'
     .filter sm-drawer="" data-title="Количество звезд"
       .inside.filter-stars
         a ng-repeat="value in StaticFilters.get('stars').values" ng-class="{ active: StaticFilters.is_selected('stars', value) }" ng-bind="value + '*'" ng-click='StaticFilters.pick("stars", value)'
