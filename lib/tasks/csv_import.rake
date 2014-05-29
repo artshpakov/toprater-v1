@@ -147,7 +147,7 @@ namespace :csv_import do
         FROM #{table_name}
 
         INNER JOIN
-          alternatives ON alternatives.ta_id = #{table_name}.ta_id
+          alternatives ON alternatives.ta_id = #{table_name}.hotel_id
     SQL
   end
 
@@ -229,7 +229,7 @@ namespace :csv_import do
           INNER JOIN
             alternatives ON alternatives.ta_id = #{table_name}.ta_id
           INNER JOIN
-            reviews ON reviews.type = 'Review::Tripadvisor' AND reviews.agency_id = #{table_name}.agency_id
+            reviews ON reviews.type = 'Review::TripAdvisor' AND reviews.agency_id = #{table_name}.agency_id
           INNER JOIN
             criteria ON criteria.external_id = #{table_name}.external_criterion_id
       SQL
