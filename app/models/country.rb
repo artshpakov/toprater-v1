@@ -2,7 +2,7 @@
 class Country
 
   def self.names
-    @names ||= Alternative.select('distinct(country_name)').map(&:country_name)
+    @names ||= Alternative.select('distinct(country_name)').map(&:country_name).compact
   end
 
 end
