@@ -64,6 +64,13 @@ namespace :csv_import do
       record.ta_id = hotel[:ta_id]
       record.lat   = hotel[:lat]
       record.lng   = hotel[:lng]
+
+      # - Location name & Country name
+      if location = db[:locations].where(:id => hotel[:location_id]).first
+        record.location_name = location[:name]
+        record.country_name  = db[:countries].where(:id => location[:country_id]).first[:name] rescue nil
+      end
+
       record.save!
 
       # TODO: move to method

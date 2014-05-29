@@ -46,6 +46,10 @@ class AlternativesIndex < Chewy::Index
 
     field :location, type: 'geo_point', lat_lon: true, value: -> { lat && lng && [lng, lat] }
 
+    # TODO:
+    # FIXME: prop_country_name is bad idea, but it works for now
+    expand_nested NotNullField.new(:prop_country_name, type: 'string', value: ->(record) { record.country_name.downcase })
+
     Criterion.rated.find_each do |cr|
       expand_nested NotNullField.new(
         :"cr_#{cr.id}", type: 'double',
