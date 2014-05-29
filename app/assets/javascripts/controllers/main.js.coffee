@@ -34,6 +34,7 @@
     is_selected : (filter_type, value) -> Search.is_picked @get(filter_type), value
 
     pick        : (type, value) ->
+      # for cases then value is one of the select option and prompt option is empty string :)
       if _.isString(value) && _.size(value) == 0
         value = null
 
