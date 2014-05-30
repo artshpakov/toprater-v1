@@ -6,8 +6,8 @@ require 'with_progress'
 
 namespace :csv_import do
 
-  PBAR_FORMAT = "%t: |%B| (%R/s) %c/%C %E"
-  PBAR_DEFS = {format: PBAR_FORMAT, output: STDERR, throttle_rate: 0.1}
+  # redisplay not so often, display rate too. Yeah, constant hashes are not so constant
+  WithProgress::DEFAULTS.merge! format: "%t: |%B| (%R/s) %c/%C %E", output: STDERR, throttle_rate: 0.1
 
   # DATA_FILES_PATH = ENV['data_files_path'] || File.join('tmp', 'csv_import')
   TMP_PATH = Rails.root.join('tmp')
@@ -58,7 +58,7 @@ namespace :csv_import do
     puts "Proccessing hotels from #{input_path}"
     db = Sequel.connect("sqlite://#{input_path}")
 
-    db[:hotels].with_progress(PBAR_DEFS.merge title: 'hotels', total: db[:hotels].count) do |hotel|
+    db[:hotels].with_progress(title: 'hotels', total: db[:hotels].count) do |hotel|
 
       record = Alternative.where(:ta_id => hotel[:ta_id], :realm_id => 1).first_or_initialize
       record.name  = hotel[:name]
