@@ -2,7 +2,7 @@ aside.bg-white ng-class="{ 'rolled-down': filters_shown }"
   .title.main.filters.txt-14 ng-click="toggle_filters()"
     span = t("static_filters.headline")
 
-  #filters-body
+  #filters-body ng-controller="rating.FiltersCtrl"
     / .filter sm-drawer=true data-title="Место / название отеля"
     /   .inside.search
     /     a href="javascript:;" : img.spr.search alt="" src="/i/blank.gif"
@@ -10,11 +10,11 @@ aside.bg-white ng-class="{ 'rolled-down': filters_shown }"
 
     .filter sm-drawer=true data-title=t('static_filters.country.title')
       .inside.search
-        = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country.prompt'), 'ng-change' => 'StaticFilters.pick("country", selected_country)', 'ng-model' => 'selected_country'
+        = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country.prompt'), 'ng-change' => 'static_filters.pick("country", selected_country)', 'ng-model' => 'selected_country'
 
     .filter sm-drawer=true data-title=t('static_filters.stars.title')
       .inside.filter-stars
-        a ng-repeat="value in StaticFilters.get('stars').values" ng-class="{ active: StaticFilters.is_selected('stars', value) }" ng-click='StaticFilters.pick("stars", value)'
+        a ng-repeat="value in static_filters.items.stars.values" ng-class="{ active: static_filters.is_selected('stars', value) }" ng-click='static_filters.pick("stars", value)'
           | {{ value }}
           = fa_icon :star
         .clear
