@@ -7,7 +7,7 @@ gem 'pg'
 gem 'pry-rails'
 gem 'slim'
 gem 'russian'
-gem 'ruby-progressbar'
+gem 'with_progress', require: false
 
 gem 'ancestry'
 gem 'gon'

@@ -2,8 +2,12 @@
 # Input point should be provided with INPUT_PATH env variable (same for OUTPUT_PATH).
 
 require 'csv'
+require 'with_progress'
 
 namespace :csv_import do
+
+  PBAR_FORMAT = "%t: |%B| (%R/s) %c/%C %E"
+  PBAR_DEFS = {format: PBAR_FORMAT, output: STDERR, throttle_rate: 0.1}
 
   # DATA_FILES_PATH = ENV['data_files_path'] || File.join('tmp', 'csv_import')
   TMP_PATH = Rails.root.join('tmp')
@@ -54,10 +58,7 @@ namespace :csv_import do
     puts "Proccessing hotels from #{input_path}"
     db = Sequel.connect("sqlite://#{input_path}")
 
-    progress_bar = ProgressBar.create(:title => 'hotels', :total => db[:hotels].count)
-
-    db[:hotels].each do |hotel|
-      progress_bar.increment
+    db[:hotels].with_progress(PBAR_DEFS.merge title: 'hotels', total: db[:hotels].count) do |hotel|
 
       record = Alternative.where(:ta_id => hotel[:ta_id], :realm_id => 1).first_or_initialize
       record.name  = hotel[:name]
