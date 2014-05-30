@@ -23,8 +23,12 @@ en:
     placeholder: "What matters to you in a hotel, e.g., quality"
 
   static_filters:
-    country: Country
-    country_prompt: select country
+    headline: "filters"
+    stars:
+      title: "Star rating"
+    country:
+      title: "Country"
+      prompt: "select a country"
 
   card:
     picked: "You selected"

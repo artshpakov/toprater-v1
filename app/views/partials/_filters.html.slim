@@ -1,24 +1,25 @@
 aside.bg-white ng-class="{ 'rolled-down': filters_shown }"
   .title.main.filters.txt-14 ng-click="toggle_filters()"
-    span ФИЛЬТРЫ
+    span = t("static_filters.headline")
 
   #filters-body
-    /* .filter sm-drawer="" data-title="Место / название отеля" */
-    /*   .inside.search */
-    /*     a href="javascript:;" : img.spr.search alt="" src="/i/blank.gif" */
-    /*     input.search[type="text" placeholder="регион, город, или отель"] */
-    .filter data-title=t('static_filters.country')
-      = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country_prompt'), 'ng-change' => 'StaticFilters.pick("country", selected_country)', 'ng-model' => 'selected_country'
-    .filter sm-drawer="" data-title="Количество звезд"
+    / .filter sm-drawer=true data-title="Место / название отеля"
+    /   .inside.search
+    /     a href="javascript:;" : img.spr.search alt="" src="/i/blank.gif"
+    /     input.search[type="text" placeholder="регион, город, или отель"]
+
+    .filter sm-drawer=true data-title=t('static_filters.country.title')
+      .inside.search
+        = select_tag :country, options_from_collection_for_select(Country.names, :downcase, :to_s), :prompt => t('static_filters.country.prompt'), 'ng-change' => 'StaticFilters.pick("country", selected_country)', 'ng-model' => 'selected_country'
+
+    .filter sm-drawer=true data-title=t('static_filters.stars.title')
       .inside.filter-stars
-        a ng-repeat="value in StaticFilters.get('stars').values" ng-class="{ active: StaticFilters.is_selected('stars', value) }" ng-bind="value + '*'" ng-click='StaticFilters.pick("stars", value)'
-        /* a href="javascript:;" 2* */
-        /* a href="javascript:;" 3* */
-        /* a href="javascript:;" 4* */
-        /* a.active href="javascript:;" 5* */
+        a ng-repeat="value in StaticFilters.get('stars').values" ng-class="{ active: StaticFilters.is_selected('stars', value) }" ng-click='StaticFilters.pick("stars", value)'
+          | {{ value }}
+          = fa_icon :star
         .clear
-    /* .filter sm-drawer="" data-title="Цена" */
-    /* .filter sm-drawer="" data-title="Тип отеля" */
-    /* .filter sm-drawer="" data-title="Питание" */
-    /* .filter sm-drawer="" data-title="Удобства" */
-    /* .filter sm-drawer="" data-title="Место / название отеля" */
+
+    /* .filter sm-drawer=true data-title="Цена" */
+    /* .filter sm-drawer=true data-title="Тип отеля" */
+    /* .filter sm-drawer=true data-title="Питание" */
+    /* .filter sm-drawer=true data-title="Удобства" */

@@ -6,6 +6,6 @@
 
   link: (scope, element, attributes) ->
     scope.$watch 'visible', (visible) ->
-      scope.state_indicator = if visible then '+' else '---'
+      scope.state_indicator = if visible then '---' else '+'
     scope.toggle = (state=null) ->
       scope.visible = if state then state else !scope.visible

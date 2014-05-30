@@ -24,6 +24,14 @@ ru:
   search:
     placeholder: "Укажите, что для Вас важно в отеле. Например: качество"
 
+  static_filters:
+    headline: "фильтры"
+    stars:
+      title: "Количество звезд"
+    country:
+      title: "Страна"
+      prompt: "выберите страну"
+
   card:
     picked: "Вы выбрали"
     recommended: "Рекомендуем"

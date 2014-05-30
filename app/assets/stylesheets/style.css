@@ -214,6 +214,7 @@ aside .title.filters:before {
 aside .title span {
   padding-top: 18px;
   display: block;
+  text-transform: uppercase;
 }
 section {
   float: left;
@@ -249,7 +250,7 @@ aside .filter .title b {
   letter-spacing: -2px;
 }
 aside .filter .inside {
-  margin: 0 0 10px 12px;
+  margin: 0 12px 10px;
 }
 aside .filter-stars a {
   color: #666;
@@ -263,6 +264,9 @@ aside .filter-stars a {
   border-radius: 2px;
   background-color: #f7f7f7;
   text-align: center;
+}
+aside .filter-stars a:last-of-type {
+  margin: 0;
 }
 aside .filter input.search {
   padding: 7px 0 8px 30px;
