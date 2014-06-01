@@ -9,7 +9,6 @@
 #= require angular-route
 #= require ng-rails-csrf
 #= require angular-bindonce
-#= require jquery-mousewheel
 #= require typeahead.js/typeahead.bundle
 #= require angular-typeahead/angular-typeahead
 

@@ -166,8 +166,6 @@ GEM
     rails-assets-angular-typeahead (0.1.4)
       rails-assets-typeahead.js (~> 0.10.1)
     rails-assets-jquery (2.1.1)
-    rails-assets-jquery-mousewheel (3.1.9)
-      rails-assets-jquery (>= 1.2.2)
     rails-assets-typeahead.js (0.10.2)
       rails-assets-jquery (>= 1.7)
     railties (4.0.4)
@@ -284,7 +282,6 @@ DEPENDENCIES
   rails (~> 4.0)
   rails-assets-angular-bindonce
   rails-assets-angular-typeahead
-  rails-assets-jquery-mousewheel
   rails-assets-typeahead.js
   redis
   redis-namespace
