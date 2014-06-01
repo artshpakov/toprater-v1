@@ -14,7 +14,8 @@ class CompleteIndex < Chewy::Index
   def self.complete(text, size: 5, correct: false)
     fuzziness = correct ? {fuzzy: { edit_distance: 1, min_length: 4}} : {}
     client.suggest(
-      index: 'complete',
+      index: Chewy::Index.build_index_name( 'complete',
+        prefix: Chewy.configuration[:prefix] ),
       body: {
         results: {
           text: text,
